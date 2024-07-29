@@ -43,6 +43,7 @@ function PopupMMessage({ closePopup, order }: PopupMMessageProps) {
         </div>
       </div>
     );
+  else return null;
 }
 
 export default PopupMMessage;
