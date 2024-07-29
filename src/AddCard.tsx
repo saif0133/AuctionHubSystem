@@ -1,0 +1,143 @@
+import React, { useState, ChangeEvent } from "react";
+import "./AddCard.css";
+
+const cardLogos: { [key: string]: string } = {
+  visa: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/640px-Visa_Logo.png",
+  mastercard: "https://pngimg.com/uploads/mastercard/mastercard_PNG15.png",
+  discover:
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Discover_Card_logo.svg/2560px-Discover_Card_logo.svg.png",
+  dinersclub:
+    "https://iconape.com/wp-content/png_logo_vector/diners-club-logo3.png",
+  jcb: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/2560px-JCB_logo.svg.png",
+  amex: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo_%282018%29.svg/2560px-American_Express_logo_%282018%29.svg.png",
+  unknown: "",
+};
+
+const getCardType = (number: string) => {
+  const sanitizedNumber = number.replace(/\s/g, "");
+  const prefix = sanitizedNumber.slice(0, 6);
+  if (/^4/.test(sanitizedNumber)) return "visa";
+  if (/^5[1-5]/.test(sanitizedNumber) || /^2[2-7]/.test(prefix))
+    return "mastercard";
+  if (/^3[47]/.test(sanitizedNumber)) return "amex";
+  if (
+    /^6(?:011|5)/.test(sanitizedNumber) ||
+    /^64[4-9]/.test(sanitizedNumber) ||
+    /^622(?:12[6-9]|1[3-9]|[2-8][0-9]|9[01]|92[0-5])/.test(prefix)
+  )
+    return "discover";
+  if (/^3(?:0[0-5]|[68])/.test(sanitizedNumber)) return "dinersclub";
+  if (/^35(?:2[89]|[3-8][0-9])/.test(prefix)) return "jcb";
+  return "unknown";
+};
+
+const AddCard = () => {
+  const [cardNumber, setCardNumber] = useState<string>("**** **** **** ****");
+  const [cardName, setCardName] = useState<string>("FULL NAME");
+  const [cardExpiry, setCardExpiry] = useState<string>("MM/YY");
+  const [cardCVC, setCardCVC] = useState<string>("CVC");
+  const [cardType, setCardType] = useState<string>("unknown");
+
+  const handleCardNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    value = value
+      .replace(/\s/g, "")
+      .replace(/(\d{4})/g, "$1 ")
+      .trim();
+    setCardNumber(value);
+    setCardType(getCardType(value));
+  };
+
+  const handleCardNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCardName(e.target.value.toUpperCase());
+  };
+
+  const handleCardExpiryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    value = value
+      .replace(/\s/g, "")
+      .replace(/(\d{2})(\d{2})/, "$1/$2")
+      .trim();
+    setCardExpiry(value);
+  };
+
+  const handleCardCVCChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCardCVC(e.target.value);
+  };
+
+  return (
+    <div className="add-card-container">
+      <div className="credit-card">
+        <div className="credit-card-content">
+          <div className="credit-card-logo">
+            {cardType !== "unknown" && (
+              <img
+                src={cardLogos[cardType]}
+                alt={cardType}
+                className="card-logo"
+              />
+            )}
+          </div>
+          <div className="credit-card-chip"></div>
+          <div className="credit-card-number">{cardNumber}</div>
+          <div className="credit-card-name">{cardName}</div>
+          <div className="credit-card-expiry">{cardExpiry}</div>
+          <div className="credit-card-cvc">{cardCVC}</div>
+        </div>
+      </div>
+      <div className="form-container">
+        <div className="field-container">
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            maxLength={20}
+            placeholder="FULL NAME"
+            onChange={handleCardNameChange}
+          />
+        </div>
+        <div className="field-container">
+          <label htmlFor="cardnumber">Card Number</label>
+          <input
+            id="cardnumber"
+            type="text"
+            pattern="[0-9]*"
+            inputMode="numeric"
+            maxLength={19}
+            placeholder="**** **** **** ****"
+            onChange={handleCardNumberChange}
+          />
+        </div>
+        <div className="field-container">
+          <label htmlFor="expirationdate">Expiration (MM/YY)</label>
+          <input
+            id="expirationdate"
+            type="text"
+            pattern="[0-9]*"
+            inputMode="numeric"
+            maxLength={4}
+            placeholder="MM/YY"
+            onChange={handleCardExpiryChange}
+          />
+        </div>
+        <div className="field-container">
+          <label htmlFor="securitycode">Security Code (CVC)</label>
+          <input
+            id="securitycode"
+            type="text"
+            pattern="[0-9]*"
+            inputMode="numeric"
+            maxLength={3}
+            placeholder="CVC"
+            onChange={handleCardCVCChange}
+          />
+        </div>
+        <button type="button" className="btn btn-primary submit">
+          Submit
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default AddCard;
