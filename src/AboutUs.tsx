@@ -16,7 +16,7 @@ function AboutUs() {
               target="_blank"
               href="https://www.cbc.ca/news/canada/gaza-red-triangle-meaning-1.7216788"
             >
-              Hamas Triangle
+              Hamas Triangles
             </a>{" "}
             , while the name "Auction Hub" echoes the collaborative spirit of
             GitHub, where developers and tech enthusiasts gather to share and
