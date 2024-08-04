@@ -907,10 +907,11 @@ select option {
   align-items: center;
 }
 
-.range_container {
-  padding: 10px !important;
-  width: 70% !important;
-  margin: 15% 10%;
+.r_container {
+  padding: 10px 20px !important;
+  width: 100% !important;
+  background-color: white !important;
+  border-radius: 20px !important;
 }
 .filter {
   background-color: white;
@@ -924,28 +925,41 @@ select option {
   font-size: x-large;
   font-weight: bolder;
 }
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10%;
+}
 .sliders_control {
   position: relative;
-  min-height: 20px;
+  min-height: 7px;
+  display: flex;
+  align-items: center;
+}
+.range-title {
+  font-weight: bolder;
+  margin-bottom: 5px;
 }
 
 .form_control {
   position: relative;
   display: flex;
   justify-content: space-between;
-  font-size: 17px;
+  font-size: small;
   color: #635a5a;
   text-align: center;
+  font-weight: bolder;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   pointer-events: all;
-  width: 15px;
-  height: 15px;
+  width: 8px;
+  height: 8px;
   background-color: #740000;
   border-radius: 50%;
-  box-shadow: 0 0 0 1px #c6c6c6;
+  /* box-shadow: 0 0 0 1px #c6c6c6;*/
   cursor: pointer;
 }
 
@@ -971,9 +985,15 @@ input[type="range"]::-webkit-slider-thumb:active {
 
 input[type="number"] {
   color: #8a8383;
-  width: auto;
+  width: 35px;
   height: 30px;
-  font-size: 20px;
+  font-size: small;
+  border: none !important;
+  font-weight: bold;
+}
+
+input[type="number"]:active {
+  border: none !important;
 }
 
 #text-field-container {
@@ -992,12 +1012,13 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .form_control_container {
   display: flex;
+  align-items: center;
 }
 
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 2px;
+  height: 4px;
   width: 100%;
   position: absolute;
   background-color: #c6c6c6;

@@ -2,10 +2,27 @@ import React, { useState, useEffect } from "react";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import ListGroup from "./components/ListGroup";
 import "./script";
+import { ChangeEvent } from "devextreme/ui/text_box";
 
 function AllProducts() {
   const [fromValue, setFromValue] = useState(10);
   const [toValue, setToValue] = useState(1000);
+  const today = new Date();
+  const day = today.getDate().toString().padStart(2, "0");
+  const [inpDay, setInpDay] = useState(day);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (parseInt(event.target.value, 10) < 10)
+      setInpDay("0" + event.target.value);
+    else if (
+      parseInt(event.target.value) >= 10 &&
+      parseInt(event.target.value) < 32
+    )
+      setInpDay(event.target.value);
+    else {
+      setInpDay(day);
+    }
+  };
 
   const items = [{ text: "Home", icon: faHome, link: "/" }];
   const logo = "https://saifsamplewebsite.netlify.app/imgs/hublogo-2.png";
@@ -59,61 +76,75 @@ function AllProducts() {
       </div>
 
       <div className="filter">Filter</div>
-      <div className="range_container list-group-item">
-        <div className="sliders_control">
-          <input
-            id="fromSlider"
-            type="range"
-            value={fromValue}
-            min="10"
-            max="1000"
-            step={10}
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (value <= toValue) {
-                setFromValue(value);
-              }
-            }}
-          />
-          <input
-            id="toSlider"
-            type="range"
-            value={toValue}
-            min="10"
-            max="1000"
-            step={10}
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (value >= fromValue) {
-                setToValue(value);
-              }
-            }}
-          />
-        </div>
-        <div className="form_control">
-          <div className="form_control_container">
-            <div className="form_control_container__time">Min</div>
+      <div className="filter-container">
+        <div className="r_container list-group-item">
+          <div className="range-title">Price Range</div>
+          <div className="sliders_control">
             <input
-              className="form_control_container__time__input"
-              type="number"
-              id="fromInput"
+              id="fromSlider"
+              type="range"
               value={fromValue}
               min="10"
-              max={toValue - 10}
-              onChange={handleFromInputChange}
+              max="1000"
+              step={10}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (value <= toValue) {
+                  setFromValue(value);
+                }
+              }}
+            />
+            <input
+              id="toSlider"
+              type="range"
+              value={toValue}
+              min="10"
+              max="1000"
+              step={10}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (value >= fromValue) {
+                  setToValue(value);
+                }
+              }}
             />
           </div>
-          <div className="form_control_container">
-            <div className="form_control_container__time">Max</div>
+          <div className="form_control">
+            <div className="form_control_container">
+              <div className="form_control_container__time">Min</div>
+              <input
+                className="form_control_container__time__input"
+                type="number"
+                id="fromInput"
+                value={fromValue}
+                min="10"
+                max={toValue - 10}
+                onChange={handleFromInputChange}
+              />
+            </div>
+            <div className="form_control_container">
+              <div className="form_control_container__time">Max</div>
+              <input
+                className="form_control_container__time__input"
+                type="number"
+                id="toInput"
+                value={toValue}
+                min={fromValue + 10}
+                max="1000"
+                onChange={handleToInputChange}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="r_container">
+          <div className="input-date">
             <input
-              className="form_control_container__time__input"
-              type="number"
-              id="toInput"
-              value={toValue}
-              min={fromValue + 10}
-              max="1000"
-              onChange={handleToInputChange}
-            />
+              type="text"
+              maxLength={2}
+              onBlur={handleChange}
+              value={inpDay}
+              onChange={(e) => setInpDay(e.target.value)}
+            />{" "}
           </div>
         </div>
       </div>
