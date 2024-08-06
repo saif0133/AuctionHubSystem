@@ -12,7 +12,7 @@ function AllProducts() {
   const [inpDay, setInpDay] = useState(day);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (parseInt(event.target.value, 10) < 10)
+    if (parseInt(event.target.value, 10) < 10 && event.target.value.length < 2)
       setInpDay("0" + event.target.value);
     else if (
       parseInt(event.target.value) >= 10 &&
