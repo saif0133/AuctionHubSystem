@@ -89,3 +89,36 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Ensure the container div has a defined size */
+.owner-pic,
+.first-pic,
+.pro-pic {
+  background-size: cover; /* Ensure the image covers the div */
+  background-position: center; /* Center the image within the div */
+  background-repeat: no-repeat; /* Prevent repeating the image */
+}
+
+/* Example size for owner pic */
+.owner-pic {
+  width: 100px; /* Adjust as needed */
+  height: 100px; /* Adjust as needed */
+  border-radius: 50%; /* Circular image */
+}
+
+/* Example size for product images */
+.first-pic {
+  width: 100%; /* Full width */
+  height: 300px; /* Adjust as needed */
+}
+
+.additional-pics {
+  display: flex;
+  gap: 10px; /* Adjust gap between images */
+}
+
+.pro-pic {
+  width: 80px; /* Adjust as needed */
+  height: 80px; /* Adjust as needed */
+  flex: 1; /* Allow to grow and fill space */
+}

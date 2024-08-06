@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   img: string;
@@ -20,9 +21,10 @@ function ProductCard({
   message,
 }: CardProps) {
   const [timeLeft, setTimeLeft] = useState<string>("");
-
+  const navigate = useNavigate();
   const handleClick = (id: number) => {
-    console.log(`Card with ID ${id} clicked`);
+    navigate(`/Product/${id}`);
+    console.log("card id is " + id);
   };
 
   useEffect(() => {
