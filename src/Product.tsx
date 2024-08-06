@@ -128,7 +128,9 @@ function Product() {
             </div>
           </>
         ) : (
-          <p>Loading product data...</p>
+          <div className="testmain">
+            <h1>Loading Product Data...</h1>{" "}
+          </div>
         )}
       </div>
     </div>

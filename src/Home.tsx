@@ -40,7 +40,11 @@ const Home: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="testmain">
+        <h1>Loading...</h1>{" "}
+      </div>
+    );
   }
 
   if (error) {

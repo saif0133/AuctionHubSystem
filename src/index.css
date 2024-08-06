@@ -380,16 +380,13 @@ li {
   width: 100%;
 }
 .forma {
-  margin-left: 5%;
   margin-top: 1%;
-  margin-right: 2%;
   width: 100%;
   display: flex;
   flex-direction: row;
 }
 
 .forma input {
-  width: 100%;
   height: 50px;
   border-radius: 10px;
   border: #878787 1px solid;
