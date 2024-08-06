@@ -1,85 +1,69 @@
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import ProductCard from "./components/ProductCard";
 
-const image =
-  "https://cdn.motor1.com/images/mgl/MkO9NN/s2/future-supercars.webp";
-const title = "Test";
-const des =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a libero quis tellus ultricies elementum. Suspendisse aliquet nisi quis diam sagittis semper.";
-const price = 1000;
-const endDate = new Date("2024-06-27T00:00:00");
-const pId = 1;
+interface Product {
+  pId: number;
+  image: string;
+  title: string;
+  description: string;
+  price: number;
+  endDate: string;
+}
 
-const Home = () => {
+const Home: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://mocki.io/v1/9ba55466-347b-4308-ad06-6b5465f7b7f0"
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data: Product[] = await response.json();
+        setProducts(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className="testmain">
       <div className="products">
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={""}
-        ></ProductCard>
-
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={""}
-        ></ProductCard>
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={""}
-        ></ProductCard>
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={""}
-        ></ProductCard>
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={""}
-        ></ProductCard>
-
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={""}
-        ></ProductCard>
-
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={""}
-        ></ProductCard>
+        {products.map((product) => {
+          return (
+            <ProductCard
+              key={product.pId}
+              img={product.image}
+              title={product.title}
+              description={product.description}
+              currentPrice={product.price}
+              endDate={new Date(product.endDate)}
+              id={product.pId}
+              message={""}
+            />
+          );
+        })}
       </div>
       <NavLink to="/all" className={"btn-secondary btn"}>
         Next
