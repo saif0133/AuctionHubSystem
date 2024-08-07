@@ -5,7 +5,35 @@ import StaticDatePickerLandscape from "./StaticDatePickerLandscape";
 import { ClickAwayListener } from "@mui/material";
 import PopupMMessage from "./components/PopupMessage";
 let count = 1;
+/*async function postData() {
+  const url = 'https://example.com/api/endpoint'; // Replace with your API endpoint
 
+  // Data to be sent in the POST request
+  const data = {
+    name: "John Doe",
+    image: "https://example.com/path/to/image.jpg"
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST', // Specify the HTTP method
+      headers: {
+        'Content-Type': 'application/json', // Specify the content type
+      },
+      body: JSON.stringify(data), // Convert the data to JSON format
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const result = await response.json(); // Parse the JSON response
+    console.log('Response:', result);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+  */
 function AddAuction() {
   let Title1 = "Product Info";
   let Title2 = "Auction Info";
@@ -330,7 +358,7 @@ function AddAuction() {
             Publish
           </button>
           {isPopupOpen && (
-            <PopupMMessage closePopup={closePopup} order={order()} />
+            <PopupMMessage closePopup={closePopup} order={order()} amount={0} />
           )}
         </div>
       </form>

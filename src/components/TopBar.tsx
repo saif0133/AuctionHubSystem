@@ -3,8 +3,8 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
 
 interface TopBarProp {
-  Name: string;
-  image: string;
+  Name: string | undefined;
+  image: string | undefined;
 }
 
 function TopBar({ Name, image }: TopBarProp) {
@@ -39,7 +39,7 @@ function TopBar({ Name, image }: TopBarProp) {
         </div>
         <div className="user-info">
           <h1 className="User-Name">Hi, {Name}</h1>
-          <img className="User-Profile-Pic" src={image} alt="User" />
+          <img className="User-Profile-Pic" src={image || ""} alt="User" />
         </div>
       </div>
     );

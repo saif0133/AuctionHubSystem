@@ -2,14 +2,15 @@ import React from "react";
 import "./popupsStyle.css";
 import noPayment from "./noPayment";
 import publishFees from "./publishFees";
-import bidFees from "./bidFees";
+import BidFees from "./bidFees";
 
 interface PopupMMessageProps {
   closePopup: () => void;
   order: string;
+  amount: number;
 }
 
-function PopupMMessage({ closePopup, order }: PopupMMessageProps) {
+function PopupMMessage({ closePopup, order, amount }: PopupMMessageProps) {
   const nopay = () => {
     return noPayment;
   };
@@ -39,7 +40,9 @@ function PopupMMessage({ closePopup, order }: PopupMMessageProps) {
     return (
       <div>
         <div id="popupBox" className="popup" onClick={outsideClick}>
-          <div className="popup-content">{bidFees()}</div>
+          <div className="popup-content">
+            <BidFees amount={amount} closePopup={closePopup} />
+          </div>{" "}
         </div>
       </div>
     );

@@ -1,13 +1,43 @@
+import { useEffect, useState } from "react";
 import TopBar from "./components/TopBar";
-
+/*
 const userName = "";
 const userProfile =
   "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-1170x780.jpg";
 
+*/
+interface UserInfo {
+  name: string;
+  pic: string;
+}
+
 function UserBar() {
+  const [Info, setInfo] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(
+          `https://mocki.io/v1/b15b139b-66be-4bbb-8b89-b3940020b8ba`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data: UserInfo = await response.json();
+        setInfo(data);
+      } catch (error) {
+        console.error("Failed to fetch product data:", error);
+      }
+    };
+
+    fetchProduct();
+  }, []);
+
   return (
     <div className="testbar">
-      <TopBar Name={userName} image={userProfile}></TopBar>
+      <TopBar Name={Info?.name} image={Info?.pic}></TopBar>
     </div>
   );
 }

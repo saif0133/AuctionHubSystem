@@ -15,6 +15,7 @@ interface ProductData {
 }
 
 function Product() {
+  let [Amount, setAmount] = useState(0);
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<ProductData | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -25,7 +26,7 @@ function Product() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `https://mocki.io/v1/181c6318-2259-463a-a14d-24facb1df32c/${id}`
+          `https://mocki.io/v1/181c6318-2259-463a-a14d-24facb1df32c`
         );
 
         if (!response.ok) {
@@ -49,11 +50,12 @@ function Product() {
   ) => {
     event.preventDefault();
     const elements = document.getElementsByClassName("input__field");
-    let bidValue = 0;
+    var bidValue = 0;
 
     if (elements.length > 0) {
       const inputElement = elements[0] as HTMLInputElement;
       bidValue = Number(inputElement.value);
+      setAmount(bidValue);
     }
 
     if (bidValue < minBid) {
@@ -120,7 +122,11 @@ function Product() {
                     Bid
                   </button>
                   {isPopupOpen && (
-                    <PopupMMessage closePopup={closePopup} order={order()} />
+                    <PopupMMessage
+                      closePopup={closePopup}
+                      order={order()}
+                      amount={Amount}
+                    />
                   )}
                 </div>
               </div>
