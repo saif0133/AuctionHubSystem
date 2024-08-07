@@ -15,6 +15,12 @@ function TopBar({ Name, image }: TopBarProp) {
   ) => {
     setSearchInput(event.target.value);
   };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent default action (like form submission)
+      handleSearchClick();
+    }
+  };
 
   const handleSearchClick = () => {
     if (!searchInput.trim()) {
@@ -34,6 +40,7 @@ function TopBar({ Name, image }: TopBarProp) {
             className="Search-Input search-a"
             value={searchInput}
             onChange={handleSearchInputChange}
+            onKeyDown={handleKeyDown}
           />
           <Button icon={faSearch} onClick2={handleSearchClick}></Button>
         </div>
