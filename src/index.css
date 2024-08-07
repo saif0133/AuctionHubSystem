@@ -122,6 +122,9 @@
 body {
   margin: 0;
 }
+body::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
 .container {
   display: grid;
   grid-template-rows: auto 1fr auto; /* Adjusted rows */

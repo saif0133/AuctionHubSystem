@@ -74,7 +74,7 @@
 }
 
 .bid {
-  width: 300px !important;
+  width: 400px !important;
 }
 
 .note {
@@ -109,7 +109,7 @@
 /* Example size for product images */
 .first-pic {
   width: 100%; /* Full width */
-  height: 300px; /* Adjust as needed */
+  height: 450px; /* Adjust as needed */
 }
 
 .additional-pics {
