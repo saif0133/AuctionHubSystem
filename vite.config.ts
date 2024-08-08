@@ -5,11 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist', // Ensure this matches your publish directory
+    outDir: 'dist',
     rollupOptions: {
-      external: [],
       output: {
-        manualChunks: {} // Update here
+        manualChunks: {}
       }
     }
   }
