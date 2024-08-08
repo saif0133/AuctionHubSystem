@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
 "scripts": {
-  "build": "tsc && vite build",
+  "build": "tsc && vite build && cp src/_redirects dist/_redirects",
   "copy-files": "copyfiles -u 1 src/legal.html src/privacy.html src/final\\ project/login-signup\\ page/login.html dist/",
   "postbuild": "npm run copy-files"
 }
