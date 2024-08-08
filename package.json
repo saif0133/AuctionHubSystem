@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && cp src/_redirects dist/_redirects",
-    "preview": "vite preview"
+"build": "tsc && vite build && copy src\\_redirects dist\\_redirects",
+"preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
