@@ -5,7 +5,7 @@ function ContactUs() {
         <div className="col">
           <div className="card">
             <img
-              src="src\assets\my pic.png"
+              src="../src/assets/my pic.png"
               className="card-img-top"
               alt="..."
             />
@@ -28,7 +28,7 @@ function ContactUs() {
         <div className="col">
           <div className="card">
             <img
-              src="src\assets\1686864505144.jpeg"
+              src="../src/assets/1686864505144.jpeg"
               className="card-img-top"
               alt="..."
             />
@@ -50,7 +50,11 @@ function ContactUs() {
         </div>
         <div className="col">
           <div className="card">
-            <img src="src\assets\ico.avif" className="card-img-top" alt="..." />
+            <img
+              src="../src/assets/ico.avif"
+              className="card-img-top"
+              alt="..."
+            />
             <div className="card-body">
               <h5 className="card-title">Abdul Rahman Basel </h5>
               <p className="card-text">
@@ -70,7 +74,7 @@ function ContactUs() {
         <div className="col">
           <div className="card">
             <img
-              src="src\assets\suhaib.jpg"
+              src="../src/assets/suhaib.jpg"
               className="card-img-top"
               alt="..."
             />
