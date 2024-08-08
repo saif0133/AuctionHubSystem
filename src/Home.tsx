@@ -27,6 +27,7 @@ const Home: React.FC = () => {
         }
         const data: Product[] = await response.json();
         setProducts(data);
+        console.log(localStorage.getItem("authToken"));
       } catch (error) {
         if (error instanceof Error) {
           setError(error);

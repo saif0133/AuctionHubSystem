@@ -3,6 +3,8 @@
 
 <head>
     <title>Auction Hub:Where Deals Meet Destiny</title>
+    <link rel="icon" type="link"
+        href="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Red_triangle.svg/540px-Red_triangle.svg.png" />
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/phonestyle.css">
     <link rel="stylesheet" href="styles/stylehover.css">
@@ -60,12 +62,12 @@ Where Deals Meet Destiny
 
             <div class="form" id="loginForm">
                 <form action="" method="post">
-                    <input type="text" placeholder="Email">
+                    <input type="text" placeholder="Email" id="email">
                     <br>
-                    <input type="password" placeholder="Password">
+                    <input type="password" placeholder="Password" id="password">
                     <br>
                     <div class="forgetpass"><a href="#">Forgot Password?</a></div>
-                    <button type="button" onclick="window.location.href='/'">LOG IN</button>
+                    <button type="button" onclick="verifyLogin();">LOG IN</button>
                     <div class="acc">
                         <p>Don't have an account? <a href="#" onclick="toggleForms();">Sign Up</a></p>
                     </div>

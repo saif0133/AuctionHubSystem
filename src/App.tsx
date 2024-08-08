@@ -18,6 +18,7 @@ import AddCard from "./AddCard";
 import Help from "./Help";
 import Product from "./Product";
 import NotImplemented from "./components/NotImpelmented";
+import Logout from "./logout";
 
 const App = () => {
   return (
@@ -45,7 +46,7 @@ const Layout = () => {
         <Route path="/Help" element={<Help />} />
         <Route path="/About-Us" element={<AboutUs />} />
         <Route path="/Contact-Us" element={<ContactUs />} />
-        <Route path="/Logout" element={<NotImplemented />} />
+        <Route path="/Logout" element={<Logout />} />
         <Route path="/AddCard" element={<AddCard />} />
         <Route path="/All" element={<AllProducts />} />
       </Routes>

@@ -15,6 +15,7 @@ interface UserInfo {
 
 function UserBar() {
   const [Info, setInfo] = useState<UserInfo | null>(null);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -46,7 +47,10 @@ function UserBar() {
 
   return (
     <div className="testbar">
-      <TopBar Name={undefined} image={Info?.pic}></TopBar>
+      <TopBar
+        Name={token ? Info?.name : undefined}
+        image={token ? Info?.pic : undefined}
+      ></TopBar>
     </div>
   );
 }
