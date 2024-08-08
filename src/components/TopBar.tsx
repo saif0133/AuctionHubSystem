@@ -65,10 +65,14 @@ function TopBar({ Name, image }: TopBarProp) {
         </div>
         <div className="info">
           <h1 className="logIn">
-            <a href="/login">Log In</a>
+            <a href="../src/final project/login-signup page/login.html">
+              Log In
+            </a>
           </h1>
           <h1 className="SignUp">
-            <a href="/Signup">Sign up</a>
+            <a href="../src/final project/login-signup page/login.html">
+              Sign up
+            </a>
           </h1>
         </div>
       </div>

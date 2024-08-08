@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import TopBar from "./components/TopBar";
+//import { token } from "./fetchContent";
+
 /*
 const userName = "";
 const userProfile =
@@ -18,7 +20,14 @@ function UserBar() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `https://mocki.io/v1/b15b139b-66be-4bbb-8b89-b3940020b8ba`
+          `https://mocki.io/v1/b15b139b-66be-4bbb-8b89-b3940020b8ba`,
+          {
+            method: "Get",
+            headers: {
+              // Authorization: `Bearer ${token}`, // Include the token
+              "Content-Type": "application/json", // If you're dealing with JSON data
+            },
+          }
         );
 
         if (!response.ok) {
@@ -37,7 +46,7 @@ function UserBar() {
 
   return (
     <div className="testbar">
-      <TopBar Name={Info?.name} image={Info?.pic}></TopBar>
+      <TopBar Name={undefined} image={Info?.pic}></TopBar>
     </div>
   );
 }

@@ -1,6 +1,1 @@
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-}
+export const token = "your-access-token";
