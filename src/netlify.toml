@@ -1,4 +1,12 @@
+[build]
+  publish = "dist" # or your specific publish directory
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-inline-functions-env" # Replace with the name of your plugin
+  # Add any specific plugin configuration here
+
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+  from = "/*"
+  to = "/index.html"
+  status = 200
