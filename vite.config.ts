@@ -8,7 +8,9 @@ export default defineConfig({
     outDir: 'dist', // Ensure this matches your publish directory
     rollupOptions: {
       external: [],
-      manualChunks: {}
+      output: {
+        manualChunks: {} // Update here
+      }
     }
   }
 });
