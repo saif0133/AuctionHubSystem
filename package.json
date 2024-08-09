@@ -5,7 +5,7 @@
   "type": "module",
  "scripts": {
   "build": "tsc && vite build",
-  "postbuild": "cpx \"src/_redirects\" dist/ && cpx \"./privacy.html\" dist/ && cpx \"./legal.html\" dist/ && cpx \"./src/final project/login-signup page/login.html\" dist/ && cpx \"./src/final project/login-signup page/styles/style.css\" dist/",
+  "postbuild": "cpx \"src/_redirects\" dist/ && cpx \"./privacy.html\" dist/ && cpx \"./legal.html\" dist/ && cpx \"./src/final project/login-signup page/login.html\" dist/ && cpx \"./src/final project/login-signup page/styles/style.css\" dist/ && cpx \"./src/final project/login-signup page/styles/stylehover.css\" dist/ && cpx \"./src/final project/login-signup page/script.js\" dist/ " ,
 "dev": "vite"
 }
 ,

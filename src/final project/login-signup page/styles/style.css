@@ -148,3 +148,26 @@ body::-webkit-scrollbar {
     color: red;
   }
 }
+
+button:hover {
+  transition: 0.3s ease;
+
+  background-color: red;
+  border: 0;
+}
+
+.logo :hover {
+  transition: 0.3s ease;
+  filter: drop-shadow(0 0 6px red);
+}
+
+.forgetpass a:hover {
+  transition: 0.3s ease;
+  color: red;
+}
+
+.logo:hover + .cta {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
