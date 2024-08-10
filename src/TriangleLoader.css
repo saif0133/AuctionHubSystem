@@ -1,0 +1,33 @@
+/* TriangleLoader.css */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+  perspective: 800px; /* Add perspective for a 3D effect */
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  margin-bottom: 20px;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-top: 50px solid #ff0000;
+  animation: flip 2s infinite ease-in-out;
+  transform-origin: center;
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0deg); /* Start position */
+  }
+  50% {
+    transform: rotateX(180deg); /* Halfway, flipped */
+  }
+  100% {
+    transform: rotateX(360deg); /* Full rotation, back to start */
+  }
+}

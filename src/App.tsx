@@ -19,6 +19,7 @@ import Help from "./Help";
 import Product from "./Product";
 import NotImplemented from "./components/NotImpelmented";
 import Logout from "./logout";
+import TriangleLoader from "./components/loading";
 
 const App = () => {
   return (

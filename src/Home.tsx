@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import ProductCard from "./components/ProductCard";
+import TriangleLoader from "./components/loading";
 
 interface Product {
   pId: number;
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
   if (loading) {
     return (
       <div className="testmain">
-        <h1>Loading...</h1>{" "}
+        <TriangleLoader />
       </div>
     );
   }

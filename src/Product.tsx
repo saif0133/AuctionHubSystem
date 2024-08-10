@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./product.css";
 import PopupMMessage from "./components/PopupMessage";
+import TriangleLoader from "./components/loading";
 
 const minBid = 100;
 
@@ -26,7 +27,7 @@ function Product() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `https://mocki.io/v1/181c6318-2259-463a-a14d-24facb1df32c`
+          `https://mocki.io/v1/181c6318-2259-463a-a14d-24facb1df32c1`
         );
 
         if (!response.ok) {
@@ -130,12 +131,73 @@ function Product() {
                   )}
                 </div>
               </div>
-              <div className="right"></div>
+              <div className="right">
+                <div className="product-name">
+                  <div className="name">
+                    <h1>Product name</h1>
+                  </div>
+                  <div className="name-spacer"></div>
+                </div>
+                <div className="prc-container">
+                  <div className="auction-price">
+                    <div className="prc">
+                      <h2>1000 JDs</h2>
+                    </div>
+                    <div className="min-bid">Min Bid : 100 JDs</div>
+                  </div>
+                  <div className="location">
+                    <h2>Amman</h2>
+                  </div>
+                </div>
+                <div className="desc">
+                  <div className="spc"></div>
+                  <div className="info">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nullam consequat dui sit amet tellus egestas eleifend
+                    venenatis non nisi. Phasellus eu sapien sit amet lectus
+                    luctus venenatis vitae sit amet erat. Integer facilisis sed
+                    turpis a condimentum. Quisque mollis lacus pharetra nisi
+                    fermentum, quis placerat nunc laoreet. Quisque lobortis
+                    neque ipsum, in aliquet urna vulputate sit amet. Etiam vel
+                    ex vestibulum tellus posuere euismod. Sed eu mi in metus
+                    consectetur fermentum. Maecenas in mi ac nibh sodales
+                    eleifend at hendrerit urna. Integer tincidunt id est sed
+                    luctus. Pellentesque consequat fringilla massa non
+                    imperdiet.
+                  </div>
+                </div>
+                <div className="tester">
+                  <table className="table table-striped table-hover">
+                    <tbody>
+                      <tr>
+                        <th scope="row">Row 1 Header</th>
+                        <td>Row 1, Column 2</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Row 2 Header</th>
+                        <td>Row 2, Column 2</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Row 3 Header</th>
+                        <td>Row 3, Column 2</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Row 4 Header</th>
+                        <td>Row 4, Column 2</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Row 5 Header</th>
+                        <td>Row 5, Column 2</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </>
         ) : (
           <div className="testmain">
-            <h1>Loading Product Data...</h1>{" "}
+            <TriangleLoader />
           </div>
         )}
       </div>
