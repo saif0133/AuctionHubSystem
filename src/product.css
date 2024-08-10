@@ -158,11 +158,12 @@
 
 .table {
   width: 70% !important;
-  background-color: #dadada;
+  background-color: #fff;
   border-radius: 15px;
   overflow: hidden;
   border-collapse: separate;
   border-spacing: 0;
+  border: #b2b2b2 1px solid;
 }
 
 th {
@@ -201,4 +202,45 @@ th {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+.dates-container {
+  height: 150px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.dates {
+  height: 100px;
+  width: 70%;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #b2b2b2;
+}
+
+.start-date {
+  height: 50%;
+  width: 100%;
+  display: flex;
+  background-color: #3a3a3a;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-weight: bolder;
+  color: #fff;
+}
+
+.end-date {
+  height: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-weight: bolder;
+}
+
+.timer {
+  font-weight: bolder;
+  color: #be1622;
 }

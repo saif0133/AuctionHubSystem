@@ -200,9 +200,18 @@ function Product() {
                     </tbody>
                   </table>
                 </div>
-                <div className="date">
-                  <div className="start-date"></div>
-                  <div className="end-date"></div>
+                <div className="dates-container">
+                  <div className="dates">
+                    <div className="start-date">
+                      <div className="date-title">Start Date</div>
+                      <div className="date">Sep 10,2024</div>
+                    </div>
+                    <div className="end-date">
+                      <div className="date-title">End date</div>
+                      <div className="date">Sep 10,2024</div>
+                    </div>
+                  </div>
+                  <div className="timer">00:00:00</div>
                 </div>
                 <div className="drop">
                   <DropdownComponent users={usersa} />
