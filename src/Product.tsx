@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "./product.css";
 import PopupMMessage from "./components/PopupMessage";
 import TriangleLoader from "./components/loading";
+import DropdownComponent from "./components/dropDown";
 
 const minBid = 100;
 
@@ -14,7 +15,12 @@ interface ProductData {
     pic: string;
   };
 }
-
+const usersa = [
+  { name: "Saif", bid: 500, pic: "https://via.placeholder.com/40?text=S" },
+  { name: "Ahmed", bid: 300, pic: "https://via.placeholder.com/40?text=A" },
+  { name: "Layla", bid: 150, pic: "https://via.placeholder.com/40?text=L" },
+  { name: "Hadi", bid: 700, pic: "https://via.placeholder.com/40?text=H" },
+];
 function Product() {
   let [Amount, setAmount] = useState(0);
   const { id } = useParams<{ id: string }>();
@@ -27,7 +33,7 @@ function Product() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `https://mocki.io/v1/181c6318-2259-463a-a14d-24facb1df32c1`
+          `https://mocki.io/v1/181c6318-2259-463a-a14d-24facb1df32c`
         );
 
         if (!response.ok) {
@@ -43,6 +49,8 @@ function Product() {
 
     if (id) {
       fetchProduct();
+      const intervalId = setInterval(fetchProduct, 5000);
+      return () => clearInterval(intervalId);
     }
   }, [id]);
 
@@ -191,6 +199,13 @@ function Product() {
                       </tr>
                     </tbody>
                   </table>
+                </div>
+                <div className="date">
+                  <div className="start-date"></div>
+                  <div className="end-date"></div>
+                </div>
+                <div className="drop">
+                  <DropdownComponent users={usersa} />
                 </div>
               </div>
             </div>

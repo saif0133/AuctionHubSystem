@@ -197,3 +197,8 @@ th {
     width: 100% !important;
   }
 }
+.drop {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

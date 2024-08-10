@@ -3,13 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
- "scripts": {
-  "build": "tsc && vite build",
-  "postbuild": "cpx \"src/_redirects\" dist/ && cpx \"./privacy.html\" dist/ && cpx \"./legal.html\" dist/ && cpx \"./src/final project/login-signup page/login.html\" dist/ && cpx \"./src/final project/login-signup page/styles/style.css\" dist/ && cpx \"./src/final project/login-signup page/styles/stylehover.css\" dist/ && cpx \"./src/final project/login-signup page/script.js\" dist/ " ,
-"dev": "vite"
-}
-,
+  "scripts": {
+    "build": "tsc && vite build",
+    "postbuild": "cpx \"src/_redirects\" dist/ && cpx \"./privacy.html\" dist/ && cpx \"./legal.html\" dist/ && cpx \"./src/final project/login-signup page/login.html\" dist/ && cpx \"./src/final project/login-signup page/styles/style.css\" dist/ && cpx \"./src/final project/login-signup page/styles/stylehover.css\" dist/ && cpx \"./src/final project/login-signup page/script.js\" dist/ ",
+    "dev": "vite"
+  },
   "dependencies": {
+    "@ant-design/icons": "^5.4.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-free": "^6.5.2",
@@ -19,6 +19,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.21",
     "@mui/x-date-pickers": "^7.8.0",
+    "antd": "^5.20.0",
     "axios": "^1.7.3",
     "bootstrap": "^5.2.3",
     "dayjs": "^1.11.11",

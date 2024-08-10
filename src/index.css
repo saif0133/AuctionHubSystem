@@ -1097,3 +1097,14 @@ input[type="range"] {
 .ssa .input__field {
   padding-left: 180px;
 }
+
+.ant-btn {
+  background-color: #009640 !important;
+  width: 70% !important;
+  justify-self: center;
+  justify-content: space-evenly;
+  color: #fff;
+  height: 50px !important;
+  font-weight: bolder;
+  border-radius: 50px !important;
+}
