@@ -82,6 +82,4 @@ function verifyLogin() {
     });
 }
 
-module.exports = {
-  userToken,
-};
+export default userToken;
