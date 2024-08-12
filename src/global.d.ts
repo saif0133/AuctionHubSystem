@@ -1,4 +1,5 @@
 // global.d.ts
+/*
 declare module "*.js" {
     export let userToken: string | null;
     export function toggleForms(): void;
@@ -7,4 +8,4 @@ declare module "*.js" {
     export function verifyLogin(): void;
     export function removeToken(): void;
   }
-  
+  */

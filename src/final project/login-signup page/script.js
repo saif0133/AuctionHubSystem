@@ -1,7 +1,7 @@
 // script.js
-export let userToken = null;
+let userToken = null;
 
-export function toggleForms() {
+function toggleForms() {
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
 
@@ -13,20 +13,20 @@ export function toggleForms() {
   toggleFlexDirection();
 }
 
-export function toggleFlexDirection() {
+function toggleFlexDirection() {
   const container = document.querySelector(".container");
   container.classList.toggle("reverse");
 }
 
-export function goHome() {
+function goHome() {
   window.location.href = "/test";
 }
 
-export function removeToken() {
+function removeToken() {
   userToken = null;
 }
 
-export function verifyLogin() {
+function verifyLogin() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
@@ -81,12 +81,3 @@ export function verifyLogin() {
       alert("Wrong Email or Password");
     });
 }
-
-export default {
-  userToken,
-  toggleForms,
-  toggleFlexDirection,
-  goHome,
-  removeToken,
-  verifyLogin,
-};
