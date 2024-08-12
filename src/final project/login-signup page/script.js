@@ -1,3 +1,5 @@
+// script.js
+
 let userToken = null;
 
 function toggleForms() {
@@ -80,4 +82,10 @@ function verifyLogin() {
     });
 }
 
-export default userToken;
+module.exports = {
+  userToken,
+  toggleForms,
+  toggleFlexDirection,
+  goHome,
+  verifyLogin,
+};
