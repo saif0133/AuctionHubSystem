@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import TopBar from "./components/TopBar";
 //import { token } from "./fetchContent";
-import userToken from "./final project/login-signup page/script.js";
+import userToken from "*.js"; // Ensure this is the correct import
 
 /*
 const userName = "";
