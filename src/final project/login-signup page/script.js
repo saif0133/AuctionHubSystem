@@ -1,5 +1,3 @@
-let userToken = null;
-
 function toggleForms() {
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
@@ -20,6 +18,8 @@ function toggleFlexDirection() {
 function goHome() {
   window.location.href = "/test";
 }
+
+let userToken; // Declare userToken globally
 
 function verifyLogin() {
   const email = document.getElementById("email").value;
@@ -80,4 +80,4 @@ function verifyLogin() {
     });
 }
 
-export default userToken;
+// You can now access userToken globally if needed.
