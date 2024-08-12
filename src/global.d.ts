@@ -1,6 +1,6 @@
 // global.d.ts
-declare module '*.js' {
-    const value: any;
-    export default value;
+declare module "*.js" {
+    export const userToken: string | null;
+  
   }
   

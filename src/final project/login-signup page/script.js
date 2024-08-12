@@ -84,8 +84,4 @@ function verifyLogin() {
 
 module.exports = {
   userToken,
-  toggleForms,
-  toggleFlexDirection,
-  goHome,
-  verifyLogin,
 };
