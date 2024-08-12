@@ -1,8 +1,7 @@
 // script.js
+export let userToken = null;
 
-let userToken = null;
-
-function toggleForms() {
+export function toggleForms() {
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
 
@@ -14,26 +13,28 @@ function toggleForms() {
   toggleFlexDirection();
 }
 
-function toggleFlexDirection() {
+export function toggleFlexDirection() {
   const container = document.querySelector(".container");
   container.classList.toggle("reverse");
 }
 
-function goHome() {
+export function goHome() {
   window.location.href = "/test";
 }
 
-function verifyLogin() {
+export function removeToken() {
+  userToken = null;
+}
+
+export function verifyLogin() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // Validate email and password
   if (!email || !password) {
     alert("Please fill in both fields.");
     return;
   }
 
-  // Create the data object to send
   const data = {
     email: email,
     password: password,
@@ -47,18 +48,15 @@ function verifyLogin() {
     body: JSON.stringify(data),
   })
     .then((response) => {
-      console.log(response.status);
       if (!response.ok) {
         return response.json().then((errorData) => {
           throw new Error(errorData.error || "Login failed");
         });
       }
+
       return response.json();
     })
     .then((data) => {
-      console.log("Success:", data);
-
-      // Ask the user if they want to save the token in local storage
       const saveToken = confirm(
         "Do you want to save your session? This will keep you logged in even after closing the browser."
       );
@@ -68,12 +66,14 @@ function verifyLogin() {
         localStorage.setItem("authToken", data.token);
         console.log("Token saved in local storage.");
       } else {
+        localStorage.setItem("authToken", data.token);
         userToken = data.token;
         console.log(
           "Token not saved. Session will end when the browser is closed."
         );
       }
 
+      console.log("Token value:", userToken);
       window.location.href = "/";
     })
     .catch((error) => {
@@ -82,4 +82,11 @@ function verifyLogin() {
     });
 }
 
-export default userToken;
+export default {
+  userToken,
+  toggleForms,
+  toggleFlexDirection,
+  goHome,
+  removeToken,
+  verifyLogin,
+};

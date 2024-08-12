@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TopBar from "./components/TopBar";
-//import { token } from "./fetchContent";
-import userToken from "./final project/login-signup page/script.js"; // Ensure this is the correct import
+import {
+  userToken,
+  toggleForms,
+  toggleFlexDirection,
+  goHome,
+  verifyLogin,
+  removeToken,
+} from "./final project/login-signup page/script.js";
 
-/*
-const userName = "";
-const userProfile =
-  "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-1170x780.jpg";
-
-*/
 interface UserInfo {
   name: string;
   pic: string;
@@ -17,16 +17,16 @@ interface UserInfo {
 function UserBar() {
   const [Info, setInfo] = useState<UserInfo | null>(null);
   const token = localStorage.getItem("authToken") || userToken;
-
+  console.log("test" + userToken);
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
           `https://mocki.io/v1/b15b139b-66be-4bbb-8b89-b3940020b8ba`,
           {
-            method: "Get",
+            method: "GET",
             headers: {
-              // Authorization: `Bearer ${token}`, // Include the token
+              Authorization: `Bearer ${token}`, // Include the token
               "Content-Type": "application/json", // If you're dealing with JSON data
             },
           }
@@ -44,14 +44,14 @@ function UserBar() {
     };
 
     fetchProduct();
-  }, []);
+  }, [token]); // Add token to dependency array
 
   return (
     <div className="testbar">
       <TopBar
         Name={token ? Info?.name : undefined}
         image={token ? Info?.pic : undefined}
-      ></TopBar>
+      />
     </div>
   );
 }
