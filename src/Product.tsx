@@ -4,6 +4,8 @@ import "./product.css";
 import PopupMMessage from "./components/PopupMessage";
 import TriangleLoader from "./components/loading";
 import DropdownComponent from "./components/dropDown";
+import Timer from "./components/timer";
+import { newDate } from "react-datepicker/dist/date_utils";
 
 const minBid = 100;
 
@@ -211,7 +213,9 @@ function Product() {
                       <div className="date">Sep 10,2024</div>
                     </div>
                   </div>
-                  <div className="timer">00:00:00</div>
+                  <div className="timer">
+                    <Timer endDate={new Date("2024-08-11T23:59:59Z")} />
+                  </div>
                 </div>
                 <div className="drop">
                   <DropdownComponent users={usersa} />

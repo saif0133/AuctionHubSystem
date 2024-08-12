@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TopBar from "./components/TopBar";
 //import { token } from "./fetchContent";
+import userToken from "./final project/login-signup page/script.js";
 
 /*
 const userName = "";
@@ -15,7 +16,7 @@ interface UserInfo {
 
 function UserBar() {
   const [Info, setInfo] = useState<UserInfo | null>(null);
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken") || userToken;
 
   useEffect(() => {
     const fetchProduct = async () => {

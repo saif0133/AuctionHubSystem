@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import Timer from "./timer";
 
 interface CardProps {
   img: string;
@@ -8,7 +9,7 @@ interface CardProps {
   currentPrice: number;
   endDate: Date;
   id: number;
-  message: String;
+  message: string;
 }
 
 function ProductCard({
@@ -20,38 +21,17 @@ function ProductCard({
   id,
   message,
 }: CardProps) {
-  const [timeLeft, setTimeLeft] = useState<string>("");
   const navigate = useNavigate();
+
   const handleClick = (id: number) => {
     navigate(`/Product/${id}`);
     console.log("card id is " + id);
   };
 
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date();
-      const difference = endDate.getTime() - now.getTime();
-      if (difference > 0) {
-        const hours = Math.floor(difference / (1000 * 60 * 60));
-        const minutes = Math.floor(
-          (difference % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        setTimeLeft(`${hours}h : ${minutes}m : ${seconds}s`);
-      } else {
-        setTimeLeft(String(message));
-      }
-    };
-
-    const timerId = setInterval(calculateTimeLeft, 1000);
-
-    return () => clearInterval(timerId);
-  }, [endDate]);
-
   return (
     <div className="products">
       <div className="card" onClick={() => handleClick(id)}>
-        <img src={img} />
+        <img src={img} alt={title} />
         <div className="product-title">{title}</div>
         <div className="product-description">{description}</div>
         <div className="product-current-price">{currentPrice} JDs</div>
@@ -60,7 +40,7 @@ function ProductCard({
             message === "time out" ? "" : "win"
           }`}
         >
-          {timeLeft}
+          <Timer endDate={endDate} />
         </div>
       </div>
     </div>

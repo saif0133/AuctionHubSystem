@@ -1,3 +1,5 @@
+let userToken = null;
+
 function toggleForms() {
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
@@ -53,7 +55,22 @@ function verifyLogin() {
     })
     .then((data) => {
       console.log("Success:", data);
-      localStorage.setItem("authToken", data.token);
+
+      // Ask the user if they want to save the token in local storage
+      const saveToken = confirm(
+        "Do you want to save your session? This will keep you logged in even after closing the browser."
+      );
+
+      if (saveToken) {
+        userToken = data.token;
+        localStorage.setItem("authToken", data.token);
+        console.log("Token saved in local storage.");
+      } else {
+        userToken = data.token;
+        console.log(
+          "Token not saved. Session will end when the browser is closed."
+        );
+      }
 
       window.location.href = "/";
     })
@@ -62,3 +79,5 @@ function verifyLogin() {
       alert("Wrong Email or Password");
     });
 }
+
+export default userToken;
