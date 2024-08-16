@@ -69,7 +69,7 @@ function verifyLogin() {
         // localStorage.setItem("authToken", data.token);
         userToken = data.token;
         console.log(
-          "Token not saved. Session will end when the browser is closed."
+          "Token not saved. Session will end when the browser closed."
         );
       }
 
