@@ -58,7 +58,7 @@ function verifyLogin() {
     })
     .then((data) => {
       const saveToken = confirm(
-        "Do you want to save your session? This will keep you logged in even after closing the browser."
+        "Do you want to save your  session? This will keep you logged in even after closing the browser."
       );
 
       if (saveToken) {
@@ -66,7 +66,7 @@ function verifyLogin() {
         localStorage.setItem("authToken", data.token);
         console.log("Token saved in local storage.");
       } else {
-        // localStorage.setItem("authToken", data.token);
+        localStorage.setItem("authToken", data.token);
         userToken = data.token;
         console.log(
           "Token not saved. Session will end when the browser closed."
