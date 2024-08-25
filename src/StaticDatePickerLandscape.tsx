@@ -17,7 +17,7 @@ export default function StaticDatePickerLandscape({ type }: DatePickerProps) {
         openTo="day"
         value={value}
         onChange={(newValue: Dayjs | null) => {
-          console.log(newValue?.toDate().toLocaleDateString() + " " + type);
+          console.log(newValue?.toDate().toDateString() + " " + type);
         }}
       />
     </LocalizationProvider>
