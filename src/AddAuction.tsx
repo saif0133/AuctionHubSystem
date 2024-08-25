@@ -1,96 +1,232 @@
 import { useEffect, useState } from "react";
-//import DatePicker from "./components/DatePicker";
-//import DatePickerComponent from "./DatePickerComponent";
 import StaticDatePickerLandscape from "./StaticDatePickerLandscape";
-import { ClickAwayListener } from "@mui/material";
 import PopupMMessage from "./components/PopupMessage";
+
 let count = 1;
-/*async function postData() {
-  const url = 'https://example.com/api/endpoint'; // Replace with your API endpoint
 
-  // Data to be sent in the POST request
-  const data = {
-    name: "John Doe",
-    image: "https://example.com/path/to/image.jpg"
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST', // Specify the HTTP method
-      headers: {
-        'Content-Type': 'application/json', // Specify the content type
-      },
-      body: JSON.stringify(data), // Convert the data to JSON format
-    });
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const result = await response.json(); // Parse the JSON response
-    console.log('Response:', result);
-  } catch (error) {
-    console.error('Error:', error);
-  }
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  attributes: string[];
 }
-  */
-function AddAuction() {
-  let Title1 = "Product Info";
-  let Title2 = "Auction Info";
 
+function AddAuction() {
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [category, setCategory] = useState<string>('');
+  const [categoryAttributes, setCategoryAttributes] = useState<string[]>([]);
+  const [productTitle, setProductTitle] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [expireDate, setExpireDate] = useState("");
+  const [itemStatus, setItemStatus] = useState("");
+  const [location, setLocation] = useState("");
+  const [minBid, setMinBid] = useState("");
+  const [initialPrice, setInitialPrice] = useState("");
+  const [attributeValues, setAttributeValues] = useState<Record<string, string>>({});
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [Title, setTitle] = useState("Product Info");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  const userToken = localStorage.getItem('authToken') || '';
   const userPayment = true;
 
   const order = () => {
-    if (userPayment) return "publishFees";
-    else return "noPayment";
+    return userPayment ? "bidFees" : "noPayment";
   };
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const postData = async () => {
+    const url = 'http://localhost:8080/auction/create'; // Replace with your API endpoint
+  
+    // Data to be sent in the POST request
+    const data = {
+      expireDate:"30-08-2024 23:00",
+      item: {
+        name: productTitle,
+        description: "",
+        images: [
+          {
+            name: "imgName",
+            type: "jpg",
+            imageUrl: "www.kbb.com/wp-content/uploads/2022/08/2022-mercedes-amg-eqs-front-left-3qtr.jpg?w=918"
+          }
+        ],
+        itemStatus,
+        category: {
+          id: "1"
+        },
+        // categoryAttributes: attributeValues
+        color: "red",
+        model: "asp"
+      },
+      location,
+      minBid: parseFloat(minBid),
+      initialPrice: parseFloat(initialPrice)
+    };
+  
+ 
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userToken}` // Add Authorization header
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json();
+      console.log('Response:', result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+  useEffect(() => {
+    const fileInputs = document.querySelectorAll(".myfile");
+  
+    const handleFileChange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
+  
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const parentWrapper = target.closest(".upload-btn-wrapper");
+          if (parentWrapper) {
+            const img = parentWrapper.querySelector(".upload") as HTMLImageElement;
+            if (img) {
+              img.src = e.target?.result as string;
+              img.alt = "Uploaded Image";
+            } else {
+              console.error("Image element not found.");
+            }
+          }
+        };
+        reader.readAsDataURL(file);
+      } else {
+        console.error("No file selected.");
+      }
+    };
+  
+    fileInputs.forEach((fileInput) => {
+      fileInput.addEventListener("change", handleFileChange);
+    });
+  
+    // Cleanup function to remove event listeners
+    return () => {
+      fileInputs.forEach((fileInput) => {
+        fileInput.removeEventListener("change", handleFileChange);
+      });
+    };
+  }, []);
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          'http://localhost:8080/category/all',
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${userToken}`, // Include the token
+              "Content-Type": "application/json", // If you're dealing with JSON data
+            },
+          }
+        );
 
-  const openPopup = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data: Category[] = await response.json();
+        setCategories(data); // Update state with fetched data
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [userToken]);
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = Number(e.target.value);
+    const category = categories.find(cat => cat.id === selectedId);
+    if (category) {
+      setSelectedCategory(selectedId);
+      setCategoryAttributes(category.attributes);
+      // Initialize attribute values for new category
+      const initialValues: Record<string, string> = {};
+      category.attributes.forEach(attr => {
+        initialValues[attr] = "";
+      });
+      setAttributeValues(initialValues);
+    }
+  };
+
+  const handleAttributeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAttributeValues(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files ? Array.from(e.target.files) : [];
+  
+    // Update the list of files
+    setImageFiles(prevFiles => [...prevFiles, ...files]);
+  
+    // Generate URLs for the new files and update the list of image URLs
+    const newImageUrls = files.map(file => URL.createObjectURL(file));
+    setImageUrls(prevUrls => [...prevUrls, ...newImageUrls]);
+    console.log(imageUrls)
+  };
+  
+
+
+  const openPopup = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     setIsPopupOpen(true);
+    postData(); // Call postData when the popup opens
   };
+
   const closePopup = () => {
     setIsPopupOpen(false);
   };
 
-  const [Title, setTitle] = useState<string>(Title1);
-  function scrollToTop() {
+  const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "smooth"
     });
-  }
+  };
+
   const test = (e: React.MouseEvent) => {
+    e.preventDefault();
     const a = document.getElementById("fromPage1");
     const b = document.getElementById("formb");
     const c = document.getElementById("formTitle");
 
-    console.log(count);
-    e.preventDefault();
-
     if (a && b && c) {
-      console.log("test" + count);
       if (count % 2 === 0) {
         a.style.display = "flex";
         b.style.display = "none";
-        a.style.transition = "1s";
-        b.style.transition = "1s";
-        setTitle(Title1);
-        scrollToTop();
+        setTitle("Product Info");
         count++;
       } else {
         a.style.display = "none";
         b.style.display = "flex";
-        a.style.transition = "1s";
-        b.style.transition = "1s";
-        setTitle(Title2);
-        scrollToTop();
+        setTitle("Auction Info");
         count++;
       }
+      scrollToTop();
     }
   };
 
@@ -107,13 +243,10 @@ function AddAuction() {
           reader.onload = function (e) {
             const parentWrapper = target.closest(".upload-btn-wrapper");
             if (parentWrapper) {
-              const img = parentWrapper.querySelector(
-                ".upload"
-              ) as HTMLImageElement;
+              const img = parentWrapper.querySelector(".upload") as HTMLImageElement;
               if (img) {
                 img.src = e.target?.result as string;
                 img.alt = "Uploaded Image";
-                console.log("Image source updated:", img.src);
               } else {
                 console.error("Image element not found.");
               }
@@ -124,10 +257,18 @@ function AddAuction() {
           console.error("No file selected.");
         }
       });
+     
     });
+
+    return () => {
+      fileInputs.forEach((fileInput) => {
+        fileInput.removeEventListener("change", () => {});
+      });
+    };
   }, []);
 
   return (
+    
     <div className="testmain">
       <div className="formTitle" id="formTitle">
         {" "}
@@ -154,38 +295,36 @@ function AddAuction() {
               </div>
             </div>
 
-            <select name="" id="" defaultValue={""} className="form-select">
+            <select
+              name=""
+              id=""
+              className="form-select"
+              value={selectedCategory || ''}
+              onChange={handleCategoryChange}
+            >
               <option value="" disabled>
                 Category
               </option>
-              <option value="">1</option>
-              <option value="">2</option>
-              <option value="">3</option>
-              <option value="">4</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
 
             <div className="additionalData" id="additionalData">
               <div className="data-group">Additional info</div>
               <div className="additionalData-input">
-                <select name="" id="" defaultValue={""} className="form-select">
-                  <option value="" disabled>
-                    Phone Type
-                  </option>
-                  <option value="iphone">iphone</option>
-                  <option value="samsung">samsung</option>
-                  <option value="hp">hp</option>
-                  <option value="ssd">ssd</option>
-                </select>
-
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
-                <input type="text" placeholder="test " />
+                {categoryAttributes.map((attr) => (
+                  <input
+                    key={attr}
+                    type="text"
+                    placeholder={attr}
+                    name={attr}
+                    value={attributeValues[attr] || ''}
+                    onChange={handleAttributeChange}
+                  />
+                ))}
               </div>
             </div>
             <button className="next btn btn-success" onClick={test}>
@@ -251,12 +390,14 @@ function AddAuction() {
                   className="upload"
                   alt="Upload Icon"
                 />
-                <input
-                  type="file"
-                  name="myfile"
-                  className="myfile"
-                  accept="image/*"
-                />
+                 <input
+                id="upload-images"
+                type="file"
+                className="myfile"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+              />
               </div>
               <div className="upload-btn-wrapper">
                 <img
@@ -264,13 +405,14 @@ function AddAuction() {
                   className="upload"
                   alt="Upload Icon"
                 />
-                <input
-                  type="file"
-                  name="myfile"
-                  className="myfile"
-                  aria-errormessage="ssa"
-                  accept="image/*"
-                />
+                 <input
+                id="upload-images"
+                type="file"
+                className="myfile"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+              />
               </div>
               <div className="upload-btn-wrapper">
                 <img
@@ -278,13 +420,14 @@ function AddAuction() {
                   className="upload"
                   alt="Upload Icon"
                 />
-                <input
-                  type="file"
-                  name="myfile"
-                  className="myfile"
-                  aria-errormessage="ssa"
-                  accept="image/*"
-                />
+                 <input
+                id="upload-images"
+                type="file"
+                className="myfile"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+              />
               </div>
               <div className="upload-btn-wrapper">
                 <img
@@ -292,13 +435,14 @@ function AddAuction() {
                   className="upload"
                   alt="Upload Icon"
                 />
-                <input
-                  type="file"
-                  name="myfile"
-                  className="myfile"
-                  aria-errormessage="ssa"
-                  accept="image/*"
-                />
+                 <input
+                id="upload-images"
+                type="file"
+                className="myfile"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+              />
               </div>
             </div>
             <select name="" defaultValue={""} id="" className="form-select">

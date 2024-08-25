@@ -1,5 +1,5 @@
 let userToken = null;
-
+const errortext=document.getElementById("error");
 /**
  * Toggles between the login and signup forms.
  */
@@ -47,6 +47,10 @@ function removeToken() {
   localStorage.removeItem("authToken");
 }
 
+
+//--------------------------------------------------------------------------------------------------
+
+
 /**
  * Handles user login by sending credentials to the server and saving the token.
  */
@@ -84,7 +88,9 @@ async function verifyLogin() {
     }
 
     if (!response.ok) {
-      throw new Error(responseData.error || "Login failed");
+     errortext.innerText=responseData.message;
+       throw new Error(responseData.error || responseData.message);
+   
     }
 
     const saveToken = confirm(
