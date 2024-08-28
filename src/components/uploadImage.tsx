@@ -9,7 +9,7 @@ const uploadImage = async (imageFile: File): Promise<string> => {
     const formData = new FormData();
     formData.append('image', imageFile);
 
-    const response = await fetch('https://api.imgbb.com/1/upload?key=YOUR_API_KEY', {
+    const response = await fetch('https://api.imgbb.com/1/upload?key=6167fd267a246964648eae8b1c642dfb', {
         method: 'POST',
         body: formData,
     });

@@ -17,54 +17,51 @@ function AddAuction() {
   const [category, setCategory] = useState<string>('');
   const [categoryAttributes, setCategoryAttributes] = useState<string[]>([]);
   const [productTitle, setProductTitle] = useState("");
+  const [productDescription, setProductDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [expireDate, setExpireDate] = useState("");
-  const [itemStatus, setItemStatus] = useState("");
-  const [location, setLocation] = useState("");
-  const [minBid, setMinBid] = useState("");
-  const [initialPrice, setInitialPrice] = useState("");
+  const [itemStatusa, setItemStatusa] = useState("NEW");
+  const [ProductLocation, setProductLocation] = useState("");
+  const [minBida, setMinBid] = useState("");
+  const [initialPricea, setInitialPrice] = useState("");
   const [attributeValues, setAttributeValues] = useState<Record<string, string>>({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [Title, setTitle] = useState("Product Info");
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [images, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageMetadata, setImageMetadata] = useState<{ name: string, type: string, imageUrl: string }[]>([]);
 
   const userToken = localStorage.getItem('authToken') || '';
   const userPayment = true;
-
   const order = () => {
     return userPayment ? "bidFees" : "noPayment";
   };
 
-  const postData = async () => {
+  const postData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+
     const url = 'http://localhost:8080/auction/create'; // Replace with your API endpoint
   
     // Data to be sent in the POST request
     const data = {
-      expireDate:"30-08-2024 23:00",
+      expireDate: expireDate,
       item: {
         name: productTitle,
-        description: "",
-        images: [
-          {
-            name: "imgName",
-            type: "jpg",
-            imageUrl: "www.kbb.com/wp-content/uploads/2022/08/2022-mercedes-amg-eqs-front-left-3qtr.jpg?w=918"
-          }
-        ],
-        itemStatus,
+        description: productDescription,
+        images:imageMetadata,
+        itemStatus:itemStatusa,
         category: {
-          id: "1"
+          id: category
         },
-        // categoryAttributes: attributeValues
-        color: "red",
-        model: "asp"
+        categoryAttributes: attributeValues
       },
-      location,
-      minBid: parseFloat(minBid),
-      initialPrice: parseFloat(initialPrice)
+      location:ProductLocation,
+      minBid: minBida,
+      initialPrice: initialPricea
     };
-  
+    
+    console.log('Data being sent:', JSON.stringify(data, null, 2));
+
  
     try {
       const response = await fetch(url, {
@@ -85,7 +82,7 @@ function AddAuction() {
     } catch (error) {
       console.error('Error:', error);
     }
-  };
+    };
   
   useEffect(() => {
     const fileInputs = document.querySelectorAll(".myfile");
@@ -176,30 +173,64 @@ function AddAuction() {
       [name]: value
     }));
   };
+  const getImageMetadata = (file: File): { name: string, type: string, imageUrl: string } => {
+    return {
+        name: file.name,
+        type: file.type.split('/')[1], // Extract type from MIME type (e.g., 'image/jpeg' => 'jpeg')
+        imageUrl: URL.createObjectURL(file)
+    };
+};
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : [];
-  
-    // Update the list of files
-    setImageFiles(prevFiles => [...prevFiles, ...files]);
-  
-    // Generate URLs for the new files and update the list of image URLs
-    const newImageUrls = files.map(file => URL.createObjectURL(file));
-    setImageUrls(prevUrls => [...prevUrls, ...newImageUrls]);
-    console.log(imageUrls)
-  };
-  
+const uploadImage = async (imageFile: File): Promise<string> => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  const response = await fetch('https://api.imgbb.com/1/upload?key=6167fd267a246964648eae8b1c642dfb', {
+      method: 'POST',
+      body: formData,
+  });
+
+  const data = await response.json();
+  return data.data.url; // URL of the uploaded image
+};
+
+const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = e.target.files ? Array.from(e.target.files) : [];
+
+  // Update the list of files
+  setImageFiles(prevFiles => [...prevFiles, ...files]);
+
+  // Upload each file and collect the URLs
+  const newImageMetadata = await Promise.all(files.map(async (file) => {
+      const imageUrl = await uploadImage(file);
+      return {
+          name: file.name,
+          type: file.type.split('/')[1], // Extract file extension
+          imageUrl
+      };
+  }));
+
+  // Update the metadata state
+  setImageMetadata(prevMetadata => [...prevMetadata, ...newImageMetadata]);
+};
 
 
   const openPopup = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+     
     event.preventDefault();
+    postData(event);
     setIsPopupOpen(true);
-    postData(); // Call postData when the popup opens
+    
   };
 
   const closePopup = () => {
     setIsPopupOpen(false);
   };
+
+const doPayment=()=>{
+  console.log("Transition done");
+}
+
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -281,32 +312,35 @@ function AddAuction() {
             <div className="inp">
               <div className="saif">
                 <label className="input">
-                  <input className="input__field" type="text" placeholder=" " />
-                  <span className="input__label">Product Name</span>
+                  <input className="input__field" type="text" placeholder=" " onChange={(e ) => setProductTitle((e.target as HTMLInputElement).value)} />
+                  <span className="input__label" >Product Name</span>
                 </label>
               </div>
             </div>
             <div className="inp">
               <div className="saif">
                 <label className="input">
-                  <textarea className="input__field" placeholder=" " />
+                  <textarea className="input__field" placeholder=" "  onChange={(e) => setProductDescription((e.target as HTMLTextAreaElement).value)} />
                   <span className="input__label">Product Description</span>
                 </label>
               </div>
             </div>
 
-            <select
+            <select 
               name=""
               id=""
               className="form-select"
               value={selectedCategory || ''}
-              onChange={handleCategoryChange}
+              onChange={(e) => {
+                handleCategoryChange(e);
+                setCategory(e.target.value);
+              }}
             >
               <option value="" disabled>
                 Category
               </option>
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
+                <option  key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
               ))}
@@ -342,6 +376,8 @@ function AddAuction() {
                   id="success-outlined"
                   autoComplete="off"
                   defaultChecked
+                  
+                  onChange={(e)=>{if(e.target.value="on")setItemStatusa("NEW")}}
                 />
                 <label
                   className="btn btn-outline-success"
@@ -357,6 +393,7 @@ function AddAuction() {
                   name="options-outlined"
                   id="danger-outlined"
                   autoComplete="off"
+                  onChange={(e)=>{if(e.target.value="on")setItemStatusa("USED")}}
                 />
                 <label
                   className="btn btn-outline-danger"
@@ -380,6 +417,8 @@ function AddAuction() {
                 className="myfile"
                 aria-errormessage="ssa"
                 accept="image/*"
+                onChange={handleImageChange}
+
               />
             </div>
             <div className="imageT">Product Gallery</div>
@@ -445,23 +484,23 @@ function AddAuction() {
               />
               </div>
             </div>
-            <select name="" defaultValue={""} id="" className="form-select">
+            <select name="" defaultValue={""} id="" className="form-select" onChange={(e)=>setProductLocation(e.target.value)}>
               <option value="" disabled>
                 Location
               </option>
-              <option value="Amman">Amman</option>
-              <option value="Irbid">Irbid</option>
-              <option value="Zarqa">Zarqa</option>
-              <option value="Aqaba">Aqaba</option>
-              <option value="Salt">Salt</option>
-              <option value="Madaba">Madaba</option>
-              <option value="Mafraq">Mafraq</option>
-              <option value="Karak">Karak</option>
-              <option value="Tafilah">Tafilah</option>
-              <option value="Ma'an">Ma'an</option>
-              <option value="Jerash">Jerash</option>
-              <option value="Ajloun">Ajloun</option>
-              <option value="Dead Sea">Dead Sea</option>
+              <option value="AMMAN">Amman</option>
+              <option value="IRBID">Irbid</option>
+              <option value="ZARQA">Zarqa</option>
+              <option value="AQABA">Aqaba</option>
+              <option value="SALT">Salt</option>
+              <option value="MADABA">Madaba</option>
+              <option value="MAFRAQ">Mafraq</option>
+              <option value="KARAK">Karak</option>
+              <option value="TAFELAH">Tafilah</option>
+              <option value="MAAN">Ma'an</option>
+              <option value="JERASH">Jerash</option>
+              <option value="AJLOUN">Ajloun</option>
+              <option value="BALQA">Balqa</option>
             </select>
           </div>
         </form>
@@ -469,19 +508,26 @@ function AddAuction() {
       <form action="" className="formb" id="formb">
         {" "}
         <div className="setDate">
-          <div className="date-cont">
-            Start Date
-            <StaticDatePickerLandscape type={"Start"} />
-          </div>
-          <div className="date-cont">
-            End Date
-            <StaticDatePickerLandscape type={"Ends"} />
-          </div>
-        </div>
+      <div className="date-cont">
+        Start Date
+        <StaticDatePickerLandscape 
+          type={"Start"} 
+          onDateChange={(date) => setStartDate(date)}
+          locked={true} // Update startDate state
+        />
+      </div>
+      <div className="date-cont">
+        End Date
+        <StaticDatePickerLandscape 
+          type={"Ends"} 
+          onDateChange={(date) => setExpireDate(date)} // Update expireDate state
+          locked={false}/>
+      </div>
+    </div>
         <div className="inp">
           <div className="saif">
             <label className="input">
-              <input className="input__field" type="number" placeholder=" " />
+              <input className="input__field" type="number" placeholder=" " onChange={(e) => setInitialPrice((e.target as HTMLInputElement).value)} />
               <span className="input__label">Initial Price</span>
             </label>
           </div>
@@ -489,7 +535,7 @@ function AddAuction() {
         <div className="inp">
           <div className="saif">
             <label className="input">
-              <input className="input__field" type="number" placeholder=" " />
+              <input className="input__field" type="number" placeholder=" " onChange={(e) => setMinBid((e.target as HTMLInputElement).value)}/>
               <span className="input__label">Min Bid</span>
             </label>
           </div>
