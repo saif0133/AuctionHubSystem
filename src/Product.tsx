@@ -5,7 +5,6 @@ import PopupMMessage from "./components/PopupMessage";
 import TriangleLoader from "./components/loading";
 import DropdownComponent from "./components/dropDown";
 import Timer from "./components/timer";
-import { newDate } from "react-datepicker/dist/date_utils";
 
 const minBid = 100;
 
@@ -16,18 +15,23 @@ interface ProductData {
     name: string;
     pic: string;
   };
+  endDate: string; // Add endDate to your ProductData
 }
+
 const usersa = [
   { name: "Saif", bid: 500, pic: "https://via.placeholder.com/40?text=S" },
   { name: "Ahmed", bid: 300, pic: "https://via.placeholder.com/40?text=A" },
   { name: "Layla", bid: 150, pic: "https://via.placeholder.com/40?text=L" },
   { name: "Hadi", bid: 700, pic: "https://via.placeholder.com/40?text=H" },
 ];
+
 function Product() {
-  let [Amount, setAmount] = useState(0);
+  const [Amount, setAmount] = useState(0);
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<ProductData | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+  const [endDate, setEndDate] = useState<string>(""); // State for endDate
   const userPayment = true;
 
   // Fetch product data when component mounts or id changes
@@ -44,6 +48,14 @@ function Product() {
 
         const data: ProductData = await response.json();
         setProduct(data);
+        setEndDate(data.endDate); // Update endDate state
+
+        // Check if the auction has ended
+        const currentDate = new Date();
+        const auctionEndDate = new Date(data.endDate);
+        if (currentDate > auctionEndDate) {
+          setIsAuctionEnded(true);
+        }
       } catch (error) {
         console.error("Failed to fetch product data:", error);
       }
@@ -61,7 +73,7 @@ function Product() {
   ) => {
     event.preventDefault();
     const elements = document.getElementsByClassName("input__field");
-    var bidValue = 0;
+    let bidValue = 0;
 
     if (elements.length > 0) {
       const inputElement = elements[0] as HTMLInputElement;
@@ -120,23 +132,26 @@ function Product() {
                         className="input__field"
                         type="text"
                         placeholder=" "
+                        disabled={isAuctionEnded} // Disable input if auction ended
                       />
                       <span className="input__label">Bid Amount</span>
                     </label>
                   </div>
                   <div className="note">Min available bid is : {minBid} $</div>
-                  <button
-                    type="submit"
-                    className="btn-secondary btn bid"
-                    onClick={openPopup}
-                  >
-                    Bid
-                  </button>
+                  {!isAuctionEnded && (
+                    <button
+                      type="submit"
+                      className="btn-secondary btn bid"
+                      onClick={openPopup}
+                    >
+                      Bid
+                    </button>
+                  )}
                   {isPopupOpen && (
                     <PopupMMessage
                       closePopup={closePopup}
                       order={order()}
-                      amount={Amount}
+                      amount={Amount.toString()}
                     />
                   )}
                 </div>
@@ -144,7 +159,7 @@ function Product() {
               <div className="right">
                 <div className="product-name">
                   <div className="name">
-                    <h1>Product name</h1>
+                    <h1>{product.name}</h1>
                   </div>
                   <div className="name-spacer"></div>
                 </div>
@@ -153,7 +168,7 @@ function Product() {
                     <div className="prc">
                       <h2>1000 JDs</h2>
                     </div>
-                    <div className="min-bid">Min Bid : 100 JDs</div>
+                    <div className="min-bid">Min Bid : {minBid} JDs</div>
                   </div>
                   <div className="location">
                     <h2>Amman</h2>
@@ -210,11 +225,11 @@ function Product() {
                     </div>
                     <div className="end-date">
                       <div className="date-title">End date</div>
-                      <div className="date">Sep 10,2024</div>
+                      <div className="date">{endDate}</div> {/* Display endDate */}
                     </div>
                   </div>
                   <div className="timer">
-                    <Timer endDate={new Date("2024-08-11T23:59:59Z")} />
+                    <Timer endDate={new Date(endDate)} /> {/* Pass endDate to Timer */}
                   </div>
                 </div>
                 <div className="drop">

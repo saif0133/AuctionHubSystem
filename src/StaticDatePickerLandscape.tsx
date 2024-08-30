@@ -119,7 +119,7 @@ export default function StaticDatePickerLandscape({ type, onDateChange, locked }
       {locked && (
         <div className={classes.overlay}>
           <img
-  src="https://cdn-icons-png.flaticon.com/512/3649/3649801.png"
+  src="https://www.itba3li.com/wp-content/uploads/2024/08/Premium.png"
   alt=""
   style={{ height: '150px' , width:'150px' , marginBottom:"50px" }} // Correct usage of inline style in React
 />

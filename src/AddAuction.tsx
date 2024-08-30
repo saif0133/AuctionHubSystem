@@ -30,12 +30,39 @@ function AddAuction() {
   const [images, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [imageMetadata, setImageMetadata] = useState<{ name: string, type: string, imageUrl: string }[]>([]);
-
+let tests=initialPricea;
   const userToken = localStorage.getItem('authToken') || '';
   const userPayment = true;
   const order = () => {
     return userPayment ? "bidFees" : "noPayment";
   };
+
+  const calculateReservedAmount = (price: number): string => {
+    let amount: number;
+  
+    if (price >= 1 && price <= 100) {
+      amount = price * 0.10; // 10%
+    } else if (price >= 101 && price <= 1000) {
+      amount = price * 0.07; // 7%
+    } else if (price >= 1001 && price <= 5000) {
+      amount = price * 0.05; // 5%
+    } else if (price >= 5001 && price <= 10000) {
+      amount = price * 0.03; // 3%
+    } else if (price > 10000) {
+      amount = price * 0.02; // 2%
+    } else {
+      amount = 0; // Default case, if needed
+    }
+  
+    // Return the amount formatted to 2 decimal places
+    return amount.toFixed(2);
+  };
+  
+  let reservedAmount="";
+  reservedAmount = calculateReservedAmount(Number(initialPricea)).toString();
+
+
+
 
   const postData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -527,7 +554,7 @@ const doPayment=()=>{
         <div className="inp">
           <div className="saif">
             <label className="input">
-              <input className="input__field" type="number" placeholder=" " onChange={(e) => setInitialPrice((e.target as HTMLInputElement).value)} />
+              <input className="input__field" type="number" placeholder=" " onChange={(e) =>{ setInitialPrice((e.target as HTMLInputElement).value); reservedAmount}} />
               <span className="input__label">Initial Price</span>
             </label>
           </div>
@@ -548,7 +575,7 @@ const doPayment=()=>{
             Publish
           </button>
           {isPopupOpen && (
-            <PopupMMessage closePopup={closePopup} order={order()} amount={0} />
+            <PopupMMessage closePopup={closePopup} order={order()} amount={reservedAmount} />
           )}
         </div>
       </form>

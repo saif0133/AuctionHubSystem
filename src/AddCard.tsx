@@ -95,6 +95,7 @@ let paymentID;
     console.log('Response:', result);
     paymentID=result.id;
     console.log("---------------------------------------"+ paymentID);
+    localStorage.setItem("paymentMethodId",paymentID);
 
   } catch (error) {
     console.error('Error:', error);
@@ -150,7 +151,7 @@ let paymentID;
              type="text"
              pattern="[0-9]*"
              inputMode="numeric"
-             maxLength={4}
+             maxLength={5}
              placeholder="MM/YY"
              onChange={handleCardExpiryChange}
            />

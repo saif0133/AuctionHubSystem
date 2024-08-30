@@ -2,7 +2,7 @@ import React from "react";
 import "./popUpContent.css";
 
 interface BidFeesProps {
-  amount: number;
+  amount: string;
   closePopup: () => void;
 }
 

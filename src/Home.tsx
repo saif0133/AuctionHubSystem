@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import ProductCard from "./components/ProductCard";
 import TriangleLoader from "./components/loading";
+import { extractDataFromToken } from "./components/tokenDecode"
 
 interface Product {
   pId: number;
@@ -17,6 +18,8 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,6 +47,7 @@ const Home: React.FC = () => {
   if (loading) {
     return (
       <div className="testmain">
+
         <TriangleLoader />
       </div>
     );

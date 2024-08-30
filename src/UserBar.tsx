@@ -9,12 +9,16 @@ import TopBar from "./components/TopBar";
   removeToken,
 } from "./final project/login-signup page/script.js";
 */
+import { extractDataFromToken } from "./components/tokenDecode"
+import { DecodedToken } from './components/tokenDecode';
+
 interface UserInfo {
   name: string;
   pic: string;
 }
 
 function UserBar() {
+  
   const [Info, setInfo] = useState<UserInfo | null>(null);
   const token = localStorage.getItem("authToken");
   useEffect(() => {
@@ -45,10 +49,23 @@ function UserBar() {
     fetchProduct();
   }, [token]); // Add token to dependency array
 
+
+  const [userData, setUserData] = useState<DecodedToken | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const data = extractDataFromToken(token);
+    setUserData(data);
+  }, []);
+
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="testbar">
       <TopBar
-        Name={token ? Info?.name : undefined}
+        Name={token ? userData.firstName : undefined}
         image={token ? Info?.pic : undefined}
       />
     </div>
