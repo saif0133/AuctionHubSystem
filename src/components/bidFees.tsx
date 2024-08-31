@@ -18,7 +18,7 @@ const BidFees: React.FC<BidFeesProps> = ({ amount, closePopup }) => {
       </div>
 
       <div className="caption">
-        Are you sure you want to bid with amount: {amount}$ ?
+        Are you sure you want to bid with amount: <span style={{ color: '#992427' }}>{amount}$</span> ?
       </div>
 
       <div className="buttons">

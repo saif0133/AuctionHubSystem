@@ -21,7 +21,7 @@ const PopupMMessage: React.FC<PopupMMessageProps> = ({ closePopup, order, amount
     <div id="popupBox" className="popup" onClick={outsideClick}>
       <div className="popup-content">
         {order === "noPayment" && <NoPayment />}
-        {order === "publishFees" && <PublishFees amount={amount} closePopup={closePopup} />}
+        {order === "PublishFees" && <PublishFees amount={amount} closePopup={closePopup} />}
         {order === "bidFees" && <BidFees amount={amount} closePopup={closePopup} />}
       </div>
     </div>

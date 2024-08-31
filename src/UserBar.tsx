@@ -58,15 +58,22 @@ function UserBar() {
     setUserData(data);
   }, []);
 
-  if (!userData) {
-    return <div>Loading...</div>;
-  }
+   if (!userData) {
+    return (
+      <div className="testbar">
+        <TopBar
+          Name={ undefined}
+          image={ undefined}
+        />
+      </div>
+    );
+   }
 
   return (
     <div className="testbar">
       <TopBar
-        Name={token ? userData.firstName : undefined}
-        image={token ? Info?.pic : undefined}
+        Name={ userData.firstName}
+        image={Info?.pic}
       />
     </div>
   );

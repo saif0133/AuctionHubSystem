@@ -8,7 +8,7 @@ interface PaymentProps {
 }
 
 const PaymentComponent: React.FC<PaymentProps> = ({ amount, description, paymentMethodId, closePopup }) => {
-  const [loading, setLoading] = useState(true); // Start loading
+  const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean | null>(null);
   const authToken = localStorage.getItem("authToken");

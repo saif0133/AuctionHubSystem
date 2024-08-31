@@ -16,14 +16,7 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup }) => {
 
   return (
     <div className="popupMessage">
-      {showPayment ? (
-        <PaymentComponent
-          amount={amount}
-          description="Fee for publishing auction"
-          paymentMethodId="your-payment-method-id"
-          closePopup={closePopup}
-        />
-      ) : (
+      (
         <>
           <div className="caption-image">
             <img
@@ -34,9 +27,9 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup }) => {
           </div>
 
           <div className="caption">
-            A refundable fee of ${amount} is required to publish your auction. This fee will be
-            returned after the auction ends. For questions, contact support.
-          </div>
+  A refundable fee of <span style={{ color: '#992427' }}>{amount}$</span> is required to publish your auction. This fee will be
+  returned after the auction ends. For questions, contact support.
+</div>
 
           <div className="buttons">
             <button
@@ -47,13 +40,13 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup }) => {
             </button>
             <button
               className="btn btn-success popa"
-              onClick={handleAccept}
+//              onClick={handleAccept}
             >
               Accept and Publish
             </button>
           </div>
         </>
-      )}
+     
     </div>
   );
 }

@@ -19,8 +19,18 @@ function AddAuction() {
   const [productTitle, setProductTitle] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [expireDate, setExpireDate] = useState("");
-  const [itemStatusa, setItemStatusa] = useState("NEW");
+ const [expireDate, setExpireDate] = useState("");
+// const [expireDate, setExpireDate] = useState(() => {
+//   const now = new Date();
+//   const day = String(now.getDate()).padStart(2, '0');
+//   const month = String(now.getMonth() + 1).padStart(2, '0');
+//   const year = now.getFullYear();
+//   const hours = String(now.getHours()).padStart(2, '0');
+//   const minutes = String(now.getMinutes()).padStart(2, '0');
+//   return `${day}-${month}-${year} ${hours}:${minutes}`;
+// });
+ 
+const [itemStatusa, setItemStatusa] = useState("NEW");
   const [ProductLocation, setProductLocation] = useState("");
   const [minBida, setMinBid] = useState("");
   const [initialPricea, setInitialPrice] = useState("");
@@ -34,7 +44,7 @@ let tests=initialPricea;
   const userToken = localStorage.getItem('authToken') || '';
   const userPayment = true;
   const order = () => {
-    return userPayment ? "bidFees" : "noPayment";
+    return userPayment ? "PublishFees" : "noPayment";
   };
 
   const calculateReservedAmount = (price: number): string => {
@@ -62,7 +72,8 @@ let tests=initialPricea;
   reservedAmount = calculateReservedAmount(Number(initialPricea)).toString();
 
 
-
+ 
+ 
 
   const postData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -258,6 +269,89 @@ const doPayment=()=>{
   console.log("Transition done");
 }
 
+
+const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  event.preventDefault();
+
+  // Create an array to hold the names of missing fields
+  const missingFields: string[] = [];
+  const newErrors = {
+    expireDate: false,
+    productTitle: false,
+    productDescription: false,
+    imageMetadata: false,
+    itemStatusa: false,
+    category: false,
+    attributeValues: false,
+    ProductLocation: false,
+    minBida: false,
+    initialPricea: false
+  };
+
+  // Check for missing or invalid fields and add to the array
+  if (!expireDate) {
+    missingFields.push("Expiration Date");
+    newErrors.expireDate = true;
+  } else {
+    const expireDateTime = new Date(expireDate);
+    const currentTime = new Date();
+    const timeDifference = expireDateTime.getTime() - currentTime.getTime();
+    const hoursDifference = timeDifference / (1000 * 60 * 60); // Convert milliseconds to hours
+
+    if (hoursDifference < 24) {
+      missingFields.push("Expiration Date must be at least 24 hours from now");
+      newErrors.expireDate = true;
+    }
+  }
+
+  if (!productTitle) {
+    missingFields.push("Product Title");
+    newErrors.productTitle = true;
+  }
+  if (!productDescription) {
+    missingFields.push("Product Description");
+    newErrors.productDescription = true;
+  }
+  if (!imageMetadata || imageMetadata.length === 0) {
+    missingFields.push("Images");
+    newErrors.imageMetadata = true;
+  }
+  if (!itemStatusa) {
+    missingFields.push("Item Status");
+    newErrors.itemStatusa = true;
+  }
+  if (!category) {
+    missingFields.push("Category");
+    newErrors.category = true;
+  }
+  if (!attributeValues || Object.keys(attributeValues).length === 0) {
+    missingFields.push("Category Attributes");
+    newErrors.attributeValues = true;
+  }
+  if (!ProductLocation) {
+    missingFields.push("Product Location");
+    newErrors.ProductLocation = true;
+  }
+  if (minBida == null) {
+    missingFields.push("Minimum Bid");
+    newErrors.minBida = true;
+  }
+  if (initialPricea == null) {
+    missingFields.push("Initial Price");
+    newErrors.initialPricea = true;
+  }
+
+
+
+
+  // If there are missing fields, show an alert with the details
+  if (missingFields.length > 0) {
+    alert("Please fill in the following required fields:\n" + missingFields.join(", "));
+  } else {
+    // Call openPopup if all values are valid
+    openPopup(event);
+  }
+};
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -571,7 +665,7 @@ const doPayment=()=>{
           <button className="next back btn btn-danger" onClick={test}>
             Back
           </button>
-          <button className="next back btn btn-success" onClick={openPopup}>
+          <button className="next back btn btn-success" onClick={validateAndProcessData}>
             Publish
           </button>
           {isPopupOpen && (
