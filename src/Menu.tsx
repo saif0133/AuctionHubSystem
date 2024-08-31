@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   faHome,
   faPlus,
@@ -18,13 +18,12 @@ interface ListItem {
   link: string;
 }
 
-const userName = "Saif";
-const userProfile =
-  "https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-1170x780.jpg";
-
 const logo = "https://saifsamplewebsite.netlify.app/imgs/hublogo-2.png";
 
 function Menu() {
+  const [isMenuVisible, setIsMenuVisible] = useState(true); // Manage visibility
+  const [menuHeight, setMenuHeight] = useState('100%'); // Manage height
+  const [menuClass, setMenuClass] = useState(''); // Manage menu class
   const token = localStorage.getItem("authToken"); // Check if the token exists
 
   let items: ListItem[] = [
@@ -42,17 +41,37 @@ function Menu() {
     items.push({ text: "Logout", icon: faSignOutAlt, link: "/Logout" });
   }
 
+  const toggleMenu = () => {
+    setIsMenuVisible(prev => !prev); // Toggle visibility
+    setMenuHeight(prev => prev === '100%' ? '2%' : '100%'); // Toggle height
+    setMenuClass(prev => prev === '' ? 'menu-hidden' : ''); // Toggle class
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
   return (
-    <div className="menu">
-      <ListGroup items={items} logo={logo} />
-      <div className="footer">
-        <p>
-          <a href="legal.html">Legal</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{" "}
-          <a href="privacy.html">Privacy Policy</a>
-        </p>
-        <p>© 2024 Auction Hub. All Rights Reserved.</p>
+    <>
+    <div className="menicon" onClick={toggleMenu}>
+        ☰
       </div>
+    <div className={`menu ${menuClass}`} style={{ height: menuHeight }}>
+      
+      {isMenuVisible && (
+        <>
+          <ListGroup items={items} logo={logo} />
+          <div className="footer">
+            <p>
+              <a href="legal.html">Legal</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{" "}
+              <a href="privacy.html">Privacy Policy</a>
+            </p>
+            <p>© 2024 Auction Hub. All Rights Reserved.</p>
+          </div>
+        </>
+      )}
     </div>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 let userToken = null;
-const errortext=document.getElementById("error");
+const errortext=document.getElementById("error-signin");
 /**
  * Toggles between the login and signup forms.
  */
@@ -114,11 +114,3 @@ async function verifyLogin() {
     alert(`Error: ${error.message}`);
   }
 }
-/*
-// Load token from local storage if available
-const currentToken = localStorage.getItem("authToken");
-if (currentToken) {
-  userToken = currentToken;
-  console.log("Token loaded from local storage.");
-}
-*/

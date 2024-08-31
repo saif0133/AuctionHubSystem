@@ -171,3 +171,10 @@ button:hover {
   opacity: 1;
   transition: opacity 1s ease;
 }
+
+
+.error-signin, .error-signup {
+  color: red;
+  font-weight: bold;
+  font-size: small;
+}

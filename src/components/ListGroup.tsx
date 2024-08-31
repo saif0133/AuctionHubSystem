@@ -23,7 +23,7 @@ const ListGroup: React.FC<ListGroupProps> = ({ items, logo }) => {
   };
 
   return (
-    <div>
+    <div className="hideme" id="hideme">
       <div className="logo-container">
         <a href="/" className="goHome">
           {" "}
