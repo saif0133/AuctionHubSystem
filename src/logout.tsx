@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const handleLogout = () => {
   localStorage.removeItem("authToken"); // Remove the token from localStorage
+  window.location.reload();
 };
 
 const Logout = () => {

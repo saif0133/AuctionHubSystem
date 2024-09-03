@@ -357,23 +357,31 @@ li {
 }
 
 .card {
-  height: 300px;
+  height: 300px ;
   width: 250px;
   text-align: center;
   border-radius: 30px !important;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 16px auto;
+  margin: 20px 20px;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card img {
   width: 100%;
+  height: 200px;
+  max-height: 200px;
+  object-fit: cover;
   border-radius: 30px 30px 0 0;
 }
 .product-title {
   font-size: xx-large;
   font-weight: bolder;
+  white-space: nowrap;        /* Prevent the text from wrapping onto multiple lines */
+  overflow: hidden;           /* Hide any overflow text that doesn't fit within the container */
+  text-overflow: ellipsis;    /* Add an ellipsis (...) to indicate that the text has been truncated */
+  display: inline-block;      /* Ensures the title behaves as an inline block element */
+  max-width: 100%;       
 }
 
 .product-description {
@@ -385,6 +393,14 @@ li {
   letter-spacing: 0.05px; /* Adjust as needed */
   padding: 2%;
   margin: 2px;
+
+  display: -webkit-box;             /* Use a flexbox-like structure */
+  -webkit-line-clamp: 4;            /* Limit the content to 5 lines */
+  -webkit-box-orient: vertical;     /* Set the box orientation to vertical */
+  overflow: hidden;                 /* Hide any content that overflows */
+  text-overflow: ellipsis;          /* Add ellipsis (...) to indicate overflow */
+  white-space: normal;              /* Allow text to wrap to new lines */
+  min-height: calc(1.2em * 5); 
 }
 
 .product-current-price {

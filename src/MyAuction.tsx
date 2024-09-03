@@ -1,46 +1,99 @@
+import { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
+import TriangleLoader from "./components/loading";
+import { Width } from "devextreme-react/cjs/chart";
+import LoginWarning from "./components/loginWarning"
 
-const image = "https://learn.corel.com/wp-content/uploads/2022/02/car_art7.jpg";
-const title = "Test";
-const des =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a libero quis tellus ultricies elementum. Suspendisse aliquet nisi quis diam sagittis semper.";
-const price = 1000;
-const endDate = new Date("2024-06-21T00:00:00");
-const pId = 1;
+interface Product {
+  id: number;
+  item: {
+    name: string;
+    description: string;
+    images: {
+      imageUrl: string;
+    }[];
+  };
+  currentPrice: number;
+  expireDate: string;
+}
+const formatToISO = (dateStr: string): string => {
+  const [day, month, yearTime] = dateStr.split('-');
+  const [year, time] = yearTime.split(' ');
+  const [hour, minute] = time.split(':');
 
+  const formattedDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:00Z`);
+  
+  return formattedDate.toISOString();
+};
 function MyAuction() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('authToken'); // Retrieve the token
+
+        const response = await fetch("http://localhost:8080/auction/myAuctions", {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data: Product[] = await response.json();
+        setProducts(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="testmain">
+        <TriangleLoader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <LoginWarning />;
+  }
+
   return (
     <div className="testmain">
       <div className="products">
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={"time out"}
-        ></ProductCard>
+        {products.map((product) => {
+                    const formattedEndDate = formatToISO(product.expireDate);
 
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={new Date("2024-06-27T00:00:00")}
-          id={pId}
-          message={""}
-        ></ProductCard>
+          // Get the first image URL for the product
+          const imageUrl = product.item.images.length > 0 ? product.item.images[0].imageUrl : '';
 
-        <ProductCard
-          img={image}
-          title={title}
-          description={des}
-          currentPrice={price}
-          endDate={endDate}
-          id={pId}
-          message={"you win"}
-        ></ProductCard>
+          return (
+            <>
+            <ProductCard
+              key={product.id}
+              img={imageUrl}
+              title={product.item.name}
+              description={product.item.description}
+              currentPrice={product.currentPrice}
+              endDate={new Date(formattedEndDate)}
+              id={product.id}
+              message={""}
+            />
+         </> );
+        })}
       </div>
     </div>
   );

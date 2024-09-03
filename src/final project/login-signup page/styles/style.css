@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Segoe UIt";
+  font-family: "Segoe UI";
   src: url("fonts") format("truetype");
   font-weight: normal;
   font-style: normal;
@@ -13,6 +13,7 @@ body {
 body::-webkit-scrollbar {
   display: none; /* Hide scrollbar */
 }
+
 @media (min-width: 1000px) {
   body {
     background: radial-gradient(circle at center, #2f2f2f 0%, #000000 150%);
@@ -94,7 +95,6 @@ body::-webkit-scrollbar {
 
   .form {
     width: 60%;
-
     margin-bottom: 40%;
   }
 
@@ -140,6 +140,9 @@ body::-webkit-scrollbar {
     cursor: pointer;
   }
 
+  #togglePassword ,#togglePassword2 ,#togglePassword3 {
+    width: auto !important;
+  }
   .acc {
     font-size: small;
   }
@@ -147,34 +150,91 @@ body::-webkit-scrollbar {
   .acc a {
     color: red;
   }
+
+  button:hover {
+    transition: 0.3s ease;
+    background-color: red;
+    border: 0;
+  }
+
+  .logo:hover {
+    transition: 0.3s ease;
+    filter: drop-shadow(0 0 6px red);
+  }
+
+  .forgetpass a:hover {
+    transition: 0.3s ease;
+    color: red;
+  }
+
+  .logo:hover + .cta {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s ease;
+  }
+
+  .error-signin, .error-signup {
+    color: red;
+    font-weight: bold;
+    font-size: small;
+  }
 }
 
-button:hover {
-  transition: 0.3s ease;
+@media (max-width: 999px) {
+  body {
+    background: linear-gradient(to bottom, #2f2f2f 0%, #000000 100%);
+  }
 
-  background-color: red;
-  border: 0;
-}
+  .container {
+    flex-direction: column;
+  }
 
-.logo :hover {
-  transition: 0.3s ease;
-  filter: drop-shadow(0 0 6px red);
-}
+  .container.reverse {
+    transform: none;
+  }
 
-.forgetpass a:hover {
-  transition: 0.3s ease;
-  color: red;
-}
+  .signtuer, .content {
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    transition: transform 1s ease;
+  }
 
-.logo:hover + .cta {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 1s ease;
-}
+  .logo {
+    width: 50%;
+    margin-top: 20%;
+  }
 
+  .cta {
+    opacity: 1;
+    visibility: visible;
+  }
 
-.error-signin, .error-signup {
-  color: red;
-  font-weight: bold;
-  font-size: small;
+  .welcome {
+    font-size: 50px;
+  }
+
+  .form {
+    width: 80%;
+    margin-bottom: 20%;
+  }
+
+  .forgetpass {
+    font-size: medium;
+    text-align: center;
+  }
+
+  input {
+    width: 90%;
+    height: 40px;
+    margin: 10px auto;
+  }
+
+  .btn {
+    width: 100% !important;
+    height: 50px !important;  }
+
+  .acc {
+    font-size: medium;
+  }
 }

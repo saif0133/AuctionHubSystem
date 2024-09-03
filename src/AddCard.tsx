@@ -1,5 +1,6 @@
  import React, { useState, ChangeEvent } from "react";
  import "./AddCard.css"
+import { useNavigate } from "react-router-dom";
  const cardLogos: { [key: string]: string } = {
    visa: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/640px-Visa_Logo.png",
    mastercard: "https://pngimg.com/uploads/mastercard/mastercard_PNG15.png",
@@ -62,6 +63,45 @@ let paymentID;
  const [cardCVC, setCardCVC] = useState<string>("CVC");
  const [cardType, setCardType] = useState<string>("unknown")
  const userToken = localStorage.getItem('authToken') || '';
+ const navigate = useNavigate();
+
+
+ const addCard = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  event.preventDefault();
+
+  const paymentID = localStorage.getItem('paymentMethodId') || 'defaultToken'; // Replace 'defaultToken' with a suitable default if needed
+
+  // Construct the URL with parameters
+  const url = `http://localhost:8080/api/stripe/add-card?token=${encodeURIComponent(paymentID)}`;
+
+  console.log('URL being sent:', url);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${userToken}`
+      }
+      // No body is needed since data is sent as URL params
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const result = await response.text();
+    console.log('Response:', result);
+    navigate('/Payment');
+    
+
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+
+
  const postData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   event.preventDefault();
 
@@ -96,11 +136,14 @@ let paymentID;
     paymentID=result.id;
     console.log("---------------------------------------"+ paymentID);
     localStorage.setItem("paymentMethodId",paymentID);
-
+    await addCard(event);
+    
   } catch (error) {
     console.error('Error:', error);
   }
 };
+
+
    return (
      <div className="add-card-container">
        <div className="credit-card">

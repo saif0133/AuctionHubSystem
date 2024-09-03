@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import ProductCard from "./components/ProductCard";
 import TriangleLoader from "./components/loading";
-import { extractDataFromToken } from "./components/tokenDecode"
+import { extractDataFromToken } from "./components/tokenDecode";
 
+// Update Product interface to match the fetched data
 interface Product {
   pId: number;
   image: string;
@@ -18,19 +19,32 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  const formatDateToISO = (dateString: string): string => {
+    const [day, month, year, time] = dateString.split(/[-\s:]/);
+    return new Date(`${year}-${month}-${day}T${time}:00Z`).toISOString();
+  };
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://mocki.io/v1/9ba55466-347b-4308-ad06-6b5465f7b7f0"
+          "http://localhost:8080/auction/all"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data: Product[] = await response.json();
-        setProducts(data);
+        const data = await response.json();
+
+        const formattedProducts = data.map((product: any) => ({
+          pId: product.id,
+          image: product.item.images[0]?.imageUrl || "", // Get the first image URL
+          title: product.item.name,
+          description: product.item.description,
+          price: product.currentPrice,
+          endDate: formatDateToISO(product.expireDate), // Convert to ISO format
+        }));
+
+        setProducts(formattedProducts);
         console.log(localStorage.getItem("authToken"));
       } catch (error) {
         if (error instanceof Error) {
@@ -47,7 +61,6 @@ const Home: React.FC = () => {
   if (loading) {
     return (
       <div className="testmain">
-
         <TriangleLoader />
       </div>
     );

@@ -114,3 +114,72 @@ async function verifyLogin() {
     alert(`Error: ${error.message}`);
   }
 }
+
+
+document.getElementById("password").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+      event.preventDefault();
+      verifyLogin();
+  }
+});
+
+
+const togglePassword = document.querySelector("#togglePassword");
+const password = document.querySelector("#password");
+const toggleImage = togglePassword.querySelector("img");
+
+togglePassword.addEventListener("click", function () {
+    // Toggle the type attribute
+    const type = password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+
+    // Change the image source and alt text based on the type
+    if (type === "password") {
+        toggleImage.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true";
+        toggleImage.alt = "Show Password";
+    } else {
+        toggleImage.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/hide%20pass.png?raw=true";
+        toggleImage.alt = "Hide Password";
+    }
+});
+
+
+
+const togglePassword2 = document.querySelector("#togglePassword2");
+const password2 = document.querySelector("#password2");
+const toggleImage2 = togglePassword2.querySelector("img");
+
+togglePassword2.addEventListener("click", function () {
+    // Toggle the type attribute
+    const type2 = password2.getAttribute("type") === "password" ? "text" : "password";
+    password2.setAttribute("type", type2);
+
+    // Change the image source and alt text based on the type
+    if (type2 === "password") {
+        toggleImage2.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true";
+        toggleImage2.alt = "Show Password";
+    } else {
+        toggleImage2.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/hide%20pass.png?raw=true";
+        toggleImage2.alt = "Hide Password";
+    }
+});
+
+
+const togglePassword3 = document.querySelector("#togglePassword3");
+const password3 = document.querySelector("#password3");
+const toggleImage3 = togglePassword3.querySelector("img");
+
+togglePassword3.addEventListener("click", function () {
+    // Toggle the type attribute
+    const type3 = password3.getAttribute("type") === "password" ? "text" : "password";
+    password3.setAttribute("type", type3);
+
+    // Change the image source and alt text based on the type
+    if (type3 === "password") {
+        toggleImage3.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true";
+        toggleImage3.alt = "Show Password";
+    } else {
+        toggleImage3.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/hide%20pass.png?raw=true";
+        toggleImage3.alt = "Hide Password";
+    }
+});

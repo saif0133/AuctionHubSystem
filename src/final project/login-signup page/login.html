@@ -20,7 +20,7 @@
     <div class="container">
 
         <div class="signtuer">
-            <div class="logo">
+            <div class="logo" onclick="window.location.href = '/';">
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1086.19 952.91">
                     <defs>
                         <style>
@@ -67,10 +67,26 @@ Where Deals Meet Destiny
             <div class="form" id="loginForm">
                 <form action="" method="post">
                     <div class="error-signin" id="error-signin"></div>
-                    <input type="text" placeholder="Email" id="email">
+                    <input type="text" placeholder="Email" id="email" required>
                     <br>
-                    <input type="password" placeholder="Password" id="password">
-                    <br>
+                    <div style="position: relative;">
+                        <input type="password" placeholder="Password" id="password" required >
+                        <button type="button" id="togglePassword" style="
+                            position: absolute;
+                            right: 0px;
+                            top: 32%;
+                            transform: translateY(-50%);
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                        ">
+                            <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true"
+                                alt="" style="
+                            
+                            width: 20px;
+                        ">
+                        </button>
+                    </div> <br>
                     <div class="forgetpass"><a href="#">Forgot Password?</a></div>
                     <button type="button" onclick="verifyLogin();">LOG IN</button>
                     <div class="acc">
@@ -90,11 +106,45 @@ Where Deals Meet Destiny
                     <br>
                     <input type="text" placeholder="Email">
                     <br>
-                    <input type="password" placeholder="Password">
+                    <div style="position: relative;">
+                        <input type="password" placeholder="Password" id="password2" required >
+                        <button type="button" id="togglePassword2" style="
+                            position: absolute;
+                            right: 0px;
+                            top: 32%;
+                            transform: translateY(-50%);
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                        ">
+                            <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true"
+                                alt="" style="
+                            
+                            width: 20px;
+                        ">
+                        </button>
+                    </div> 
                     <br>
-                    <input type="password" placeholder="Confirm Password">
+                    <div style="position: relative;">
+                        <input type="password" placeholder="Confirm Password" id="password3" required >
+                        <button type="button" id="togglePassword3" style="
+                            position: absolute;
+                            right: 0px;
+                            top: 32%;
+                            transform: translateY(-50%);
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                        ">
+                            <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true"
+                                alt="" style="
+                            
+                            width: 20px;
+                        ">
+                        </button>
+                    </div> 
                     <br>
-                    <div class="btn"><button type="submit">SIGN UP</button></div>
+                    <button class="btn" type="submit">SIGN UP</button>
                     <div class="acc">
                         <p>Already have an account? <a href="#" onclick="toggleForms(); ">Log In</a></p>
                     </div>

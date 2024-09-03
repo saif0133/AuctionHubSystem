@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import StaticDatePickerLandscape from "./StaticDatePickerLandscape";
 import PopupMMessage from "./components/PopupMessage";
+import LoginWarning from "./components/loginWarning";
+import { fetchPaymentId, getPaymentDetails } from "./components/paymentId";
 
 let count = 1;
-
+let userNotIn=true;
 interface Category {
   id: number;
   name: string;
@@ -40,9 +42,11 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const [images, setImageFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [imageMetadata, setImageMetadata] = useState<{ name: string, type: string, imageUrl: string }[]>([]);
-let tests=initialPricea;
-  const userToken = localStorage.getItem('authToken') || '';
-  const userPayment = true;
+  const [hasPaymentDetails, setHasPaymentDetails] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const userToken = localStorage.getItem('authToken') || null;
+  let userPayment = false;
   const order = () => {
     return userPayment ? "PublishFees" : "noPayment";
   };
@@ -122,6 +126,26 @@ let tests=initialPricea;
     }
     };
   
+
+    
+  useEffect(() => {
+    const initializePaymentId = async () => {
+      await fetchPaymentId();
+      const details = getPaymentDetails(); // Get the details from the fetchPaymentId function
+      setHasPaymentDetails(false);
+
+      if (details.paymentId) {
+       
+        userPayment=true;
+      }
+
+      setIsLoading(false); // Set loading to false after data is fetched
+    };
+
+    initializePaymentId();
+  }, []);
+
+
   useEffect(() => {
     const fileInputs = document.querySelectorAll(".myfile");
   
@@ -297,11 +321,11 @@ const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, Mouse
     const currentTime = new Date();
     const timeDifference = expireDateTime.getTime() - currentTime.getTime();
     const hoursDifference = timeDifference / (1000 * 60 * 60); // Convert milliseconds to hours
-
+/*
     if (hoursDifference < 24) {
       missingFields.push("Expiration Date must be at least 24 hours from now");
       newErrors.expireDate = true;
-    }
+    }*/
   }
 
   if (!productTitle) {
@@ -418,6 +442,8 @@ const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, Mouse
       });
     };
   }, []);
+  if(!userToken)
+    return <LoginWarning />;
 
   return (
     
@@ -669,7 +695,17 @@ const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, Mouse
             Publish
           </button>
           {isPopupOpen && (
-            <PopupMMessage closePopup={closePopup} order={order()} amount={reservedAmount} />
+            <PopupMMessage 
+  closePopup={closePopup} 
+  order={order()} 
+  amount={reservedAmount} 
+  customFunction={(event) => {
+    postData(event).then(() => {
+    }).catch((error) => {
+      console.error(error);
+    });
+  }} 
+/>
           )}
         </div>
       </form>

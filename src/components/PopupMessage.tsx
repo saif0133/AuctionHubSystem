@@ -8,9 +8,10 @@ interface PopupMMessageProps {
   closePopup: () => void;
   order: string;
   amount: string;
+  customFunction?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-const PopupMMessage: React.FC<PopupMMessageProps> = ({ closePopup, order, amount }) => {
+const PopupMMessage: React.FC<PopupMMessageProps> = ({ closePopup, order, amount,customFunction }) => {
   const outsideClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if ((event.target as HTMLDivElement).className === "popup") {
       closePopup();
