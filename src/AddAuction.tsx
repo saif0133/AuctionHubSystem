@@ -46,7 +46,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const [isLoading, setIsLoading] = useState(true);
 
   const userToken = localStorage.getItem('authToken') || null;
-  let userPayment = false;
+  const [userPayment, srtUserPayment] = useState(false);
   const order = () => {
     return userPayment ? "PublishFees" : "noPayment";
   };
@@ -79,38 +79,34 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
  
  
 
-  const postData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-
-    const url = 'http://localhost:8080/auction/create'; // Replace with your API endpoint
+  const postData = async (): Promise<string | null> => {
+    const url = 'http://localhost:8080/auction/create'; 
   
-    // Data to be sent in the POST request
     const data = {
       expireDate: expireDate,
       item: {
         name: productTitle,
         description: productDescription,
-        images:imageMetadata,
-        itemStatus:itemStatusa,
+        images: imageMetadata,
+        itemStatus: itemStatusa,
         category: {
           id: category
         },
         categoryAttributes: attributeValues
       },
-      location:ProductLocation,
+      location: ProductLocation,
       minBid: minBida,
       initialPrice: initialPricea
     };
-    
+  
     console.log('Data being sent:', JSON.stringify(data, null, 2));
-
- 
+  
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}` // Add Authorization header
+          'Authorization': `Bearer ${userToken}`
         },
         body: JSON.stringify(data)
       });
@@ -121,10 +117,14 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   
       const result = await response.json();
       console.log('Response:', result);
+  
+      return result.id || null;
     } catch (error) {
       console.error('Error:', error);
+      return null;
     }
-    };
+  };
+  
   
 
     
@@ -136,7 +136,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
 
       if (details.paymentId) {
        
-        userPayment=true;
+        srtUserPayment(true);
       }
 
       setIsLoading(false); // Set loading to false after data is fetched
@@ -280,7 +280,7 @@ const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const openPopup = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
      
     event.preventDefault();
-    postData(event);
+   // postData(event);
     setIsPopupOpen(true);
     
   };
@@ -698,13 +698,9 @@ const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, Mouse
             <PopupMMessage 
   closePopup={closePopup} 
   order={order()} 
+  description={productTitle}
   amount={reservedAmount} 
-  customFunction={(event) => {
-    postData(event).then(() => {
-    }).catch((error) => {
-      console.error(error);
-    });
-  }} 
+  customFunction={postData} 
 />
           )}
         </div>

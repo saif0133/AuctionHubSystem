@@ -71,8 +71,12 @@ function MyAuction() {
     return <LoginWarning />;
   }
 
+  let Title= "My Auction";
   return (
     <div className="testmain">
+      <div className="formTitle" id="formTitle">
+       My Auction
+      </div>
       <div className="products">
         {products.map((product) => {
                     const formattedEndDate = formatToISO(product.expireDate);

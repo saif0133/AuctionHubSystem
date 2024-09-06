@@ -158,8 +158,9 @@ body::-webkit-scrollbar {
   grid-column: 2 / 3;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /*justify-content: center;*/
   align-items: center;
+  background-color: #EFEFEF;
 }
 
 /* Responsive adjustments */
@@ -356,20 +357,73 @@ li {
   display: flex;
 }
 
+.imageContainer{
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  opacity: 0.8;
+}
+.imageCont{
+  width: 1000px;
+}
 .card {
-  height: 300px ;
-  width: 250px;
+  height: 370px !important;
+  width: 230px;
   text-align: center;
   border-radius: 30px !important;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px 20px;
+ border: none !important;
+  margin: 20px 15px;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.cat{
+  height: 150px !important;
+width: 300px !important;
+cursor: move !important;
+}
+cat:hover{
+  box-shadow: none !important;
+}
+
+.category-list {
+  display: flex;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  overflow-y: hidden !important; /* Hides vertical scrolling */
+  white-space: nowrap; /* Prevents wrapping */
+  cursor: grab; /* Changes cursor to indicate dragging */
+  padding: 10px;
+  scroll-behavior: smooth; /* Enables smooth scrolling */
+}
+
+.category-card {
+  flex: 0 0 auto; /* Prevents shrinking and keeps the cards side by side */
+  width: 200px; /* Set a fixed width for each card */
+  margin-right: 10px;
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  user-select: none; /* Prevents text selection during drag */
+  transition: transform 0.2s ease; /* Animation for hover effect */
+}
+
+.category-card:hover {
+  transform: scale(1.05); /* Slightly enlarges the card on hover */
+}
+
+/* Optional: Add hover effects for cards */
+.category-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
 .card img {
   width: 100%;
-  height: 200px;
+  height: 160px !important;
   max-height: 200px;
   object-fit: cover;
   border-radius: 30px 30px 0 0;
@@ -402,12 +456,20 @@ li {
   white-space: normal;              /* Allow text to wrap to new lines */
   min-height: calc(1.2em * 5); 
 }
+.recipte{
+  width: 80%;
+  height: auto;
+  margin-bottom: 100px;
+  border-radius: 20px;
+  overflow: hidden;
 
+  
+}
 .product-current-price {
   color: #fff;
   font-size: xx-large;
   font-weight: bolder;
-  background-color: green;
+  background-color: rgb(75, 75, 75);
 }
 
 .product-count-down {
@@ -432,10 +494,10 @@ li {
 .list-group a {
   text-decoration: none;
 }
-
+/*
 .win {
   color: green;
-}
+}*/
 .fromPage {
   width: 90%;
   display: flex;
@@ -489,6 +551,7 @@ li {
   border: #878787 1px solid;
   margin-bottom: 10px;
   padding: 10px;
+  background-color: #EFEFEF !important;
 }
 
 .forma textarea {
@@ -870,8 +933,12 @@ select option {
   border-radius: 50px;
   padding: 15px;
   margin: 0 7% 0 7% !important;
+  
 }
+.css-1rtg91x-MuiDateCalendar-root {
 
+background-color: #EFEFEF;
+}
 .formb input {
   width: 70%;
   height: 50px;
@@ -906,7 +973,7 @@ select option {
   justify-content: center !important;
   display: flex !important;
 
-  --color-light: white;
+  /*--color-light: white;*/
   --color-dark: #212121;
   --color-signal: #740000;
 
@@ -951,6 +1018,7 @@ select option {
   transition: transform 120ms ease-in;
   font-weight: bold;
   line-height: 1.2;
+  background-color: #EFEFEF;
 }
 
 .input__field {

@@ -2,41 +2,52 @@ import React, { useEffect, useState } from "react";
 import "./popUpContent.css";
 import { fetchPaymentId, getPaymentDetails } from "./paymentId";
 import { charge } from "./charge";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 interface PublishFeesProps {
   amount: string;
   closePopup: () => void;
-  customFunction?: () => void;
+  description :string;
+  customFunction?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup ,customFunction}) => {
+const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup, customFunction , description}) => {
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [showPayment, setShowPayment] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const initializePaymentId = async () => {
-      await fetchPaymentId();
-      const details = getPaymentDetails(); // Get the details from the fetchPaymentId function
-    setPaymentId(details.paymentId); // Set the paymentId in the state
+      try {
+        await fetchPaymentId();
+        const details = getPaymentDetails();
+        setPaymentId(details.paymentId);
+      } catch (error) {
+        console.error('Error initializing payment ID:', error);
+      }
     };
 
     initializePaymentId();
   }, []);
 
-
-  
-
-
   const handleAccept = () => {
     setShowPayment(true);
   };
 
-  const testCharge = async () => {
-    
+  const testCharge = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+
     try {
-      const success = await charge(amount);
+      const success = await charge(amount ,"Publish fees for auction with title " + description);
       if (success) {
-        customFunction;
+        // Invoke customFunction if provided
+        if (customFunction) {
+          const id =  await  customFunction(event);
+          await  message.info(`Transition Done Successfully`)
+          navigate(`/Product/${id}`); // Navigate to a route with the ID
+
+        }
       } else {
         console.log('Charge failed');
       }
@@ -44,7 +55,6 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup ,customFun
       console.error('Error in testCharge:', error);
     }
   };
-  
 
   const postData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -61,7 +71,7 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup ,customFun
       paymentMethodId: paymentId,
       amount: amountInCents,
       currency: "usd",
-      description: "Publish fees"
+      description: "Publish fees for auction with title" + description
     };
 
     console.log('Data being sent:', JSON.stringify(data, null, 2));

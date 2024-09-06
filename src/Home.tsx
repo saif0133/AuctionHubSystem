@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import ProductCard from "./components/ProductCard";
 import TriangleLoader from "./components/loading";
 import { extractDataFromToken } from "./components/tokenDecode";
+import CategoryCard from "./components/CategoryCard";
 
 // Update Product interface to match the fetched data
 interface Product {
@@ -72,6 +73,18 @@ const Home: React.FC = () => {
 
   return (
     <div className="testmain">
+      <div className="imageContainer">
+        <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/auction.png?raw=true" alt="" className="imageCont" />
+      </div>
+      <div className="category-list">
+
+      <CategoryCard 
+     
+      />
+     
+      </div>
+     
+      
       <div className="products">
         {products.map((product) => {
           return (

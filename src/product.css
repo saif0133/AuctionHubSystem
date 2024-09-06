@@ -18,8 +18,15 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 2%;
+  justify-content: space-between;
 }
 
+.owner-cont{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
 .prod {
   width: 100%;
   height: 100%;
@@ -242,5 +249,47 @@ th {
 
 .timer {
   font-weight: bolder;
+  color: #be1622;
+}
+
+
+.bi-pencil-square{
+  width: 100px !important;
+}
+
+
+.ted{
+margin: 3px;
+position: relative;
+display: inline-block;
+
+}
+
+.icons{
+  display: flex;
+  margin-right: 100px;
+}
+
+
+.description {
+  position: absolute;
+  top: 150%;
+  right: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+  opacity: 0.7;
+  z-index: 1;
+  visibility: hidden;
+text-align: center;
+}
+
+.ted:hover .description {
+  visibility: visible;
+}
+
+.bi-trash3{
   color: #be1622;
 }

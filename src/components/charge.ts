@@ -15,7 +15,7 @@ const initializePaymentId = async () => {
 // Initialize paymentId when the module is loaded
 initializePaymentId();
 
-export const charge = async (amount: string): Promise<boolean> => {
+export const charge = async (amount: string ,description:string): Promise<boolean> => {
   if (!paymentId) {
     console.error('Payment ID is not initialized');
     return false;
@@ -29,7 +29,7 @@ export const charge = async (amount: string): Promise<boolean> => {
     paymentMethodId: paymentId,
     amount: amountInCents,
     currency: "usd",
-    description: "Publish fees"
+    description: description
   };
 
   console.log('Data being sent:', JSON.stringify(data, null, 2));
@@ -50,6 +50,7 @@ export const charge = async (amount: string): Promise<boolean> => {
 
     const result = await response.json();
     console.log('Response:', result);
+
     return true;
     
   } catch (error) {
