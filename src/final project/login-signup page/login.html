@@ -3,6 +3,8 @@
 
 <head>
     <title>Auction Hub:Where Deals Meet Destiny</title>
+    <meta charset="UTF-8">
+
     <link rel="icon" type="link"
         href="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Red_triangle.svg/540px-Red_triangle.svg.png" />
     <link rel="stylesheet" href="./style.css">
@@ -59,7 +61,7 @@ Where Deals Meet Destiny
         <div class="content">
             <div class="title">
                 <div class="welcome">Welcome</div>
-                <div class="form-title">Log in to your account to continue</div>
+                <div class="form-title">Please Log in or Create Account</div>
             </div>
 
 
@@ -67,10 +69,24 @@ Where Deals Meet Destiny
             <div class="form" id="loginForm">
                 <form action="" method="post">
                     <div class="error-signin" id="error-signin"></div>
-                    <input type="text" placeholder="Email" id="email" required>
+                    <div class="inp">
+                        <div class="saif">
+                            <label class="input">
+                                <input class="input__field" id="email" type="text" placeholder=" " />
+                                <span class="input__label">Email</span>
+                            </label>
+                        </div>
+                    </div>
                     <br>
                     <div style="position: relative;">
-                        <input type="password" placeholder="Password" id="password" required >
+                        <div class="inp">
+                            <div class="saif">
+                                <label class="input">
+                                    <input class="input__field" id="password" type="text" placeholder=" " />
+                                    <span class="input__label">Password</span>
+                                </label>
+                            </div>
+                        </div>
                         <button type="button" id="togglePassword" style="
                             position: absolute;
                             right: 0px;
@@ -87,10 +103,25 @@ Where Deals Meet Destiny
                         ">
                         </button>
                     </div> <br>
-                    <div class="forgetpass"><a href="#">Forgot Password?</a></div>
+
                     <button type="button" onclick="verifyLogin();">LOG IN</button>
-                    <div class="acc">
-                        <p>Don't have an account? <a href="#" onclick="toggleForms();">Sign Up</a></p>
+                    <div class="forgetpass"> <a href="#" class="forgetpassa" onclick="openPopup()">Forgot Password?</a>
+                    </div>
+
+
+                    <!-- Popup Modal -->
+                    <div id="popup" class="popup">
+                        <div class="popup-content">
+                            <span class="close" onclick="closePopup()">&times;</span>
+                            <h2>Reset Password</h2>
+                            <p>Enter your email address to reset your password:</p>
+                            <input type="email" id="emailk" placeholder="Enter your email">
+                            <button onclick="submitEmail()">Submit</button>
+                        </div>
+                    </div>
+                    <div class="acc2">
+                        <p class="text">Don't have an account? <a href="#" class="create"
+                                onclick="toggleForms();">CREATE NEW</a></p>
                     </div>
                 </form>
             </div>
@@ -100,14 +131,42 @@ Where Deals Meet Destiny
                 <form action="" method="post">
                     <div class="error-signup" id="error-signup"></div>
 
-                    <input type="text" placeholder="First Name">
+                    <div class="inp">
+                        <div class="saif">
+                            <label class="input">
+                                <input class="input__field" id="email" type="text" placeholder=" " />
+                                <span class="input__label">First Name</span>
+                            </label>
+                        </div>
+                    </div>
                     <br>
-                    <input type="text" placeholder="Last Name">
+                    <div class="inp">
+                        <div class="saif">
+                            <label class="input">
+                                <input class="input__field" id="email" type="text" placeholder=" " />
+                                <span class="input__label">Last Name</span>
+                            </label>
+                        </div>
+                    </div>
                     <br>
-                    <input type="text" placeholder="Email">
+                    <div class="inp">
+                        <div class="saif">
+                            <label class="input">
+                                <input class="input__field" id="email" type="text" placeholder=" " />
+                                <span class="input__label">Email</span>
+                            </label>
+                        </div>
+                    </div>
                     <br>
                     <div style="position: relative;">
-                        <input type="password" placeholder="Password" id="password2" required >
+                        <div class="inp">
+                            <div class="saif">
+                                <label class="input">
+                                    <input class="input__field" id="password2" type="text" placeholder=" " />
+                                    <span class="input__label">Password</span>
+                                </label>
+                            </div>
+                        </div>
                         <button type="button" id="togglePassword2" style="
                             position: absolute;
                             right: 0px;
@@ -123,33 +182,20 @@ Where Deals Meet Destiny
                             width: 20px;
                         ">
                         </button>
-                    </div> 
+                    </div>
                     <br>
-                    <div style="position: relative;">
-                        <input type="password" placeholder="Confirm Password" id="password3" required >
-                        <button type="button" id="togglePassword3" style="
-                            position: absolute;
-                            right: 0px;
-                            top: 32%;
-                            transform: translateY(-50%);
-                            background: none;
-                            border: none;
-                            cursor: pointer;
-                        ">
-                            <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true"
-                                alt="" style="
-                            
-                            width: 20px;
-                        ">
-                        </button>
-                    </div> 
+
                     <br>
                     <button class="btn" type="submit">SIGN UP</button>
-                    <div class="acc">
-                        <p>Already have an account? <a href="#" onclick="toggleForms(); ">Log In</a></p>
+                    <div class="acc3">
+                        <p class="text">Already have an account? <a href="#" class="create"
+                                onclick="toggleForms(); ">Log In</a></p>
                     </div>
                 </form>
             </div>
+        </div>
+        <div class="footer">
+            <p class="text">© 2024 Auction Hub. All Rights Reserved.</p>
         </div>
     </div>
 

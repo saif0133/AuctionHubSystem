@@ -358,7 +358,7 @@ li {
 }
 
 .imageContainer{
-  width: 100%;
+  width: 70vw;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -367,7 +367,7 @@ li {
   opacity: 0.8;
 }
 .imageCont{
-  width: 1000px;
+  width: 100%;
 }
 .card {
   height: 370px !important;
@@ -392,6 +392,9 @@ cat:hover{
 
 .category-list {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
   overflow-x: auto; /* Enables horizontal scrolling */
   overflow-y: hidden !important; /* Hides vertical scrolling */
   white-space: nowrap; /* Prevents wrapping */
@@ -583,6 +586,17 @@ cat:hover{
   padding: 10px;
 }
 
+.notFound{
+  width: 80%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.notFound-img{
+  width: 100%;
+  height: auto;
+}
 .additionalData-input {
   width: 100%;
   display: flex;
@@ -590,7 +604,9 @@ cat:hover{
   justify-content: center;
   align-items: center;
 }
-
+.forma input{
+  background-color: transparent !important;
+}
 .additionalData textarea {
   width: 80%;
 }
@@ -803,6 +819,11 @@ select option {
 }
 
 .addNewCard {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-decoration: none !important;
 }
 

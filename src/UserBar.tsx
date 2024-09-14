@@ -21,7 +21,7 @@ function UserBar() {
   
   const [Info, setInfo] = useState<UserInfo | null>(null);
   const token = localStorage.getItem("authToken");
-  useEffect(() => {
+  /*useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
@@ -49,7 +49,7 @@ function UserBar() {
     fetchProduct();
   }, [token]); // Add token to dependency array
 
-
+*/
   const [userData, setUserData] = useState<DecodedToken | null>(null);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ function UserBar() {
     <div className="testbar">
       <TopBar
         Name={ userData.firstName}
-        image={Info?.pic}
+        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnnFf6DXcgRxe71BOQm1orHpnKjJloo9c2jg&s"
       />
     </div>
   );

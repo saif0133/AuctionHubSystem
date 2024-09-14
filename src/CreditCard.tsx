@@ -3,19 +3,106 @@ import { useNavigate } from "react-router-dom";
 import { fetchPaymentId, getPaymentDetails } from "./components/paymentId";
 import TriangleLoader from "./components/loading";
 import LoginWarning from "./components/loginWarning";
+interface BillingDetails {
+  address: {
+    city: string | null;
+    country: string | null;
+    line1: string | null;
+    line2: string | null;
+    postalCode: string | null;
+    state: string | null;
+  };
+  email: string | null;
+  name: string | null;
+  phone: string | null;
+}
 
+interface Charge {
+  amount: number;
+  amountCaptured: number;
+  amountRefunded: number;
+  billingDetails: BillingDetails;
+  created: number;
+  currency: string;
+  description: string | null;
+  id: string;
+  paid: boolean;
+  receiptNumber: string | null;
+  receiptUrl: string | null;
+}
+
+interface ResponseData {
+  data: Charge[];
+}
+
+interface FormattedCharge {
+  amount: string;
+  description: string;
+  receiptNumber: string;
+  receiptUrl: string;
+}
 function CrediCard() {
   const [hasPaymentDetails, setHasPaymentDetails] = useState(false);
   const [cardHolderName, setCardHolderName] = useState("");
   const [last4Digits, setLast4Digits] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const userToken = localStorage.getItem('authToken') || null;
+  const [charges, setCharges] = useState<FormattedCharge[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const userToken = localStorage.getItem("authToken") || null;
   const data = [
     { amount: '100 $', description: 'Payment for item A', date: '2024-09-01' },
     { amount: '250 $', description: 'Payment for item B', date: '2024-09-02' },
     // Add more rows as needed
   ];
+
+
+  const fetchStripeCharges = async () => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/stripe/listCharges/pm_1PyguSE51UEbJoiHQYB3WBaE`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${userToken} ` , // Replace with your actual token
+              'Content-Type': 'application/json'
+            },
+        });
+
+        if (!response.ok) {
+          //  throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Read the response as text first
+        const textResponse = await response.text();
+        
+        // Attempt to parse the response as JSON
+        let jsonResponse;
+        try {
+            jsonResponse = JSON.parse(textResponse);
+        } catch (e) {
+            console.error("Failed to parse JSON response:", e);
+            // Handle or sanitize the text response as needed here
+            jsonResponse = { error: "Failed to parse JSON response" }; // Example fallback
+        }
+
+        console.log("Successfully fetched charges:", jsonResponse);
+        return jsonResponse;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return { error };
+    }
+};
+
+  
+  
+  
+  
+  
+  
+  
+   
+
+
+
 
   const tableStyle: React.CSSProperties = {
     width: '100%',
@@ -53,6 +140,7 @@ function CrediCard() {
   const navigate = useNavigate();
  
   useEffect(() => {
+    fetchStripeCharges();
     const initializePaymentId = async () => {
       await fetchPaymentId();
       const details = getPaymentDetails(); // Get the details from the fetchPaymentId function
@@ -65,7 +153,7 @@ function CrediCard() {
         setHasPaymentDetails(true);
       }
 
-      setIsLoading(false); // Set loading to false after data is fetched
+      setLoading(false); // Set loading to false after data is fetched
     };
 
     initializePaymentId();
@@ -75,7 +163,7 @@ function CrediCard() {
     navigate("/AddCard");
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="testmain">
         <TriangleLoader />

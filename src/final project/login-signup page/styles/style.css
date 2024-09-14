@@ -14,7 +14,7 @@ body::-webkit-scrollbar {
   display: none; /* Hide scrollbar */
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 751px) {
   body {
     background: radial-gradient(circle at center, #2f2f2f 0%, #000000 150%);
   }
@@ -90,7 +90,7 @@ body::-webkit-scrollbar {
   .title {
     width: 100%;
     margin-top: 20%;
-    margin-bottom: 10%;
+    margin-bottom: 5%;
   }
 
   .form {
@@ -108,8 +108,9 @@ body::-webkit-scrollbar {
   .forgetpass {
     font-weight: lighter;
     font-size: small;
-    text-align: right;
+    text-align: center;
     color: #2f2f2f;
+    text-decoration: none !important;
   }
 
   .form-title {
@@ -122,7 +123,7 @@ body::-webkit-scrollbar {
     height: 30px;
     margin: 10px;
     border: 1px solid #323231;
-    border-radius: 50px;
+    border-radius: 6px;
     text-align: center;
   }
 
@@ -133,9 +134,9 @@ body::-webkit-scrollbar {
   button {
     color: #ffffff;
     background-color: #323231;
-    width: 30%;
-    height: 30px;
-    border-radius: 50px;
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
     margin: 10px;
     cursor: pointer;
   }
@@ -143,8 +144,9 @@ body::-webkit-scrollbar {
   #togglePassword ,#togglePassword2 ,#togglePassword3 {
     width: auto !important;
   }
-  .acc {
-    font-size: small;
+  .acc2 {
+    font-size: bolder;
+    margin-top: 20% !important;
   }
 
   .acc a {
@@ -153,7 +155,7 @@ body::-webkit-scrollbar {
 
   button:hover {
     transition: 0.3s ease;
-    background-color: red;
+    background-color: rgb(116, 0, 0);
     border: 0;
   }
 
@@ -164,7 +166,7 @@ body::-webkit-scrollbar {
 
   .forgetpass a:hover {
     transition: 0.3s ease;
-    color: red;
+    color: rgb(137, 0, 0);
   }
 
   .logo:hover + .cta {
@@ -180,40 +182,72 @@ body::-webkit-scrollbar {
   }
 }
 
-@media (max-width: 999px) {
+
+
+
+
+@media (max-width: 750px) {
   body {
-    background: linear-gradient(to bottom, #2f2f2f 0%, #000000 100%);
+    background-color: #2f2f2f;
   }
 
   .container {
+    width: 100%;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
   }
 
   .container.reverse {
     transform: none;
   }
 
-  .signtuer, .content {
-    width: 100%;
-    height: auto;
-    border-radius: 0;
-    transition: transform 1s ease;
+ .content {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
   }
+.signtuer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  
 
+}
   .logo {
-    width: 50%;
-    margin-top: 20%;
+    width: 20%;
+    color:rgb(164, 5, 5);
+
+    
   }
 
   .cta {
+    text-align: center;
+    color:rgb(255, 255, 255);
+    font-size: large;
+font-weight: bolder;
     opacity: 1;
     visibility: visible;
   }
 
   .welcome {
     font-size: 50px;
+    display: none;
   }
-
+.title{
+  width: 80% !important;
+}
+  .form-title{
+    width: 100% !important;
+    text-align: left !important;
+    font-weight: bolder;
+    color: #ffffff;
+    margin-bottom: 20px !important;
+  }
   .form {
     width: 80%;
     margin-bottom: 20%;
@@ -230,11 +264,337 @@ body::-webkit-scrollbar {
     margin: 10px auto;
   }
 
+  button {
+    width: 90%;
+    height: 40px;
+    margin: 10px auto;
+  }
+
+.acc2{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.text{
+  color: #fff5f5;
+}
+
+.footer{
+  display: flex !important;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(164, 5, 5);
+}
+
+.create{
+  color: white !important;
+  font-size: 11px !important;
+  padding: 7px 17px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  background-color: #800101 !important; /* Start with a solid color */
+  border: none !important;
+  transition: background-color 0.5s ease;
+}
+
+
+  .forgetpassa {
+    font-weight: lighter;
+    font-size: small;
+    text-align: center;
+    color: #ffffff;
+    text-decoration: none !important;
+  }
+
+.acc3{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#togglePassword ,#togglePassword2{
+  width: 10px !important;
+  margin-right: 60px;
+}
   .btn {
     width: 100% !important;
     height: 50px !important;  }
 
   .acc {
     font-size: medium;
+  }
+
+
+button{
+  background-color: #ffffff;
+  border-radius: 6px;
+  width: 100% !important;
+}
+
+
+  .saif {
+    width: 100%;
+    justify-content: center !important;
+    display: flex !important;
+  
+    --color-light: white;
+    --color-dark: #212121;
+    --color-signal: #fff5f5 !important;
+  
+   /* --color-background: var(--color-light);*/
+    --color-text: white !important;
+    --color-accent: var(--color-signal);
+  
+    --size-bezel: 0.5rem;
+    --size-radius: 4px;
+  
+    line-height: 1.4;
+  
+    font-family: "Inter", sans-serif;
+    font-size: calc(0.6rem + 0.4vw);
+    color: var(--color-text);
+   background: none !important;
+    font-weight: 300;
+    padding: 0 calc(var(--size-bezel) * 3);
+  }
+  
+  .input {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left !important;
+    justify-content: center;
+  }
+  
+  .input__label {
+    text-align: left !important;
+    width: auto;
+    position: absolute;
+    top: -4;
+    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
+    margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
+    white-space: nowrap;
+    transform: translate(0, 0);
+    transform-origin: 0 0;
+    background: #2f2f2f !important;
+    transition: transform 120ms ease-in;
+    font-weight: bolder;
+    line-height: 1.2;
+  /*  background-color: #ffffff;*/
+  }
+  
+  .input__field {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: 40px;
+    border: 1px solid currentColor;
+    padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
+    color: currentColor;
+    background: transparent;
+    border-radius: var(--size-radius);
+  }
+  
+  .input__field:focus + .input__label,
+  .input__field:not(:placeholder-shown) + .input__label {
+    transform: translate(0.25rem, -65%) scale(0.8);
+   /* color: var(--color-accent);*/
+   font-size: 20px !important;
+  }
+  .inp {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+
+
+
+
+
+  
+}
+.signupForm{
+  margin-top: 0;
+}
+
+.create{
+  color: white !important;
+  font-size: 11px !important;
+  padding: 7px 17px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  background-color: #2f2f2f; /* Start with a solid color */
+  border: 1px solid rgb(81, 81, 81);
+  transition: background-color 0.5s ease;
+}
+
+.create:hover{
+  background-color: #960000; /* Change to another solid color on hover */
+  border: 1px solid rgb(123, 0, 0);
+}
+
+
+
+
+.saif {
+  width: 100%;
+  justify-content: center !important;
+  display: flex !important;
+
+  /*--color-light: white;*/
+  --color-dark: #212121;
+  --color-signal: #740000;
+
+  --color-background: var(--color-light);
+  --color-text: var(--color-dark);
+  --color-accent: var(--color-signal);
+
+  --size-bezel: 0.5rem;
+  --size-radius: 4px;
+
+  line-height: 1.4;
+
+  font-family: "Inter", sans-serif;
+  font-size: calc(0.6rem + 0.4vw);
+  color: var(--color-text);
+  background: var(--color-background);
+  font-weight: 300;
+  padding: 0 calc(var(--size-bezel) * 3);
+}
+
+.input {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left !important;
+  justify-content: center;
+}
+
+.input__label {
+  text-align: left !important;
+  width: auto;
+  position: absolute;
+  top: -4;
+  padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
+  margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
+  white-space: nowrap;
+  transform: translate(0, 0);
+  transform-origin: 0 0;
+  background: var(--color-background);
+  transition: transform 120ms ease-in;
+  font-weight: bold;
+  line-height: 1.2;
+  background-color: #ffffff;
+}
+
+.input__field {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 40px;
+  border: 1px solid currentColor;
+  padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
+  color: currentColor;
+  background: transparent;
+  border-radius: var(--size-radius);
+}
+
+.input__field:focus + .input__label,
+.input__field:not(:placeholder-shown) + .input__label {
+  transform: translate(0.25rem, -65%) scale(0.8);
+  color: var(--color-accent);
+}
+.inp {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.footer{
+  display: none;
+}
+
+
+/* Popup container - hidden by default */
+.popup {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+}
+
+/* Popup content */
+.popup-content {
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 600px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Close button */
+.close {
+  display: block;
+  color: #aaa;
+  float: right !important;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Media Query for Mobile Devices */
+@media only screen and (max-width: 600px) {
+  .popup-content {
+    width: 90%; /* Make the popup wider on smaller screens */
+    margin-top: 30%; /* Adjust the position on the screen */
+  }
+
+  .popup {
+    padding-top: 10px; /* Less padding on top */
+  }
+
+  .close {
+    font-size: 24px; /* Adjust close button size for mobile */
+  }
+
+  input[type="email"] {
+    width: 100%; /* Make input field full width */
+    box-sizing: border-box; /* Include padding and border in element's width and height */
+  }
+
+  button {
+    width: 100%; /* Full width button */
+    padding: 10px; /* Increase button padding */
+    font-size: 16px; /* Increase button font size */
   }
 }

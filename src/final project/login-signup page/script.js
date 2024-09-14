@@ -183,3 +183,77 @@ togglePassword3.addEventListener("click", function () {
         toggleImage3.alt = "Hide Password";
     }
 });
+
+
+
+
+
+
+async function resetPasswor (email){
+
+
+  
+try {
+  const response = await fetch(`http://localhost:8080/forgot-password-request?email=${email}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(email),
+  });
+
+  const contentType = response.headers.get("Content-Type");
+  let responseData = {};
+
+  if (contentType && contentType.includes("application/json")) {
+    responseData = await response.json();
+  } else {
+    const text = await response.text();
+    console.log("Unexpected response format:", text);
+
+  }
+
+  if (!response.ok) {
+   errortext.innerText=responseData.message;
+     throw new Error(responseData.error || responseData.message);
+ 
+  }
+
+  alert("Rest Password email was sent");
+  closePopup();
+} catch (error) {
+  console.error("Error:", error);
+  alert(`Error: ${error.message}`);
+  closePopup();
+}
+
+
+
+
+}
+
+
+
+
+
+
+// Open popup
+function openPopup() {
+  document.getElementById("popup").style.display = "block";
+}
+
+// Close popup
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+// Submit email
+function submitEmail() {
+  const email = document.getElementById('emailk').value;
+  if (email) {
+    resetPasswor(email);
+    
+  } else {
+    alert('Please enter a valid email address.');
+  }
+}

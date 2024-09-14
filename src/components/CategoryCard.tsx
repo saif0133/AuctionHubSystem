@@ -7,7 +7,6 @@ const CategoryList: React.FC = () => {
       <CategoryCard title={"test"} description={"resr"} />
       <CategoryCard title={"test"} description={"resr"} />
       <CategoryCard title={"test"} description={"resr"} />
-      <CategoryCard title={"test"} description={"resr"} />
     </div>
   );
 };

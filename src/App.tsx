@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -19,18 +19,18 @@ import Help from "./Help";
 import Product from "./Product";
 import NotImplemented from "./components/NotImpelmented";
 import Logout from "./logout";
-import TriangleLoader from "./components/loading";
-
-const App = () => {
-  return (
-    <Router>
-      <Layout />
-    </Router>
-  );
-};
+import NotFound from "./notFound";
+import VarifyEmail from "./VarifyEmail";
 
 const Layout = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/VarifyEmail') {
+      import('./VarifyEmail.css');
+    }
+  }, [location.pathname]);
+
   const showMenu = location.pathname !== "/All";
 
   return (
@@ -50,8 +50,18 @@ const Layout = () => {
         <Route path="/Logout" element={<Logout />} />
         <Route path="/AddCard" element={<AddCard />} />
         <Route path="/All" element={<AllProducts />} />
+        <Route path="/VarifyEmail" element={<VarifyEmail />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <Layout />
+    </Router>
   );
 };
 

@@ -2,7 +2,7 @@ button:hover
 {
     transition: 0.3s ease;
 
-    background-color: red;
+    background-color: rgb(165, 0, 0);
     border: 0;
 }
 
