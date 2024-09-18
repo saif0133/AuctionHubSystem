@@ -1504,6 +1504,8 @@ input[type="range"] {
   top: 92% !important;
   left: 19% !important;
   transition: 1s ease;
+  z-index: 100;
+
 }
 
 .bi-arrow-left-circle-fill::before {
