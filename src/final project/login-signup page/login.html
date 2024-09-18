@@ -18,7 +18,12 @@
 
 <body>
 
-
+ <!-- Loading popup -->
+ <div id="loadingPopup" class="loading-popup" style="display: none;">
+    <div class="loading-content">
+      <img src="https://i.pinimg.com/originals/ec/d6/bc/ecd6bc09da634e4e2efa16b571618a22.gif" class="loading" alt="">
+    </div>
+  </div>
     <div class="container">
 
         <div class="signtuer">
@@ -82,7 +87,7 @@ Where Deals Meet Destiny
                         <div class="inp">
                             <div class="saif">
                                 <label class="input">
-                                    <input class="input__field" id="password" type="text" placeholder=" " />
+                                    <input class="input__field" id="password" type="password" placeholder=" " />
                                     <span class="input__label">Password</span>
                                 </label>
                             </div>
@@ -128,81 +133,88 @@ Where Deals Meet Destiny
 
 
             <div class="form" id="signupForm" style="display: none;">
+              
+  
                 <form action="" method="post">
                     <div class="error-signup" id="error-signup"></div>
 
                     <div class="inp">
                         <div class="saif">
-                            <label class="input">
-                                <input class="input__field" id="email" type="text" placeholder=" " />
-                                <span class="input__label">First Name</span>
-                            </label>
+                          <label class="input">
+                            <input class="input__field" id="firstNameL" type="text" placeholder=" " />
+                            <span class="input__label">First Name</span>
+                            <div class="info-box" id="firstNameLError">First name is required.</div>
+                          </label>
                         </div>
-                    </div>
+                      </div>
+
                     <br>
+
                     <div class="inp">
                         <div class="saif">
-                            <label class="input">
-                                <input class="input__field" id="email" type="text" placeholder=" " />
-                                <span class="input__label">Last Name</span>
-                            </label>
+                          <label class="input">
+                            <input class="input__field" id="lastNameL" type="text" placeholder=" " />
+                            <span class="input__label">Last Name</span>
+                            <div class="info-box" id="lastNameLError">Last name is required.</div>
+                          </label>
                         </div>
-                    </div>
+                      </div>
                     <br>
+
                     <div class="inp">
                         <div class="saif">
-                            <label class="input">
-                                <input class="input__field" id="email" type="text" placeholder=" " />
-                                <span class="input__label">Email</span>
-                            </label>
+                          <label class="input">
+                            <input class="input__field" id="emailL" type="text" placeholder=" " />
+                            <span class="input__label">Email</span>
+                            <div class="info-box" id="emailLError">Email must contain '@' and '.'.</div>
+                          </label>
                         </div>
-                    </div>
+                      </div>
                     <br>
+
                     <div style="position: relative;">
                         <div class="inp">
                             <div class="saif">
-                                <label class="input">
-                                    <input class="input__field" id="password2" type="text" placeholder=" " />
-                                    <span class="input__label">Password</span>
-                                </label>
+                              <label class="input">
+                                <input class="input__field" id="password2" type="password" placeholder=" " />
+                                <span class="input__label">Password</span>
+                                <div class="info-box" id="password2LError">Password must be at least 10 characters long and include numbers, uppercase, lowercase letters, and special characters (., #, @).</div>
+                              </label>
                             </div>
-                        </div>
+                          </div>
                         <button type="button" id="togglePassword2" style="
-                            position: absolute;
-                            right: 0px;
-                            top: 32%;
-                            transform: translateY(-50%);
-                            background: none;
-                            border: none;
-                            cursor: pointer;
-                        ">
+                        position: absolute;
+                        right: 0px;
+                        top: 32%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                    ">
                             <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true"
-                                alt="" style="
-                            
-                            width: 20px;
-                        ">
+                                alt="" style="width: 20px;">
                         </button>
                     </div>
-                    <br>
 
                     <br>
-                    <button class="btn" type="submit">SIGN UP</button>
+
+                    <button class="btn" type="button" onclick="CreateAccount(event)">SIGN UP</button>
                     <div class="acc3">
-                        <p class="text">Already have an account? <a href="#" class="create"
-                                onclick="toggleForms(); ">Log In</a></p>
+                        <p class="text">Already have an account? <a href="#" class="create" onclick="toggleForms();">Log
+                                In</a></p>
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="footer">
-            <p class="text">© 2024 Auction Hub. All Rights Reserved.</p>
-        </div>
-    </div>
+
+            <div class="footer">
+                <p class="text">© 2024 Auction Hub. All Rights Reserved.</p>
+            </div>
 
 
-    <script src="./script.js"></script>
 
-    <script type="module" src="../main.js"></script>
+            <script src="./script.js"></script>
+
+            <!--   <script type="module" src="../main.js"></script>-->
 
 
 </html>

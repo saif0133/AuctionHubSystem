@@ -21,13 +21,17 @@ import NotImplemented from "./components/NotImpelmented";
 import Logout from "./logout";
 import NotFound from "./notFound";
 import VarifyEmail from "./VarifyEmail";
+import ResetPassword from "./ResetPassword";
 
 const Layout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === '/VarifyEmail') {
+    if (location.pathname === '/verifyEmail') {
       import('./VarifyEmail.css');
+    }
+    else if (location.pathname === '/reset-password') {
+      import('./ResetPassword.css');
     }
   }, [location.pathname]);
 
@@ -50,7 +54,8 @@ const Layout = () => {
         <Route path="/Logout" element={<Logout />} />
         <Route path="/AddCard" element={<AddCard />} />
         <Route path="/All" element={<AllProducts />} />
-        <Route path="/VarifyEmail" element={<VarifyEmail />} />
+        <Route path="/verifyEmail" element={<VarifyEmail />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

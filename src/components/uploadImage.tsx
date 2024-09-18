@@ -5,7 +5,7 @@ interface FileProp {
     onUpload: (url: string) => void; // onUpload function receives the uploaded URL as a parameter
 }
 
-const uploadImage = async (imageFile: File): Promise<string> => {
+const uploadImage = async (imageFile: File)=> {
     const formData = new FormData();
     formData.append('image', imageFile);
 
@@ -43,7 +43,7 @@ const UploadComponent: React.FC<FileProp> = ({ file, onUpload }) => {
 
     return (
         <div>
-            {uploadedUrl && <p>Uploaded Image URL: {uploadedUrl}</p>}
+           
         </div>
     );
 };

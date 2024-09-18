@@ -15,7 +15,7 @@ const token = localStorage.getItem('authToken');
 
 export const extractDataFromToken = (token: string | null): DecodedToken | null => {
   if (!token) {
-    console.error("User not signed in");
+   // console.error("User not signed in");
     return null;
   }
 

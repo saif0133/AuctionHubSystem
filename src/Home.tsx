@@ -46,7 +46,7 @@ const Home: React.FC = () => {
         }));
 
         setProducts(formattedProducts);
-        console.log(localStorage.getItem("authToken"));
+       // console.log(localStorage.getItem("authToken"));
       } catch (error) {
         if (error instanceof Error) {
           setError(error);
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+  //  return <div>Error: {error.message}</div>;
   }
 
   return (

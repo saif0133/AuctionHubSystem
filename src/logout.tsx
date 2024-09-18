@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 //import removeToken from "./final project/login-signup page/script.js";
 
 const handleLogout = () => {
-  localStorage.removeItem("authToken"); // Remove the token from localStorage
+  localStorage.clear(); // Remove the token from localStorage
   window.location.reload();
 };
 

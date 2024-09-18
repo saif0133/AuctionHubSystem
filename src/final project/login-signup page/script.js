@@ -21,7 +21,7 @@ function toggleForms() {
 }
 
 /**
- * Toggles the flex direction of the container element.
+ * Toggles the flex direction of the container 
  */
 function toggleFlexDirection() {
   const container = document.querySelector(".container");
@@ -32,28 +32,14 @@ function toggleFlexDirection() {
   container.classList.toggle("reverse");
 }
 
-/**
- * Redirects the user to the home page.
- */
-function goHome() {
-  window.location.href = "/test";
-}
 
-/**
- * Removes the user token and clears it from local storage.
- */
-function removeToken() {
-  userToken = null;
-  localStorage.removeItem("authToken");
-}
+
 
 
 //--------------------------------------------------------------------------------------------------
 
 
-/**
- * Handles user login by sending credentials to the server and saving the token.
- */
+
 async function verifyLogin() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -83,7 +69,6 @@ async function verifyLogin() {
       const text = await response.text();
       console.log("Unexpected response format:", text);
 
-      // Assuming the response is a plain JWT token if not JSON
       responseData = { token: text };
     }
 
@@ -92,22 +77,8 @@ async function verifyLogin() {
        throw new Error(responseData.error || responseData.message);
    
     }
-
-    const saveToken = confirm(
-      "Do you want to save your session? This will keep you logged in even after closing the browser."
-    );
-
-    if (saveToken) {
-      userToken = responseData.token;
-      localStorage.setItem("authToken", responseData.token);
-      console.log("Token saved in local storage.");
-    } else {
-      localStorage.setItem("authToken", responseData.token);
-      userToken = responseData.token;
-      console.log("Token not saved. Session will end when the browser closes.");
-    }
-
-    console.log("Token value:", userToken);
+    localStorage.setItem("authToken", responseData.token);
+    
     window.location.href = "/";
   } catch (error) {
     console.error("Error:", error);
@@ -129,11 +100,9 @@ const password = document.querySelector("#password");
 const toggleImage = togglePassword.querySelector("img");
 
 togglePassword.addEventListener("click", function () {
-    // Toggle the type attribute
     const type = password.getAttribute("type") === "password" ? "text" : "password";
     password.setAttribute("type", type);
 
-    // Change the image source and alt text based on the type
     if (type === "password") {
         toggleImage.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true";
         toggleImage.alt = "Show Password";
@@ -150,11 +119,9 @@ const password2 = document.querySelector("#password2");
 const toggleImage2 = togglePassword2.querySelector("img");
 
 togglePassword2.addEventListener("click", function () {
-    // Toggle the type attribute
     const type2 = password2.getAttribute("type") === "password" ? "text" : "password";
     password2.setAttribute("type", type2);
 
-    // Change the image source and alt text based on the type
     if (type2 === "password") {
         toggleImage2.src = "https://github.com/saif0133/deploy-sec/blob/main/imgs/show%20pass.png?raw=true";
         toggleImage2.alt = "Show Password";
@@ -164,7 +131,7 @@ togglePassword2.addEventListener("click", function () {
     }
 });
 
-
+/*
 const togglePassword3 = document.querySelector("#togglePassword3");
 const password3 = document.querySelector("#password3");
 const toggleImage3 = togglePassword3.querySelector("img");
@@ -185,75 +152,177 @@ togglePassword3.addEventListener("click", function () {
 });
 
 
-
-
-
-
-async function resetPasswor (email){
-
-
-  
-try {
-  const response = await fetch(`http://localhost:8080/forgot-password-request?email=${email}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(email),
-  });
-
-  const contentType = response.headers.get("Content-Type");
-  let responseData = {};
-
-  if (contentType && contentType.includes("application/json")) {
-    responseData = await response.json();
-  } else {
-    const text = await response.text();
-    console.log("Unexpected response format:", text);
-
-  }
-
-  if (!response.ok) {
-   errortext.innerText=responseData.message;
-     throw new Error(responseData.error || responseData.message);
- 
-  }
-
-  alert("Rest Password email was sent");
-  closePopup();
-} catch (error) {
-  console.error("Error:", error);
-  alert(`Error: ${error.message}`);
-  closePopup();
-}
-
-
-
-
-}
+*/
 
 
 
 
 
 
-// Open popup
+
+
 function openPopup() {
   document.getElementById("popup").style.display = "block";
 }
 
-// Close popup
 function closePopup() {
   document.getElementById("popup").style.display = "none";
 }
 
-// Submit email
+
 function submitEmail() {
   const email = document.getElementById('emailk').value;
   if (email) {
-    resetPasswor(email);
+   // resetPassword();
+   postData(email);
+   localStorage.setItem("PasswordCounter","A");
     
   } else {
     alert('Please enter a valid email address.');
   }
 }
+
+
+
+
+const postData = async (email2) => {
+  event.preventDefault();
+
+  const url = `http://localhost:8080/forgot-password-request?email=${email2}`; // Replace with your API endpoint
+console.log(url);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+      //  'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const result = await response.text();
+    console.log('Response:', result);
+    alert("Reset Password email was sent successfully!");
+    
+  } catch (error) {
+    alert("User not found, Please make sure of your email");
+    console.error('Error:', error);
+  }
+};
+
+
+
+
+function validateField(inputElement, errorBoxElement, validationFn) {
+  inputElement.addEventListener('blur', () => {
+    if (!validationFn(inputElement.value)) {
+      errorBoxElement.classList.add('show');
+    } else {
+      errorBoxElement.classList.remove('show');
+    }
+  });
+
+  inputElement.addEventListener('focus', () => {
+    errorBoxElement.classList.remove('show');
+  });
+
+  inputElement.addEventListener('input', () => {
+    if (!validationFn(inputElement.value)) {
+      errorBoxElement.classList.add('show');
+    } else {
+      errorBoxElement.classList.remove('show');
+    }
+  });
+}
+
+const validateName = value => value.trim() !== '';
+const validateEmail = value => /.+@.+\..+/.test(value);
+const validatePassword = value => /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.,#@]).{10,}$/.test(value);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const firstNameInput = document.getElementById('firstNameL');
+  const firstNameError = document.getElementById('firstNameLError');
+  validateField(firstNameInput, firstNameError, validateName);
+
+  const lastNameInput = document.getElementById('lastNameL');
+  const lastNameError = document.getElementById('lastNameLError');
+  validateField(lastNameInput, lastNameError, validateName);
+
+  const emailInput = document.getElementById('emailL');
+  const emailError = document.getElementById('emailLError');
+  validateField(emailInput, emailError, validateEmail);
+
+  const passwordInput = document.getElementById('password2');
+  const passwordError = document.getElementById('password2LError');
+  validateField(passwordInput, passwordError, validatePassword);
+});
+
+async function CreateAccount(event) {
+  event.preventDefault();
+
+  const loadingPopup = document.getElementById('loadingPopup');
+  if (loadingPopup) {
+    loadingPopup.style.display = 'flex';
+  }
+
+  const CreateFirstName = document.getElementById('firstNameL').value;
+  const CreateLastName = document.getElementById('lastNameL').value;
+  const CreateEmail = document.getElementById('emailL').value;
+  const CreatePass = document.getElementById('password2').value;
+  const firstLetter = CreateFirstName ? CreateFirstName.charAt(0).toUpperCase() : 'U';
+
+  if (!CreateFirstName || !CreateLastName || !CreateEmail || !CreatePass) {
+    alert('Please fill in all fields.');
+    return;
+  }
+
+  const data = {
+    firstName: CreateFirstName,
+    lastName: CreateLastName,
+    email: CreateEmail,
+    password: CreatePass,
+    image: {
+      name: 'img',
+      type: 'png',
+      imageUrl: `https://via.placeholder.com/40?text=${firstLetter}`
+    }
+  };
+
+  try {
+    const response = await fetch('http://localhost:8080/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const contentType = response.headers.get('Content-Type');
+    let responseData = {};
+
+    if (contentType && contentType.includes('application/json')) {
+      responseData = await response.json();
+    } else {
+      const text = await response.text();
+      console.log('Unexpected response format:', text);
+    }
+
+    if (!response.ok) {
+      throw new Error(responseData.error || responseData.message);
+    }
+  
+    alert('Please check your email');
+    window.location.reload();
+  } catch (error) {
+    console.error('Error:', error);
+    alert(`Error: ${error.message}`);
+  } finally {
+    if (loadingPopup) {
+      loadingPopup.style.display = 'none';
+    }
+  }
+}
+

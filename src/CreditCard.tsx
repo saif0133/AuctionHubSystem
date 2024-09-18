@@ -18,18 +18,13 @@ interface BillingDetails {
 }
 
 interface Charge {
-  amount: number;
-  amountCaptured: number;
-  amountRefunded: number;
-  billingDetails: BillingDetails;
-  created: number;
-  currency: string;
-  description: string | null;
-  id: string;
-  paid: boolean;
-  receiptNumber: string | null;
-  receiptUrl: string | null;
+  amount: string;
+  description: string;
+  date: string;
+  receiptUrl?: string;
+  status: string;
 }
+
 
 interface ResponseData {
   data: Charge[];
@@ -38,35 +33,37 @@ interface ResponseData {
 interface FormattedCharge {
   amount: string;
   description: string;
-  receiptNumber: string;
-  receiptUrl: string;
+ // receiptNumber: string;
+ receiptUrl: string;
 }
 function CrediCard() {
   const [hasPaymentDetails, setHasPaymentDetails] = useState(false);
   const [cardHolderName, setCardHolderName] = useState("");
+  const [PaymentID, SetPaymentID] = useState("");
   const [last4Digits, setLast4Digits] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+  const [data, setData] = useState([]);
   const [charges, setCharges] = useState<FormattedCharge[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const userToken = localStorage.getItem("authToken") || null;
-  const data = [
-    { amount: '100 $', description: 'Payment for item A', date: '2024-09-01' },
-    { amount: '250 $', description: 'Payment for item B', date: '2024-09-02' },
-    // Add more rows as needed
-  ];
+  // const data = [
+  //   { amount: '100 $', description: 'Payment for item A', date: '2024-09-01' },
+  //   { amount: '250 $', description: 'Payment for item B', date: '2024-09-02' },
+  //   // Add more rows as needed
+  // ];
 
 
-  const fetchStripeCharges = async () => {
+  /*const fetchStripeCharges = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/stripe/listCharges/pm_1PyguSE51UEbJoiHQYB3WBaE`, {
+        const response = await fetch(`http://localhost:8080/api/stripe/listCharges/${PaymentID}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${userToken} ` , // Replace with your actual token
               'Content-Type': 'application/json'
             },
         });
-
+console.log(PaymentID);
         if (!response.ok) {
           //  throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -91,13 +88,50 @@ function CrediCard() {
         return { error };
     }
 };
+*/
+  
+  
+
+const postData = async () => {
+  const url = `http://localhost:8080/api/stripe/listCharges/${localStorage.getItem("payID")}`; // Replace PaymentID with actual value
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userToken}`
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const result = await response.json();
+   // console.log('Response*****:', result);
+
+    // Transform the response into the desired format
+    const formattedData = result.data.map((charge: { amount: number; description: any; created: number; receipt_url: any; status: any; }) => ({
+      amount: `${charge.amount / 100} $`, // Convert amount to dollars
+      description: charge.description,
+      date: new Date(charge.created * 1000).toISOString().split('T')[0], // Convert timestamp to date
+      receiptUrl: charge.receipt_url,
+      status: charge.status
+    }));
+setData(formattedData);
+   // console.log('Formatted Data:', formattedData);
+    return formattedData;
+
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+};
 
   
-  
-  
-  
-  
-  
+
+
   
    
 
@@ -139,14 +173,17 @@ function CrediCard() {
 
   const navigate = useNavigate();
  
-  useEffect(() => {
-    fetchStripeCharges();
+
+   
+   
     const initializePaymentId = async () => {
       await fetchPaymentId();
       const details = getPaymentDetails(); // Get the details from the fetchPaymentId function
       setHasPaymentDetails(false);
 
       if (details.paymentId) {
+        SetPaymentID(details.paymentId);
+        localStorage.setItem("payID",details.paymentId);
         setCardHolderName(details.cardHolderName);
         setLast4Digits(details.last4Digits);
         setExpiryDate(`${details.expMonth}/${details.expYear}`);
@@ -156,8 +193,22 @@ function CrediCard() {
       setLoading(false); // Set loading to false after data is fetched
     };
 
-    initializePaymentId();
-  }, []);
+    useEffect(() => {
+      initializePaymentId();
+     
+
+    }, []); // Empty dependency array ensures this runs only once
+ 
+    if( localStorage.getItem("payID"))
+    {
+      useEffect(() => {
+        postData();     
+  
+      }, []); // Empty dependency array ensures this runs only once
+   
+
+    }
+  
 
   const add = () => {
     navigate("/AddCard");
@@ -197,31 +248,42 @@ function CrediCard() {
           <tr>
             <th style={thStyle}>Amount</th>
             <th style={thStyle}>Description</th>
-            <th style={thStyle}>Date</th>
+            <th style={thStyle}>Receipt URL</th>
+            <th style={thStyle}>Status</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
-            <tr
-              key={index}
-              style={trStyle}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#FFCCCC')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-            >
-              <td style={tdStyle}>{row.amount}</td>
-              <td style={tdStyle}>{row.description}</td>
-              <td style={tdStyle}>{row.date}</td>
-            </tr>
-          ))}
-        </tbody>
+  {data.map((row: Charge, index: React.Key | null | undefined) => (
+    <tr
+      key={index}
+      style={trStyle}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#FFCCCC')}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+    >
+      <td style={tdStyle}>{row.amount}</td>
+      <td style={tdStyle}>{row.description}</td>
+      <td style={tdStyle} ><a className="linkR" href={row.receiptUrl} target="_blank">{row.date}</a></td>
+      <td style={tdStyle} className="tda">
+        {row.status === 'succeeded' && (
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-square-fill" viewBox="0 0 16 16">
+          <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+        </svg>
+        )}
+        
+      </td>    
+    </tr>
+  ))}
+</tbody>
+
       </table>
     </div>
       </div>
     );
   } else {
     return (
+      <div className="testmain">
       <div onClick={add} className="addNewCard">
-        <div className="testmain">
+       
           <div className="credit-card card add-card">
             <div className="addCard">+</div>
             <div className="addCardTxt">Add Payment Method</div>

@@ -62,7 +62,9 @@ function UserBar() {
     return (
       <div className="testbar">
         <TopBar
-          Name={ undefined}
+          FirestName={ undefined}
+          LastName={undefined}
+          UserEmail={undefined}
           image={ undefined}
         />
       </div>
@@ -72,8 +74,10 @@ function UserBar() {
   return (
     <div className="testbar">
       <TopBar
-        Name={ userData.firstName}
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnnFf6DXcgRxe71BOQm1orHpnKjJloo9c2jg&s"
+        FirestName={ userData.firstName}
+        LastName={ userData.lastName}
+        UserEmail={ userData.sub}
+        image="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
       />
     </div>
   );

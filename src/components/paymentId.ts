@@ -1,6 +1,5 @@
 // let paymentId="";
 
-import { useEffect, useState } from "react";
 import { DecodedToken, extractDataFromToken } from "./tokenDecode";
 
 // export const fetchPaymentId = async (): Promise<void> => {
@@ -46,8 +45,10 @@ let userData: DecodedToken | null = null;
 userData=data;
 
 export const fetchPaymentId = async (): Promise<void> => {
+  const userToken = localStorage.getItem('authToken'); // Retrieve token from local storage or another source
+  if(userToken)
   try {
-    const userToken = localStorage.getItem('authToken'); // Retrieve token from local storage or another source
+   
 
     const response = await fetch('http://localhost:8080/api/stripe/customer-cards', {
       headers: {
@@ -71,12 +72,12 @@ export const fetchPaymentId = async (): Promise<void> => {
       cardHolderName = firstCard.billingDetails?.name || userData?.firstName+" "+userData?.lastName; // If cardholder's name is present
       expMonth = firstCard.card.expMonth;
       expYear = firstCard.card.expYear;
-      console.log(expYear);
+     // console.log(expYear);
     } else {
       console.log('No payment methods found');
     }
   } catch (error) {
-    console.error('Error fetching payment methods:', error);
+    //console.error('Error fetching payment methods:', error);
   }
 };
 

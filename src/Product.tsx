@@ -265,7 +265,9 @@ function Product() {
           </>
         ) : (
           <div className="testmain">
+            <div className="cut">
             <TriangleLoader />
+          </div>
           </div>
         )}
       </div>
