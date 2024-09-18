@@ -29,6 +29,12 @@ const ListGroup: React.FC<ListGroupProps> = ({ items, logo, isMenuCollapsed }) =
         </a>
         <div className="logo-spacer"></div>
       </div>
+      <div className="logo-container2">
+        <a href="/" className="goHome">
+          <img className="logo" src="https://github.com/saif0133/website-deployment/blob/main/imgs/hublogo1.png?raw=true" alt="User" />
+        </a>
+       
+      </div>
       <ul className="list-group">
         {items.map((item) => (
           <li className="list-group-item" key={item.text} onClick={() => handleClick(item)}>

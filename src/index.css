@@ -1516,7 +1516,21 @@ input[type="range"] {
   z-index: -100;
 }
 
-.goHome , .list-group , .list-group-item , .testmain , .Top-Bar ,.container , .testbar{
+ .list-group , .list-group-item , .testmain , .Top-Bar ,.container , .testbar{
   transition: 1s ease-in-out !important;
 }
 
+.logo-container2{
+  display: none;
+  transition: 2s ease-in-out;
+
+}
+
+.collapsed .logo-container2{
+  display: flex;
+  transition: 3s ease-in-out;
+}
+
+.logo-container2{
+  max-width: 100px !important;
+}
