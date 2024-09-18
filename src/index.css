@@ -1502,7 +1502,7 @@ input[type="range"] {
 .small{
   position: fixed;
   top: 92% !important;
-  left: 20% !important;
+  left: 19% !important;
   transition: 1s ease;
 }
 

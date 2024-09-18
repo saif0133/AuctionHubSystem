@@ -62,6 +62,8 @@ function AllProducts() {
     });
   };
 
+  
+
   // Update slider background whenever the values change
   useEffect(() => {
     updateSliderBackground();
@@ -69,7 +71,7 @@ function AllProducts() {
 
   return (
     <div className="menu">
-      <ListGroup items={items} logo={logo} />
+      <ListGroup items={items} logo={logo} isMenuCollapsed={false} />
 
       <div className="logo-container">
         <div className="logo-spacer"></div>
