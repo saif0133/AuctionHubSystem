@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 
@@ -11,42 +11,45 @@ interface ListItem {
 interface ListGroupProps {
   items: ListItem[];
   logo: string;
+  isMenuCollapsed: boolean;
 }
 
-const ListGroup: React.FC<ListGroupProps> = ({ items, logo }) => {
+const ListGroup: React.FC<ListGroupProps> = ({ items, logo, isMenuCollapsed }) => {
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const handleClick = (item: ListItem) => {
     navigate(item.link);
-    setSelectedItem(item.text);
   };
 
   return (
-    <div className="hideme" id="hideme">
+    <>
       <div className="logo-container">
         <a href="/" className="goHome">
-          {" "}
           <img className="logo" src={logo} alt="User" />
         </a>
         <div className="logo-spacer"></div>
       </div>
       <ul className="list-group">
         {items.map((item) => (
-          <li
-            className={
-              selectedItem === item.text
-                ? "list-group-item active"
-                : "list-group-item"
-            }
-            key={item.text}
-            onClick={() => handleClick(item)}
-          >
-            <FontAwesomeIcon icon={item.icon} /> {item.text}
+          <li className="list-group-item" key={item.text} onClick={() => handleClick(item)}>
+            <div className="Men">
+              <div className="iconMenu">
+                <FontAwesomeIcon icon={item.icon} />
+              </div>
+             
+                {!isMenuCollapsed && (
+                   <div className={`TextMen ${isMenuCollapsed ? "collapsed" : ""}`} >
+                  
+                    {item.text}
+                  </div>
+                )}
+             
+            </div>
           </li>
         ))}
       </ul>
-    </div>
+     
+    </>
   );
 };
 

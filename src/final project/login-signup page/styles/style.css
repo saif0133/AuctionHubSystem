@@ -32,6 +32,7 @@ body::-webkit-scrollbar {
     background-color: white;
     border-radius: 5% 0 0 5%;
     transition: 1s ease;
+    filter: drop-shadow(0 0 10px black); /* Applies a centered black drop shadow */
   }
 
   .container {
@@ -54,6 +55,7 @@ body::-webkit-scrollbar {
   .container.reverse .signtuer {
     transform: translateX(200%);
     transition: transform 2s ease;
+    z-index: -1;
   }
 
   .signtuer {
@@ -67,6 +69,7 @@ body::-webkit-scrollbar {
     font-size: large;
     align-self: center;
     transition: transform 2s ease;
+    z-index: 1;
   }
 
   .container.reverse .content {

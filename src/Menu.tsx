@@ -40,6 +40,11 @@ function Menu() {
   if (token) {
     items.push({ text: "Logout", icon: faSignOutAlt, link: "/Logout" });
   }
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
+
+  const toggleMenuCollapse = () => {
+    setIsMenuCollapsed(!isMenuCollapsed);
+  };
 
   const toggleMenu = () => {
     setIsMenuVisible(prev => !prev); // Toggle visibility
@@ -54,24 +59,32 @@ function Menu() {
   return (
     <>
     <div className="menicon" onClick={toggleMenu}>
-        ☰
+      ☰
+    </div>
+    <div
+      className={`menu ${isMenuCollapsed ? "collapsed" : ""}`}
+    >
+      <div className="small">
+        <i
+          className="bi bi-arrow-left-circle-fill"
+          onClick={toggleMenuCollapse}
+          style={{ float: "right", cursor: "pointer" }}
+        ></i>
       </div>
-    <div className={`menu ${menuClass}`} style={{ height: menuHeight }}>
-      
-      {isMenuVisible && (
+     
         <>
-          <ListGroup items={items} logo={logo} />
+            <ListGroup items={items} logo={logo} isMenuCollapsed={isMenuCollapsed} />
           <div className="footer">
             <p>
-              <a href="legal.html">Legal</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{" "}
+              <a href="legal.html">Legal</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <a href="privacy.html">Privacy Policy</a>
             </p>
             <p>© 2024 Auction Hub. All Rights Reserved.</p>
           </div>
         </>
-      )}
+      
     </div>
-    </>
+  </>
   );
 }
 
