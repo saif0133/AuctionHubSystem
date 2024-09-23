@@ -4,6 +4,8 @@ import ProductCard from "./components/ProductCard";
 import TriangleLoader from "./components/loading";
 import { extractDataFromToken } from "./components/tokenDecode";
 import CategoryCard from "./components/CategoryCard";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 // Update Product interface to match the fetched data
 interface Product {
@@ -101,7 +103,7 @@ const Home: React.FC = () => {
           );
         })}
       </div>
-      <NavLink to="/all" className={"btn-secondary btn"}>
+       <NavLink to="/all" className={"btn-secondary btn"}>
         Next
       </NavLink>
     </div>
