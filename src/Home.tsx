@@ -21,6 +21,7 @@ const Home: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const token = localStorage.getItem("authToken") || "";
 
   const formatDateToISO = (dateString: string): string => {
     const [day, month, year, time] = dateString.split(/[-\s:]/);
@@ -30,25 +31,41 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8080/auction/all"
-        );
+        const response = await fetch("http://localhost:8080/auctions", {
+          method: "GET", // Change to POST
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            searchKey: "",
+            itemStatus: "",
+            category: "",
+            beginDate: "",
+            expireDate: "",
+            location: "",
+            minCurrentPrice: "",
+            maxCurrentPrice: ""
+          }),
+        });
+    
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+    
         const data = await response.json();
-
+    
         const formattedProducts = data.map((product: any) => ({
           pId: product.id,
-          image: product.item.images[0]?.imageUrl || "", // Get the first image URL
+          image: product.item.images[0]?.imageUrl || "", // Get the first image URL or empty string
           title: product.item.name,
           description: product.item.description,
           price: product.currentPrice,
           endDate: formatDateToISO(product.expireDate), // Convert to ISO format
         }));
-
+    
         setProducts(formattedProducts);
-       // console.log(localStorage.getItem("authToken"));
+        console.log(formattedProducts);
       } catch (error) {
         if (error instanceof Error) {
           setError(error);
@@ -57,9 +74,11 @@ const Home: React.FC = () => {
         setLoading(false);
       }
     };
-
+    
+  
     fetchData();
-  }, []);
+  }, []); // Dependency array is empty to ensure the effect runs once on component mount
+  
 
   if (loading) {
     return (

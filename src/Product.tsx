@@ -6,18 +6,32 @@ import TriangleLoader from "./components/loading";
 import DropdownComponent from "./components/dropDown";
 import Timer from "./components/timer";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-
+import { DecodedToken, extractDataFromToken } from "./components/tokenDecode";
+import { message } from "antd";
 
 const minBid = 100;
 
 interface ProductData {
-  name: string;
-  images: string[]; // Assuming images are URLs
-  owner: {
+  id(id: any): void;
+  item: {
     name: string;
-    pic: string;
+    images: { imageUrl: string }[];
+    description: string;
+    categoryAttributes: {
+      [key: string]: string; // Dynamic category attributes
+    };
   };
-  endDate: string; // Add endDate to your ProductData
+  seller: {
+    firstName: string;
+    lastName: string;
+    pic: string;
+    email: string; // Added email property
+  };
+  currentPrice: number;
+  minBid: number;
+  location: string;
+  beginDate: string;
+  expireDate: string;
 }
 
 const usersa = [
@@ -28,21 +42,64 @@ const usersa = [
 ];
 
 function Product() {
-  const [Amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(0);
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<ProductData | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isOwner, setIsOwner] = useState(true);
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
-  const [endDate, setEndDate] = useState<string>(""); // State for endDate
+  const [formattedExpireDate, setFormattedExpireDate] = useState<string | null>(null);
   const userPayment = true;
+  const [userData, setUserData] = useState<DecodedToken | null>(null);
 
-  // Fetch product data when component mounts or id changes
+  const token = localStorage.getItem("authToken") || "";
+
+  const formatToISO = (dateStr: string): string => {
+    const [day, month, yearTime] = dateStr.split('-'); // Split DD-MM-YYYY HH:mm
+    const [year, time] = yearTime.split(' ');
+    const [hour, minute] = time.split(':');
+  
+    const formattedDate = new Date(
+      Number(year), 
+      Number(month) - 1,
+      Number(day), 
+      Number(hour), 
+      Number(minute)
+    );
+    return formattedDate.toISOString();
+  };
+  
+  const rmv = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/auctions/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+    
+      console.log('Auction deleted successfully');
+      // Redirect to "My Auction" page
+      window.location.href = "/My-Auction";
+    } catch (error) {
+      console.error("Failed to delete auction:", error);
+    }
+  };
+  
+  
   useEffect(() => {
+    const data = extractDataFromToken(token);
+    setUserData(data);
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          `https://mocki.io/v1/181c6318-2259-463a-a14d-24facb1df32c`
-        );
+        const response = await fetch(`http://localhost:8080/auctions/${id}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -50,29 +107,30 @@ function Product() {
 
         const data: ProductData = await response.json();
         setProduct(data);
-        setEndDate(data.endDate); // Update endDate state
 
-        // Check if the auction has ended
         const currentDate = new Date();
-        const auctionEndDate = new Date(data.endDate);
-        if (currentDate > auctionEndDate) {
-          setIsAuctionEnded(true);
+        const auctionEndDate = new Date(formatToISO(data.expireDate));
+        console.log(auctionEndDate);
+        setFormattedExpireDate(formatToISO(data.expireDate));
+        setIsAuctionEnded(currentDate > auctionEndDate);
+        if(userData?.sub ==data.seller.email)
+          {
+            setIsOwner(true);
         }
       } catch (error) {
         console.error("Failed to fetch product data:", error);
       }
     };
 
+   
     if (id) {
       fetchProduct();
       const intervalId = setInterval(fetchProduct, 5000);
       return () => clearInterval(intervalId);
     }
-  }, [id]);
+  }, [id, token]);
 
-  const openPopup = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const openPopup = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     const elements = document.getElementsByClassName("input__field");
     let bidValue = 0;
@@ -107,60 +165,58 @@ function Product() {
               <div className="owner-cont">
                 <div
                   className="owner-pic"
-                  style={{ backgroundImage: `url(${product.owner.pic})` }}
+                  style={{
+                    backgroundImage: `url(${product.seller.pic || `https://via.placeholder.com/40?text=${product.seller.firstName.charAt(0)}`})`,
+                  }}
                 ></div>
-
                 <div className="owner-name">
-                  <h2>{product.owner.name}</h2>
+                  <h2>{`${product.seller.firstName} ${product.seller.lastName}`}</h2>
                 </div>
               </div>
-              <div className="icons">
+              {isOwner &&(<div className="icons">
                 <div className="ted">
-                  <div className="description">
-                    Edit your auction info
+                  <div className="description">Remove your auction</div>
+                  <i className="bi bi-trash3" onClick={rmv}></i> {/* Ensure product.id contains the correct auction ID */}
                   </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                  </svg></div>
-                <div className="ted">
-                <div className="description">
-                    Remove your auction
-                  </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">
-                  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                </svg></div>
-              </div>
+              </div>)}
             </div>
 
             <div className="product-info">
               <div className="left">
                 <div
                   className="first-pic"
-                  style={{ backgroundImage: `url(${product.images[0]})` }}
+                  style={{
+                    backgroundImage: `url(${product.item.images[0].imageUrl})`,
+                  }}
                 ></div>
                 <div className="additional-pics">
-                  {product.images.slice(1).map((image, index) => (
+                  {product.item.images.slice(1).map((image, index) => (
                     <div
                       key={index}
                       className={`pic-${index + 1} pro-pic`}
-                      style={{ backgroundImage: `url(${image})` }}
+                      style={{ backgroundImage: `url(${image.imageUrl})` }}
                     ></div>
                   ))}
                 </div>
+
                 <div className="form">
-                  <div className="saif ssa">
-                    <label className="input">
-                      <input
-                        className="input__field"
-                        type="text"
-                        placeholder=" "
-                        disabled={isAuctionEnded} // Disable input if auction ended
-                      />
-                      <span className="input__label">Bid Amount</span>
-                    </label>
-                  </div>
-                  <div className="note">Min available bid is : {minBid} $</div>
+                  {!isAuctionEnded && (
+                    <div>
+                      <div className="saif ssa">
+                        <label className="input">
+                          <input
+                            className="input__field"
+                            type="text"
+                            placeholder=" "
+                            disabled={isAuctionEnded}
+                          />
+                          <span className="input__label">Bid Amount</span>
+                        </label>
+                      </div>
+                      <div className="note">Min available bid is : {product.minBid} $</div>
+                    </div>
+                  )}
+                 
                   {!isAuctionEnded && (
                     <button
                       type="submit"
@@ -174,89 +230,72 @@ function Product() {
                     <PopupMMessage
                       closePopup={closePopup}
                       order={order()}
-                      amount={Amount.toString()}
+                      amount={amount.toString()}
                       description=""
                     />
                   )}
                 </div>
               </div>
+
               <div className="right">
                 <div className="product-name">
                   <div className="name">
-                    <h1>{product.name}</h1>
+                    <h1>{product.item.name}</h1>
                   </div>
                   <div className="name-spacer"></div>
                 </div>
+
                 <div className="prc-container">
                   <div className="auction-price">
                     <div className="prc">
-                      <h2>1000 JDs</h2>
+                      <h2>{`${product.currentPrice} JDs`}</h2>
                     </div>
-                    <div className="min-bid">Min Bid : {minBid} JDs</div>
+                    <div className="min-bid">Min Bid : {product.minBid} JDs</div>
                   </div>
-
                   <div className="location">
-                    <h2>Amman</h2>
+                    <h2>{product.location}</h2>
                   </div>
                 </div>
+
                 <div className="desc">
                   <div className="spc"></div>
-                  <div className="info">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam consequat dui sit amet tellus egestas eleifend
-                    venenatis non nisi. Phasellus eu sapien sit amet lectus
-                    luctus venenatis vitae sit amet erat. Integer facilisis sed
-                    turpis a condimentum. Quisque mollis lacus pharetra nisi
-                    fermentum, quis placerat nunc laoreet. Quisque lobortis
-                    neque ipsum, in aliquet urna vulputate sit amet. Etiam vel
-                    ex vestibulum tellus posuere euismod. Sed eu mi in metus
-                    consectetur fermentum. Maecenas in mi ac nibh sodales
-                    eleifend at hendrerit urna. Integer tincidunt id est sed
-                    luctus. Pellentesque consequat fringilla massa non
-                    imperdiet.
-                  </div>
+                  <div className="info">{product.item.description}</div>
                 </div>
+
+                {/* New Table for Category Attributes */}
                 <div className="tester">
                   <table className="table table-striped table-hover">
                     <tbody>
-                      <tr>
-                        <th scope="row">Row 1 Header</th>
-                        <td>Row 1, Column 2</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Row 2 Header</th>
-                        <td>Row 2, Column 2</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Row 3 Header</th>
-                        <td>Row 3, Column 2</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Row 4 Header</th>
-                        <td>Row 4, Column 2</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Row 5 Header</th>
-                        <td>Row 5, Column 2</td>
-                      </tr>
+                      {Object.entries(product?.item.categoryAttributes || {}).map(
+                        ([key, value], index) => (
+                          <tr key={index}>
+                            <th scope="row">{key.trim()}</th> {/* Trim to remove unwanted whitespace */}
+                            <td>{value}</td>
+                          </tr>
+                        )
+                      )}
                     </tbody>
                   </table>
                 </div>
+
                 <div className="dates-container">
                   <div className="dates">
                     <div className="start-date">
                       <div className="date-title">Start Date</div>
-                      <div className="date">Sep 10,2024</div>
+                      <div className="date">{product.beginDate}</div>
                     </div>
                     <div className="end-date">
                       <div className="date-title">End date</div>
-                      <div className="date">{endDate}</div> {/* Display endDate */}
+                      <div className="date">{product.expireDate}</div>
                     </div>
                   </div>
                   <div className="timer">
-                    <Timer endDate={new Date(endDate)} /> {/* Pass endDate to Timer */}
+                    {formattedExpireDate && (
+                      <Timer endDate={new Date(formattedExpireDate)} />
+                    )}
                   </div>
                 </div>
+
                 <div className="drop">
                   <DropdownComponent users={usersa} />
                 </div>
@@ -266,8 +305,8 @@ function Product() {
         ) : (
           <div className="testmain">
             <div className="cut">
-            <TriangleLoader />
-          </div>
+              <TriangleLoader />
+            </div>
           </div>
         )}
       </div>

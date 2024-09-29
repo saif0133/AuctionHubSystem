@@ -73,12 +73,16 @@ Where Deals Meet Destiny
 
             <div class="form" id="loginForm">
                 <form action="" method="post">
-                    <div class="error-signin" id="error-signin"></div>
+                    <div class="err" id="err">
+                        <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/wrong.png?raw=true" alt="" class="err-img">
+                    <div class="error-signin" id="error-signin">Invalid email or password</div>
+                </div>
                     <div class="inp">
                         <div class="saif">
                             <label class="input">
                                 <input class="input__field" id="email" type="text" placeholder=" " />
                                 <span class="input__label">Email</span>
+                                <div class="info-box" id="emailLError-log">Email must contain '@' and '.'.</div>
                             </label>
                         </div>
                     </div>
@@ -89,6 +93,7 @@ Where Deals Meet Destiny
                                 <label class="input">
                                     <input class="input__field" id="password" type="password" placeholder=" " />
                                     <span class="input__label">Password</span>
+
                                 </label>
                             </div>
                         </div>

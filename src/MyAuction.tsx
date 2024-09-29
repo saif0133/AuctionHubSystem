@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
 import TriangleLoader from "./components/loading";
-import { Width } from "devextreme-react/cjs/chart";
-import LoginWarning from "./components/loginWarning"
+import LoginWarning from "./components/loginWarning";
 
 interface Product {
   id: number;
@@ -14,17 +13,25 @@ interface Product {
     }[];
   };
   currentPrice: number;
-  expireDate: string;
+  expireDate: string; // Keep this as string since you're parsing it
 }
+
+
 const formatToISO = (dateStr: string): string => {
-  const [day, month, yearTime] = dateStr.split('-');
+  const [day, month, yearTime] = dateStr.split('-'); // Split DD-MM-YYYY HH:mm
   const [year, time] = yearTime.split(' ');
   const [hour, minute] = time.split(':');
 
-  const formattedDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:00Z`);
-  
+  const formattedDate = new Date(
+    Number(year), 
+    Number(month) - 1,
+    Number(day), 
+    Number(hour), 
+    Number(minute)
+  );
   return formattedDate.toISOString();
 };
+
 function MyAuction() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,9 +40,9 @@ function MyAuction() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('authToken'); // Retrieve the token
-
-        const response = await fetch("http://localhost:8080/auction/myAuctions", {
+        const token = localStorage.getItem('authToken');
+        console.log(token);
+        const response = await fetch("http://localhost:8080/auctions/myAuctions", {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -67,36 +74,33 @@ function MyAuction() {
     );
   }
 
-  if (error) {
+  if (!localStorage.getItem("authToken")) {
     return <LoginWarning />;
   }
 
-  let Title= "My Auction";
   return (
     <div className="testmain">
       <div className="formTitle" id="formTitle">
-       My Auction
+        My Auction
       </div>
       <div className="products">
         {products.map((product) => {
-                    const formattedEndDate = formatToISO(product.expireDate);
-
           // Get the first image URL for the product
           const imageUrl = product.item.images.length > 0 ? product.item.images[0].imageUrl : '';
+          const formattedExpireDate = formatToISO(product.expireDate); // Format expireDate
 
           return (
-            <>
             <ProductCard
               key={product.id}
               img={imageUrl}
               title={product.item.name}
               description={product.item.description}
               currentPrice={product.currentPrice}
-              endDate={new Date(formattedEndDate)}
+              endDate={new Date(formattedExpireDate)} // Pass the formatted date
               id={product.id}
               message={""}
             />
-         </> );
+          );
         })}
       </div>
     </div>

@@ -1,5 +1,6 @@
 let userToken = null;
 const errortext=document.getElementById("error-signin");
+const errorcontainer=document.getElementById("err");
 /**
  * Toggles between the login and signup forms.
  */
@@ -40,59 +41,6 @@ function toggleFlexDirection() {
 
 
 
-async function verifyLogin() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  if (!email || !password) {
-    alert("Please fill in both fields.");
-    return;
-  }
-
-  const data = { login: email, password: password };
-
-  try {
-    const response = await fetch("http://localhost:8080/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const contentType = response.headers.get("Content-Type");
-    let responseData = {};
-
-    if (contentType && contentType.includes("application/json")) {
-      responseData = await response.json();
-    } else {
-      const text = await response.text();
-      console.log("Unexpected response format:", text);
-
-      responseData = { token: text };
-    }
-
-    if (!response.ok) {
-     errortext.innerText=responseData.message;
-       throw new Error(responseData.error || responseData.message);
-   
-    }
-    localStorage.setItem("authToken", responseData.token);
-    
-    window.location.href = "/";
-  } catch (error) {
-    console.error("Error:", error);
-    alert(`Error: ${error.message}`);
-  }
-}
-
-
-document.getElementById("password").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-      event.preventDefault();
-      verifyLogin();
-  }
-});
 
 
 const togglePassword = document.querySelector("#togglePassword");
@@ -255,6 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailError = document.getElementById('emailLError');
   validateField(emailInput, emailError, validateEmail);
 
+  const emailInput1 = document.getElementById('email');
+  const emailError1 = document.getElementById('emailLError-log');
+  validateField(emailInput1, emailError1, validateEmail);
+
   const passwordInput = document.getElementById('password2');
   const passwordError = document.getElementById('password2LError');
   validateField(passwordInput, passwordError, validatePassword);
@@ -326,3 +278,84 @@ async function CreateAccount(event) {
   }
 }
 
+
+
+
+
+
+async function verifyLogin() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const validateEmail = value => /.+@.+\..+/.test(value);
+
+  if (!validateEmail(email)) {
+    setTimeout(() => {
+      errorcontainer.style.display = "flex";
+    }, 500); 
+ errortext.innerText="Please enter valid Email";
+ return;
+   }
+
+
+
+  errorcontainer.style.display = "none";
+  if (!email || !password) {
+    alert("Please fill in both fields.");
+    return;
+  }
+
+  const data = { login: email, password: password };
+
+  try {
+    const response = await fetch("http://localhost:8080/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const contentType = response.headers.get("Content-Type");
+    let responseData = {};
+
+    if (contentType && contentType.includes("application/json")) {
+      responseData = await response.json();
+    } else {
+      const text = await response.text();
+      console.log("Unexpected response format:", text);
+
+      responseData = { token: text };
+    }
+
+    if (!response.ok) {
+      if(responseData.message== "Invalid credentials" )
+      {
+        setTimeout(() => {
+          errorcontainer.style.display = "flex";
+        }, 500); 
+     errortext.innerText="Invalid Email or Password";
+       }
+   else
+   {
+    errorcontainer.style.display = "flex";
+   errortext.innerText=responseData.message;
+}
+   throw new Error(responseData.error || responseData.message);
+    }
+    localStorage.setItem("authToken", responseData.token);
+
+    window.location.href = "/";
+  } catch (error) {
+    console.error("Error:", error);
+   // alert(`Error: ${error.message}`);
+  }
+}
+
+
+document.getElementById("password").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+      event.preventDefault();
+      verifyLogin();
+  }
+});

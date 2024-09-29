@@ -80,7 +80,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
  
 
   const postData = async (): Promise<string | null> => {
-    const url = 'http://localhost:8080/auction/create'; 
+    const url = 'http://localhost:8080/auctions'; 
   
     const data = {
       expireDate: expireDate,

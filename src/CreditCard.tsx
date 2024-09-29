@@ -93,7 +93,7 @@ console.log(PaymentID);
   
 
 const postData = async () => {
-  const url = `http://localhost:8080/api/stripe/listCharges/${localStorage.getItem("payID")}`; // Replace PaymentID with actual value
+  const url = `http://localhost:8080/api/stripe/listCharges/${localStorage.getItem("payID")}`;
 
   try {
     const response = await fetch(url, {
@@ -131,7 +131,7 @@ setData(formattedData);
 
   
 
-
+//postData();
   
    
 
@@ -188,6 +188,7 @@ setData(formattedData);
         setLast4Digits(details.last4Digits);
         setExpiryDate(`${details.expMonth}/${details.expYear}`);
         setHasPaymentDetails(true);
+        postData(); 
       }
 
       setLoading(false); // Set loading to false after data is fetched
@@ -195,19 +196,7 @@ setData(formattedData);
 
     useEffect(() => {
       initializePaymentId();
-     
-
-    }, []); // Empty dependency array ensures this runs only once
- 
-    if( localStorage.getItem("payID"))
-    {
-      useEffect(() => {
-        postData();     
-  
-      }, []); // Empty dependency array ensures this runs only once
-   
-
-    }
+    }, []); 
   
 
   const add = () => {
@@ -241,6 +230,7 @@ setData(formattedData);
         <div className="formTitle" id="formTitle">
        My Payments
       </div>
+      
       <div className="recipte">
      
       <table style={tableStyle}>

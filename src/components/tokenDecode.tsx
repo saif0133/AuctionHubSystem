@@ -4,6 +4,7 @@ export interface DecodedToken {
   sub: string;
   firstName: string;
   lastName: string;
+  image: string;
   roles: string[];
   isBlocked: boolean;
   exp: number;

@@ -4,20 +4,34 @@ function VarifyEmail() {
   const [verificationStatus, setVerificationStatus] = useState('');
   const [error, setError] = useState('');
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+
+
   const handleVerify = async () => {
-    //try {
-      // Simulate an API request to verify the email
-      //const response = await fakeApiVerifyEmail();
-      //if (response.success) {
-    //    setVerificationStatus('success');
-      //} else {
-       // setVerificationStatus('failed');
-        //setError(response.message);
-    //  }
-    //} catch (err) {
-     // setVerificationStatus('failed');
-      //setError('An error occurred while verifying your email.');
-    //}
+    
+    try {
+      // Make an API call to verify the email
+      const response = await fetch(`http://localhost:8080/verifyEmail?token=${token}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const responseData = await response.json();
+        setVerificationStatus('failed');
+        setError(responseData.message || 'Verification failed.');
+      } else {
+        setVerificationStatus('success');
+      }
+    } catch (err) {
+      // Handle network or unexpected errors
+      setVerificationStatus('failed');
+      setError('An error occurred while verifying your email.');
+    }
+  
   
   }
   ;

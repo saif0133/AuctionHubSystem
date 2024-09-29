@@ -171,6 +171,7 @@
   border-collapse: separate;
   border-spacing: 0;
   border: #b2b2b2 1px solid;
+  text-align: center;
 }
 
 th {
@@ -292,4 +293,5 @@ text-align: center;
 
 .bi-trash3{
   color: #be1622;
+  cursor: pointer;
 }
