@@ -524,35 +524,76 @@ cursor: move !important;
 cat:hover{
   box-shadow: none !important;
 }
+/* Custom scrollbar for .category-list */
+/* Custom scrollbar for .category-list */
+.category-list::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar */
+  background-color: #f1f1f1; /* Light background color for the scrollbar */
+}
+
+.category-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7a0000, #960000); /* Gradient for the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+  border: 3px solid #f1f1f1; /* Border around the scrollbar thumb */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for the thumb */
+  cursor: pointer;
+}
+
+.category-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #960000, #7a0000); /* Darker gradient when hovered */
+}
+
+.category-list::-webkit-scrollbar-track {
+  background-color: #e0e0e0; /* Light gray background for the track */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
 
 .category-list {
+  padding-bottom: 20px !important;
+  max-width: 1000px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  justify-content: flex-start; /* Aligns items to the start */
   gap: 10px;
   overflow-x: auto; /* Enables horizontal scrolling */
-  overflow-y: hidden !important; /* Hides vertical scrolling */
-  white-space: nowrap; /* Prevents wrapping */
-  cursor: grab; /* Changes cursor to indicate dragging */
   padding: 10px;
   scroll-behavior: smooth; /* Enables smooth scrolling */
 }
+
 
 .category-card {
   flex: 0 0 auto; /* Prevents shrinking and keeps the cards side by side */
   width: 200px; /* Set a fixed width for each card */
   margin-right: 10px;
   background-color: #f1f1f1;
+  overflow: hidden;
   padding: 10px;
+  -webkit-line-clamp: 3; /* Limits to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* Hides the overflow */
+  text-overflow: ellipsis; /* Adds '...' at the end if the text is too long */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   user-select: none; /* Prevents text selection during drag */
   transition: transform 0.2s ease; /* Animation for hover effect */
 }
 
+.category-card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limits to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* Hides the overflow */
+  text-overflow: ellipsis; /* Adds '...' at the end if the text is too long */
+  margin: 10px 0 0 0;
+}
+
+
 .category-card:hover {
   transform: scale(1.05); /* Slightly enlarges the card on hover */
 }
+
 
 /* Optional: Add hover effects for cards */
 .category-card:hover {

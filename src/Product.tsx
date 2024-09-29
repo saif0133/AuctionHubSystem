@@ -29,7 +29,7 @@ interface ProductData {
   };
   currentPrice: number;
   minBid: number;
-  location: string;
+  address: string;
   beginDate: string;
   expireDate: string;
 }
@@ -48,9 +48,11 @@ function Product() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isOwner, setIsOwner] = useState(true);
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+  const [isJoined, setIsJoined] = useState(true);
   const [formattedExpireDate, setFormattedExpireDate] = useState<string | null>(null);
   const userPayment = true;
   const [userData, setUserData] = useState<DecodedToken | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const token = localStorage.getItem("authToken") || "";
 
@@ -58,17 +60,17 @@ function Product() {
     const [day, month, yearTime] = dateStr.split('-'); // Split DD-MM-YYYY HH:mm
     const [year, time] = yearTime.split(' ');
     const [hour, minute] = time.split(':');
-  
+
     const formattedDate = new Date(
-      Number(year), 
+      Number(year),
       Number(month) - 1,
-      Number(day), 
-      Number(hour), 
+      Number(day),
+      Number(hour),
       Number(minute)
     );
     return formattedDate.toISOString();
   };
-  
+
   const rmv = async () => {
     try {
       const response = await fetch(`http://localhost:8080/auctions/${id}`, {
@@ -77,8 +79,8 @@ function Product() {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
-    
+
+
       console.log('Auction deleted successfully');
       // Redirect to "My Auction" page
       window.location.href = "/My-Auction";
@@ -86,8 +88,8 @@ function Product() {
       console.error("Failed to delete auction:", error);
     }
   };
-  
-  
+
+
   useEffect(() => {
     const data = extractDataFromToken(token);
     setUserData(data);
@@ -100,36 +102,39 @@ function Product() {
             'Content-Type': 'application/json',
           },
         });
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
+  
         const data: ProductData = await response.json();
         setProduct(data);
-
+  
+        // Set the default image to the first image in the array
+        if (data.item.images.length > 0) {
+          setSelectedImage(data.item.images[0].imageUrl);
+        }
+  
         const currentDate = new Date();
         const auctionEndDate = new Date(formatToISO(data.expireDate));
-        console.log(auctionEndDate);
         setFormattedExpireDate(formatToISO(data.expireDate));
         setIsAuctionEnded(currentDate > auctionEndDate);
-        if(userData?.sub ==data.seller.email)
-          {
-            setIsOwner(true);
+  
+        if (userData?.sub === data.seller.email) {
+          setIsOwner(true);
         }
       } catch (error) {
         console.error("Failed to fetch product data:", error);
       }
     };
-
-   
+  
     if (id) {
       fetchProduct();
       const intervalId = setInterval(fetchProduct, 5000);
       return () => clearInterval(intervalId);
     }
   }, [id, token]);
-
+  
   const openPopup = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     const elements = document.getElementsByClassName("input__field");
@@ -156,6 +161,11 @@ function Product() {
     return userPayment ? "bidFees" : "noPayment";
   };
 
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+  
+
   return (
     <div className="testmain">
       <div className="prod">
@@ -173,34 +183,42 @@ function Product() {
                   <h2>{`${product.seller.firstName} ${product.seller.lastName}`}</h2>
                 </div>
               </div>
-              {isOwner &&(<div className="icons">
+              {isOwner && (<div className="icons">
                 <div className="ted">
                   <div className="description">Remove your auction</div>
                   <i className="bi bi-trash3" onClick={rmv}></i> {/* Ensure product.id contains the correct auction ID */}
-                  </div>
+                </div>
               </div>)}
             </div>
 
             <div className="product-info">
-              <div className="left">
-                <div
-                  className="first-pic"
-                  style={{
-                    backgroundImage: `url(${product.item.images[0].imageUrl})`,
-                  }}
-                ></div>
-                <div className="additional-pics">
-                  {product.item.images.slice(1).map((image, index) => (
-                    <div
-                      key={index}
-                      className={`pic-${index + 1} pro-pic`}
-                      style={{ backgroundImage: `url(${image.imageUrl})` }}
-                    ></div>
-                  ))}
-                </div>
+  <div className="left">
+    {/* Main Image Container */}
+    <div
+      className="first-pic"
+      style={{
+        backgroundImage: `url(${selectedImage || product.item.images[0].imageUrl})`,
+      }}
+    ></div>
+
+    {/* Additional Images - Clicking on them updates the main image */}
+    <div className="additional-pics">
+      {product.item.images.map((image, index) => (
+        <div
+          key={index}
+          className={`pic-${index + 1} pro-pic`}
+          style={{ backgroundImage: `url(${image.imageUrl})` }}
+          onClick={() => handleImageClick(image.imageUrl)}
+        ></div>
+      ))}
+    </div>
+
+
+
 
                 <div className="form">
-                  {!isAuctionEnded && (
+                  {!isAuctionEnded && isJoined && (
+                    <>
                     <div>
                       <div className="saif ssa">
                         <label className="input">
@@ -215,9 +233,9 @@ function Product() {
                       </div>
                       <div className="note">Min available bid is : {product.minBid} $</div>
                     </div>
-                  )}
                  
-                  {!isAuctionEnded && (
+
+                  
                     <button
                       type="submit"
                       className="btn-secondary btn bid"
@@ -225,7 +243,29 @@ function Product() {
                     >
                       Bid
                     </button>
+                    </>
                   )}
+
+
+{!isJoined && (
+  <div>
+  <button
+    type="submit"
+    className="btn-secondary btn bid"
+    onClick={openPopup}
+  >
+    Join Auction
+  </button></div>
+)}
+{isAuctionEnded && (<div className="Auction-message">
+  
+<img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/time%20out.png?raw=true" alt="" className="mess-img" />
+
+<div className="mess">Time Out</div>
+
+
+</div> )}
+                  
                   {isPopupOpen && (
                     <PopupMMessage
                       closePopup={closePopup}
@@ -235,6 +275,7 @@ function Product() {
                     />
                   )}
                 </div>
+                
               </div>
 
               <div className="right">
@@ -253,7 +294,7 @@ function Product() {
                     <div className="min-bid">Min Bid : {product.minBid} JDs</div>
                   </div>
                   <div className="location">
-                    <h2>{product.location}</h2>
+                    <h4>{product.address}</h4>
                   </div>
                 </div>
 

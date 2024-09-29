@@ -22,16 +22,7 @@ function AddAuction() {
   const [productDescription, setProductDescription] = useState("");
   const [startDate, setStartDate] = useState("");
  const [expireDate, setExpireDate] = useState("");
-// const [expireDate, setExpireDate] = useState(() => {
-//   const now = new Date();
-//   const day = String(now.getDate()).padStart(2, '0');
-//   const month = String(now.getMonth() + 1).padStart(2, '0');
-//   const year = now.getFullYear();
-//   const hours = String(now.getHours()).padStart(2, '0');
-//   const minutes = String(now.getMinutes()).padStart(2, '0');
-//   return `${day}-${month}-${year} ${hours}:${minutes}`;
-// });
- 
+
 const [itemStatusa, setItemStatusa] = useState("NEW");
   const [ProductLocation, setProductLocation] = useState("");
   const [minBida, setMinBid] = useState("");
@@ -40,7 +31,6 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [Title, setTitle] = useState("Product Info");
   const [images, setImageFiles] = useState<File[]>([]);
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [imageMetadata, setImageMetadata] = useState<{ name: string, type: string, imageUrl: string }[]>([]);
   const [hasPaymentDetails, setHasPaymentDetails] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -94,7 +84,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
         },
         categoryAttributes: attributeValues
       },
-      location: ProductLocation,
+      address: ProductLocation,
       minBid: minBida,
       initialPrice: initialPricea
     };

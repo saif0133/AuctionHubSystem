@@ -147,7 +147,7 @@
   width: 100%;
   background-color: #b2b2b2;
   border-radius: 50px;
-  margin-top: 5%;
+  margin-top: 1%;
 }
 
 .desc {
@@ -294,4 +294,21 @@ text-align: center;
 .bi-trash3{
   color: #be1622;
   cursor: pointer;
+}
+
+.Auction-message{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+gap: 25px;
+}
+
+.mess-img{
+  height: 70px !important;
+}
+
+.mess{
+  font-size: 40px;
+  font-weight: bold;
+  color: #BE1622;
 }

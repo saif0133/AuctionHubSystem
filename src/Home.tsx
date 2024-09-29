@@ -28,57 +28,52 @@ const Home: React.FC = () => {
     return new Date(`${year}-${month}-${day}T${time}:00Z`).toISOString();
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/auctions", {
-          method: "GET", // Change to POST
+  
+  const fetchData = async (page: number) => {
+    try {
+      setLoading(true); // Loading state before API call
+      const response = await fetch(
+        `http://localhost:8080/auctions?offset=0&pageSize=10&sortBy=&sortDirection=&searchKey=&itemStatus=&category=&beginDate=&expireDate&address=&minCurrentPrice=&maxCurrentPrice=`,
+        {
+          method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            searchKey: "",
-            itemStatus: "",
-            category: "",
-            beginDate: "",
-            expireDate: "",
-            location: "",
-            minCurrentPrice: "",
-            maxCurrentPrice: ""
-          }),
-        });
-    
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
         }
-    
-        const data = await response.json();
-    
-        const formattedProducts = data.map((product: any) => ({
-          pId: product.id,
-          image: product.item.images[0]?.imageUrl || "", // Get the first image URL or empty string
-          title: product.item.name,
-          description: product.item.description,
-          price: product.currentPrice,
-          endDate: formatDateToISO(product.expireDate), // Convert to ISO format
-        }));
-    
-        setProducts(formattedProducts);
-        console.log(formattedProducts);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error);
-        }
-      } finally {
-        setLoading(false);
+      );
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
-    
   
-    fetchData();
-  }, []); // Dependency array is empty to ensure the effect runs once on component mount
+      const data = await response.json();
+      console.log(data); // Log the full API response to debug structure
   
+      // Access the 'content' array in the response
+      const formattedProducts = (data.content || []).map((product: any) => ({
+        pId: product.id,
+        image: product.item.images[0]?.imageUrl || "", // Get the first image URL or empty string
+        title: product.item.name,
+        description: product.item.description,
+        price: product.currentPrice,
+        endDate: formatDateToISO(product.expireDate), // Convert date to ISO format
+      }));
+  
+      setProducts(formattedProducts);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  useEffect(() => {
+    fetchData(1);
+  }, [token]);
 
   if (loading) {
     return (
@@ -89,7 +84,7 @@ const Home: React.FC = () => {
   }
 
   if (error) {
-  //  return <div>Error: {error.message}</div>;
+    return <div>Error: {error.message}</div>; // Display error if exists
   }
 
   return (
