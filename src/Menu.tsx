@@ -40,7 +40,7 @@ function Menu() {
   if (token) {
     items.push({ text: "Logout", icon: faSignOutAlt, link: "/Logout" });
   }
-  const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState(true);
 
   const toggleMenuCollapse = () => {
     setIsMenuCollapsed(!isMenuCollapsed);
@@ -58,9 +58,9 @@ function Menu() {
 
   return (
     <>
-    <div className="menicon" onClick={toggleMenu}>
+    {/* <div className="menicon" onClick={toggleMenu}>
       ☰
-    </div>
+    </div> */}
     <div
       className={`menu ${isMenuCollapsed ? "collapsed" : ""}`}
     >

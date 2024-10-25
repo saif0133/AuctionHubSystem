@@ -261,7 +261,7 @@ if(data.joined)
                 </div>
               </div>)}
               {isJoined && !isOwner &&(
-                <div className="joined">Joined</div>
+                <div className="joined">You Joined this Auction</div>
               )}
             </div>
 
