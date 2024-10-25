@@ -69,7 +69,6 @@ const Home: React.FC = () => {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchData(1);

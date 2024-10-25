@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface ListItem {
   text: string;
@@ -16,6 +16,7 @@ interface ListGroupProps {
 
 const ListGroup: React.FC<ListGroupProps> = ({ items, logo, isMenuCollapsed }) => {
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
 
   const handleClick = (item: ListItem) => {
     navigate(item.link);
@@ -31,30 +32,33 @@ const ListGroup: React.FC<ListGroupProps> = ({ items, logo, isMenuCollapsed }) =
       </div>
       <div className="logo-container2">
         <a href="/" className="goHome">
-          <img className="logo" src="https://github.com/saif0133/website-deployment/blob/main/imgs/hublogo1.png?raw=true" alt="User" />
+          <img
+            className="logo"
+            src="https://github.com/saif0133/website-deployment/blob/main/imgs/hublogo1.png?raw=true"
+            alt="User"
+          />
         </a>
-       
       </div>
       <ul className="list-group">
         {items.map((item) => (
-          <li className="list-group-item" key={item.text} onClick={() => handleClick(item)}>
+          <li
+            className={`list-group-item ${location.pathname === item.link ? 'active' : ''}`}
+            key={item.text}
+            onClick={() => handleClick(item)}
+          >
             <div className="Men">
               <div className="iconMenu">
                 <FontAwesomeIcon icon={item.icon} />
               </div>
-             
-                {!isMenuCollapsed && (
-                   <div className={`TextMen ${isMenuCollapsed ? "collapsed" : ""}`} >
-                  
-                    {item.text}
-                  </div>
-                )}
-             
+              {!isMenuCollapsed && (
+                <div className={`TextMen ${isMenuCollapsed ? "collapsed" : ""}`}>
+                  {item.text}
+                </div>
+              )}
             </div>
           </li>
         ))}
       </ul>
-     
     </>
   );
 };

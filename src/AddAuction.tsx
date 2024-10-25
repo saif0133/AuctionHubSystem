@@ -38,7 +38,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const userToken = localStorage.getItem('authToken') || null;
   const [userPayment, srtUserPayment] = useState(false);
   const order = () => {
-    return userPayment ? "PublishFees" : "noPayment";
+    return "PublishFees";
   };
 
   const calculateReservedAmount = (price: number): string => {

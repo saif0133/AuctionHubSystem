@@ -35,7 +35,7 @@ const Layout = () => {
     }
   }, [location.pathname]);
 
-  const showMenu = location.pathname !== "/All";
+  const showMenu = location.pathname !== "/all";
 
   return (
     <>

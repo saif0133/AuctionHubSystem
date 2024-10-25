@@ -39,8 +39,8 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup, customFun
     event.preventDefault();
 
     try {
-      const success = await charge(amount ,"Publish fees for auction with title " + description);
-      if (success) {
+    //  const success = await charge(amount ,"Publish fees for auction with title " + description);
+     // if (success) {
         // Invoke customFunction if provided
         if (customFunction) {
           const id =  await  customFunction(event);
@@ -48,9 +48,9 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup, customFun
           navigate(`/Product/${id}`); // Navigate to a route with the ID
 
         }
-      } else {
-        console.log('Charge failed');
-      }
+    //  } else {
+      //  console.log('Charge failed');
+      //}
     } catch (error) {
       console.error('Error in testCharge:', error);
     }

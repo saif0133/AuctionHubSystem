@@ -3,6 +3,7 @@ import "./popupsStyle.css";
 import NoPayment from "./noPayment";  // Ensure correct path and capitalization
 import PublishFees from "./publishFees";  // Ensure correct path and capitalization
 import BidFees from "./bidFees";  // Ensure correct path and capitalization
+import JoinFees from "./JoinFees";
 
 interface PopupMMessageProps {
   closePopup: () => void;
@@ -24,7 +25,8 @@ const PopupMMessage: React.FC<PopupMMessageProps> = ({ closePopup, order, amount
       <div className="popup-content">
         {order === "noPayment" && <NoPayment />}
         {order === "PublishFees" && <PublishFees amount={amount} closePopup={closePopup} customFunction={customFunction} description={description} />}
-        {order === "bidFees" && <BidFees amount={amount} closePopup={closePopup} />}
+        {order === "JoinAuction" && <JoinFees amount={amount} closePopup={closePopup} customFunction={customFunction} description={description} />}
+        {order === "bidFees" && <BidFees amount={amount} closePopup={closePopup} description={description} />}
       </div>
     </div>
   );

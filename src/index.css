@@ -1102,7 +1102,7 @@ select option {
   display: none !important;
 }
 
-.Mui-selected {
+ .Mui-selected {
   background-color: #740000 !important;
 }
 
@@ -1271,7 +1271,7 @@ background-color: #EFEFEF;
   width: 80%;
   align-items: center;
   justify-content: center;
-  margin: 10%;
+  margin: 2% 10% 2% 10%;
   padding: 2% 7%;
   border-radius: 10px;
   font-size: x-large;
@@ -1282,6 +1282,7 @@ background-color: #EFEFEF;
   display: flex;
   flex-direction: column;
   padding: 0 10%;
+  gap: 15px;
 }
 .sliders_control {
   position: relative;
@@ -1591,4 +1592,137 @@ input[type="range"] {
 }
 .css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
 color: white !important;
+}
+
+/* .Mui-selected{
+  background-color: transparent !important;
+} */
+
+.MuiTreeItem-label{
+  font-weight: bolder !important;
+}
+
+.css-r93niq-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected{
+  color: #740000 !important;
+  border: #740000 1px solid !important;
+}
+
+.back{
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.css-16mfp94-MuiTablePagination-root{
+  display: none !important;
+}
+
+.check{
+  display: flex;
+  border-radius: 10px;
+
+  justify-content: center;
+  align-items: center;
+  gap: 1;
+  background-color: white;
+}
+
+.check label{
+ background-color: #EAEAEA;
+ padding: 4px 10px;
+ border-radius: 3px;
+ margin-left: 6px;
+
+}
+
+.check2 {
+  border-radius: 10px;
+
+  background-color: white;
+}
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
+  font-weight: 600 !important;
+  color: #3a3a3a !important;
+}
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root{
+  color: #3a3a3a !important;
+
+}
+
+.ch{
+  display: flex;
+}
+.spacer{
+  width: 80%;
+  height: 1px;
+  background-color: #212121;
+  margin: 0 0 2% 10%;
+}
+
+.check-cat{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 7px;
+}
+
+.check label {
+  padding: 5px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+.check input {
+
+  margin-right: 10px;
+}
+.check input:checked {
+color: #740000;
+ background-color: #009640 !important;
+}
+
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.custom-checkbox .checkmark {
+  position: relative;
+  display: inline-block;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #dedede;
+  border: 1px solid #333;
+  border-radius: 3px;
+  margin-right: 2px;
+}
+
+/* Create the checkmark */
+.custom-checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid rgb(9, 155, 16);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+/* Show the checkmark when the checkbox is checked */
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.list-group-item.active {
+  color: rgb(170, 0, 0) !important; /* Ensure the text color is red when active */
 }

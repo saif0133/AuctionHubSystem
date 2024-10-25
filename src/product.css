@@ -312,3 +312,19 @@ gap: 25px;
   font-weight: bold;
   color: #BE1622;
 }
+
+
+.joined{
+  margin-right: 3%;
+  font-weight: bold;
+  background-color: #009640 ;
+  padding: 1%;
+  color: #fff;
+  border-radius: 10px;
+  transition: 0.2s ease;
+}
+
+.joined:hover{
+  background-color: rgb(1, 103, 1);
+
+}
