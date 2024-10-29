@@ -224,10 +224,13 @@ async function CreateAccount(event) {
   const CreateLastName = document.getElementById('lastNameL').value;
   const CreateEmail = document.getElementById('emailL').value;
   const CreatePass = document.getElementById('password2').value;
+  const CreatePhone = document.getElementById('phone').value;
   const firstLetter = CreateFirstName ? CreateFirstName.charAt(0).toUpperCase() : 'U';
 
   if (!CreateFirstName || !CreateLastName || !CreateEmail || !CreatePass) {
     alert('Please fill in all fields.');
+    loadingPopup.style.display = 'none';
+
     return;
   }
 
@@ -240,7 +243,8 @@ async function CreateAccount(event) {
       name: 'img',
       type: 'png',
       imageUrl: `https://via.placeholder.com/40?text=${firstLetter}`
-    }
+    },
+    phoneNumber: CreatePhone
   };
 
   try {
@@ -261,8 +265,10 @@ async function CreateAccount(event) {
       const text = await response.text();
       console.log('Unexpected response format:', text);
     }
+    loadingPopup.style.display = 'none';
 
     if (!response.ok) {
+      loadingPopup.style.display = 'none';
       throw new Error(responseData.error || responseData.message);
     }
   

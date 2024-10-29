@@ -21,10 +21,10 @@ body::-webkit-scrollbar {
 
   .content {
     width: 50%;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     text-align: center;
     font-size: large;
@@ -92,13 +92,13 @@ body::-webkit-scrollbar {
 
   .title {
     width: 100%;
-    margin-top: 20%;
+    /*margin-top: 10%;*/
     margin-bottom: 5%;
   }
 
   .form {
     width: 60%;
-    margin-bottom: 40%;
+   /* margin-bottom: 40%;*/
   }
 
   .welcome {

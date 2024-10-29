@@ -44,8 +44,8 @@ const PublishFees: React.FC<PublishFeesProps> = ({ amount, closePopup, customFun
         // Invoke customFunction if provided
         if (customFunction) {
           const id =  await  customFunction(event);
-          await  message.info(`Transition Done Successfully`)
-          navigate(`/Product/${id}`); // Navigate to a route with the ID
+         
+        
 
         }
     //  } else {

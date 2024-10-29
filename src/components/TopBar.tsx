@@ -86,7 +86,7 @@ function TopBar({ FirestName, LastName, UserEmail, image }: TopBarProp) {
       const response = await fetch(url, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          //"Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(body),
@@ -99,8 +99,7 @@ function TopBar({ FirestName, LastName, UserEmail, image }: TopBarProp) {
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
           console.log("Account updated:", data);
-          window.location.href="/Logout"
-   window.location.href="/src/final%20project/login-signup%20page/login.html"
+         console.log(response);
         } else {
           console.log("Account updated, no JSON returned.");
              window.location.href="/Logout"

@@ -322,9 +322,15 @@ body::-webkit-scrollbar {
     grid-column: 1 / 2;
     height: 60px; /* Further reduce height for small screens */
   }
+  .menu.collapsed ~ .testbar,
+  .menu.collapsed ~ .testmain {
+    grid-column: 1 / 3;
+    margin-left: 50px;
 
+    transition: 1s ease-in-out !important;
+  }
   .menu {
-    grid-row: 2 / 3; /* Move menu below the top bar */
+    grid-row: 1 / 3; /* Move menu below the top bar */
     grid-column: 1 / 2;
     overflow-y: auto;
   }
@@ -340,7 +346,7 @@ position: fixed;
     font-size: xx-large;
   }
   .testmain {
-    grid-row: 3 / 4;
+    grid-row: 2 / 4;
     grid-column: 1 / 2;
     padding: 20px; /* Add padding for better readability on small screens */
     transition: 1s ease !important;
@@ -350,6 +356,7 @@ position: fixed;
 
 
 @media (max-width: 480px) {
+  
   .testbar {
     height: 50px; /* Adjust height for very small screens */
   }
@@ -1069,6 +1076,7 @@ select option {
   align-items: center;
   justify-content: center;
   width: 500px !important;
+  background-color: #EFEFEF !important;
 }
 /*.datepicker-toggle {
   width: 100%;
@@ -1092,6 +1100,7 @@ select option {
 
 .css-1vrd5hx-MuiPickersLayout-root {
   width: 100px !important;
+  
 }
 
 .MuiPickersLayout-root {
@@ -1726,3 +1735,12 @@ color: #740000;
 .list-group-item.active {
   color: rgb(170, 0, 0) !important; /* Ensure the text color is red when active */
 }
+
+.errorpage{
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+

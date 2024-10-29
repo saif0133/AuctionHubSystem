@@ -35,7 +35,7 @@ const BidFees: React.FC<BidFeesProps> = ({ amount, closePopup ,description }) =>
   
       const result = await response.json();
       console.log('Bid successful:', result);
-  
+      closePopup();
       return result;  // Return the response if needed for further actions
   
     } catch (error) {

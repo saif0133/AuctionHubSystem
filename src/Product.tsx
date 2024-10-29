@@ -11,13 +11,13 @@ import { message } from "antd";
 
 interface ProductData {
   id: number;
-  active: boolean;
+  status: string;
   beginDate: string;
   expireDate: string;
   item: {
     name: string;
     description: string;
-    images: {
+    auctionImages: {
       id: number;
       name: string;
       type: string;
@@ -55,12 +55,7 @@ interface userdata {
   sub:string;
 }
 
-const usersa = [
-  { name: "Saif", bid: 500, pic: "https://via.placeholder.com/40?text=S" },
-  { name: "Ahmed", bid: 300, pic: "https://via.placeholder.com/40?text=A" },
-  { name: "Layla", bid: 150, pic: "https://via.placeholder.com/40?text=L" },
-  { name: "Hadi", bid: 700, pic: "https://via.placeholder.com/40?text=H" },
-];
+
 
 function Product() {
   const [amount, setAmount] = useState(0);
@@ -75,22 +70,57 @@ function Product() {
   const userPayment = true;
   const [userData, setUserData] = useState<userdata| null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
+  const [usersa, setUsersa] = useState<{ name: string; bid: number; pic: string }[]>([]);
 
   const token = localStorage.getItem("authToken") || "";
 
-  const formatToISO = (dateStr: string): string => {
-    const [day, month, yearTime] = dateStr.split('-'); // Split DD-MM-YYYY HH:mm
-    const [year, time] = yearTime.split(' ');
-    const [hour, minute] = time.split(':');
+  const logBids = (product: ProductData) => {
+    console.log(`Bids for ${product.item.name}:`);
+    
+    product.bids.forEach(bid => {
+        const newUser = {
+            name: bid.bidder.firstName + " " + bid.bidder.lastName,
+            bid: bid.amount,
+            pic: `https://via.placeholder.com/40?text=${bid.bidder.firstName[0]}`, // Generates pic URL with the first letter
+        };
+        
+        // Check if user already exists in usersa
+        const exists = usersa.some(user => user.bid === newUser.bid);
+        
+        // If the user does not exist, push the new user
+        if (!exists) {
+            usersa.push(newUser);
+        }
+    });
+};
 
-    const formattedDate = new Date(
-      Number(year),
-      Number(month) - 1,
-      Number(day),
-      Number(hour),
-      Number(minute)
-    );
-    return formattedDate.toISOString();
+
+
+  const formatDateToISO = (dateString: string): string => {
+    const [day, month, year, time] = dateString.split(/[-\s:]/);
+    return new Date(`${year}-${month}-${day}T${time}:00Z`).toISOString();
+  };
+
+  const calculateReservedAmount = (price: number): string => {
+    let amount: number;
+  
+    if (price >= 1 && price <= 100) {
+      amount = price * 0.10; // 10%
+    } else if (price >= 101 && price <= 1000) {
+      amount = price * 0.07; // 7%
+    } else if (price >= 1001 && price <= 5000) {
+      amount = price * 0.05; // 5%
+    } else if (price >= 5001 && price <= 10000) {
+      amount = price * 0.03; // 3%
+    } else if (price > 10000) {
+      amount = price * 0.02; // 2%
+    } else {
+      amount = 0; // Default case, if needed
+    }
+  
+    // Return the amount formatted to 2 decimal places
+    return amount.toFixed(2);
   };
 
   const rmv = async () => {
@@ -165,21 +195,24 @@ if(data.joined)
   setIsJoined(true);
 
 }
+
+logBids(data);
+
        // setIsOwner(true);
        // setIsJoined(true);
        // console.log(userData?.sub + "///" + data.seller.email);
 
 
         // Set the default image to the first image in the array
-        if (data.item.images.length > 0) {
-          setSelectedImage(data.item.images[0].imageUrl);
+        if (data.item.auctionImages.length > 0) {
+          setSelectedImage(data.item.auctionImages[0].imageUrl);
         }
 
         const currentDate = new Date();
-        const auctionEndDate = new Date(formatToISO(data.expireDate));
-        setFormattedExpireDate(formatToISO(data.expireDate));
+        const auctionEndDate = new Date(formatDateToISO(data.expireDate));
+        setFormattedExpireDate(formatDateToISO(data.expireDate));
         setIsAuctionEnded(currentDate > auctionEndDate);
-
+console.log(data.bids);
 
       } catch (error) {
         console.error("Failed to fetch product data:", error);
@@ -209,7 +242,7 @@ if(data.joined)
 
     if (product)
       if (bidValue < product.minBid || 0) {
-        alert(`${bidValue} is not acceptable, min available bid is ${product.minBid}`);
+        alert(`${bidValue} is not acceptable, min available bid is ${product.minBid + product.currentPrice}`);
       } else {
         setIsPopupOpen(true);
       }
@@ -223,6 +256,11 @@ if(data.joined)
 
   const closePopup = () => {
     setIsPopupOpen(false);
+    const elements = document.getElementsByClassName("input__field") as HTMLCollectionOf<HTMLInputElement>;
+Array.from(elements).forEach((element) => {
+  element.value = ""; // Clear the input field
+});
+
   };
   const closePopup2 = () => {
     setIsPopupOpen2(false);
@@ -271,13 +309,13 @@ if(data.joined)
                 <div
                   className="first-pic"
                   style={{
-                    backgroundImage: `url(${selectedImage || product.item.images[0].imageUrl})`,
+                    backgroundImage: `url(${selectedImage || product.item.auctionImages[0].imageUrl})`,
                   }}
                 ></div>
 
                 {/* Additional Images - Clicking on them updates the main image */}
                 <div className="additional-pics">
-                  {product.item.images.map((image, index) => (
+                  {product.item.auctionImages.map((image, index) => (
                     <div
                       key={index}
                       className={`pic-${index + 1} pro-pic`}
@@ -305,7 +343,7 @@ if(data.joined)
                             <span className="input__label">Bid Amount</span>
                           </label>
                         </div>
-                        <div className="note">Min available bid is : {product.minBid} $</div>
+                        <div className="note">Min available bid is : {product.minBid + product.currentPrice} $</div>
                       </div>
 
 
@@ -335,7 +373,7 @@ if(data.joined)
                     <PopupMMessage
                       closePopup={closePopup2}
                       order={"JoinAuction"}
-                      amount={amount.toString()}
+                      amount={calculateReservedAmount(product.initialPrice)}
                       description={product.id.toString()}
                     />
                   )}
@@ -371,13 +409,16 @@ if(data.joined)
                 <div className="prc-container">
                   <div className="auction-price">
                     <div className="prc">
-                      <h2>{`${product.currentPrice} JDs`}</h2>
+                      <div className="curPrice"><h4 >{`Current Price is : `}</h4><div className="currentPrice"><h2> ${product.currentPrice} JDs</h2></div></div>
+                      <h5>{`Initial Price is : ${product.initialPrice} JDs`}</h5>
                     </div>
-                    <div className="min-bid">Min Bid : {product.minBid} JDs</div>
+                   
                   </div>
                   <div className="location">
                     <h4>{product.address}</h4>
+                    <div className="min-bid">Min Bid : {product.minBid} JDs</div>
                   </div>
+                  
                 </div>
 
                 <div className="desc">

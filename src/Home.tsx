@@ -6,15 +6,20 @@ import { extractDataFromToken } from "./components/tokenDecode";
 import CategoryCard from "./components/CategoryCard";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import LoginWarning from "./components/loginWarning";
 
 // Update Product interface to match the fetched data
 interface Product {
-  pId: number;
-  image: string;
-  title: string;
-  description: string;
-  price: number;
-  endDate: string;
+  id: number;
+  item: {
+    name: string;
+    description: string;
+    auctionImages: {
+      imageUrl: string;
+    }[];
+  };
+  currentPrice: number;
+  expireDate: string; // Keep this as string since you're parsing it
 }
 
 const Home: React.FC = () => {
@@ -29,17 +34,34 @@ const Home: React.FC = () => {
   };
 
   
+
+  
   const fetchData = async (page: number) => {
     try {
       setLoading(true); // Loading state before API call
+      
+      // Body of the request
+      const requestBody = {
+        searchKey: "",             // Search term, empty by default
+        itemStatus: "",            // Status filter, empty by default
+        category: [],              // Array of categories, empty by default
+        beginDate: "",             // Beginning date filter, empty by default
+        expireDate: "",            // Expiry date filter, empty by default
+        address: [""],             // Address array, can include multiple locations if needed
+        minCurrentPrice: "",       // Minimum price filter, empty by default
+        maxCurrentPrice: ""        // Maximum price filter, empty by default
+      };
+      
+  
       const response = await fetch(
-        `http://localhost:8080/auctions?offset=0&pageSize=10&sortBy=&sortDirection=&searchKey=&itemStatus=&category=&beginDate=&expireDate&address=&minCurrentPrice=&maxCurrentPrice=`,
+        `http://localhost:8080/auctions/all?offset=0&pageSize=10&sortBy=&sortDirection=`, // Remove query params for body data
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(requestBody), // Convert request body to JSON
         }
       );
   
@@ -51,24 +73,28 @@ const Home: React.FC = () => {
       console.log(data); // Log the full API response to debug structure
   
       // Access the 'content' array in the response
-      const formattedProducts = (data.content || []).map((product: any) => ({
-        pId: product.id,
-        image: product.item.images[0]?.imageUrl || "", // Get the first image URL or empty string
-        title: product.item.name,
-        description: product.item.description,
-        price: product.currentPrice,
-        endDate: formatDateToISO(product.expireDate), // Convert date to ISO format
+      const formattedProducts = (data.content || []).map((product: Product) => ({
+        id: product.id,
+        item: {
+          name: product.item.name,
+          description: product.item.description,
+          auctionImages: product.item.auctionImages, // Array of images
+        },
+        currentPrice: product.currentPrice,
+        expireDate: formatDateToISO(product.expireDate), // Convert expireDate to ISO format
       }));
-  
+      
       setProducts(formattedProducts);
     } catch (error) {
       if (error instanceof Error) {
         setError(error);
+        console.log(error)
       }
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchData(1);
@@ -83,7 +109,17 @@ const Home: React.FC = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>; // Display error if exists
+    return <div className="testmain">
+      <div className="errorpage"> 
+      <div><img 
+        src="https://github.com/saif0133/deploy-sec/blob/main/imgs/warning.png?raw=true" 
+        alt="" 
+        style={{ width: "100px" ,marginBottom:"20px"}} 
+      /></div>
+      <div><h4 style={{color:"#90908F"}} >Something went wrong</h4></div>
+      <div><button className="btn-danger btn bid" onClick={() => window.location.reload()}>Refresh</button></div>
+      </div>
+      </div>
   }
 
   return (
@@ -102,15 +138,18 @@ const Home: React.FC = () => {
       
       <div className="products">
         {products.map((product) => {
+                    const imageUrl = product.item.auctionImages.length > 0 ? product.item.auctionImages[0].imageUrl : '';
+                    //const formattedExpireDate = formatDateToISO(product.expireDate); // Format expireDate
+
           return (
             <ProductCard
-              key={product.pId}
-              img={product.image}
-              title={product.title}
-              description={product.description}
-              currentPrice={product.price}
-              endDate={new Date(product.endDate)}
-              id={product.pId}
+              key={product.id}
+              img={imageUrl}
+              title={product.item.name}
+              description={product.item.description}
+              currentPrice={product.currentPrice}
+              endDate={new Date(product.expireDate)}
+              id={product.id}
               message={""}
             />
           );

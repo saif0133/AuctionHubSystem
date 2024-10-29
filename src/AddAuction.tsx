@@ -3,6 +3,8 @@ import StaticDatePickerLandscape from "./StaticDatePickerLandscape";
 import PopupMMessage from "./components/PopupMessage";
 import LoginWarning from "./components/loginWarning";
 import { fetchPaymentId, getPaymentDetails } from "./components/paymentId";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 
 let count = 1;
 let userNotIn=true;
@@ -34,7 +36,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const [imageMetadata, setImageMetadata] = useState<{ name: string, type: string, imageUrl: string }[]>([]);
   const [hasPaymentDetails, setHasPaymentDetails] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  const navigate = useNavigate(); // Initialize useNavigate
   const userToken = localStorage.getItem('authToken') || null;
   const [userPayment, srtUserPayment] = useState(false);
   const order = () => {
@@ -77,7 +79,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
       item: {
         name: productTitle,
         description: productDescription,
-        images: imageMetadata,
+        auctionImages: imageMetadata,
         itemStatus: itemStatusa,
         category: {
           id: category
@@ -95,19 +97,22 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+        //  'Content-Type': 'application/json',
           'Authorization': `Bearer ${userToken}`
         },
         body: JSON.stringify(data)
       });
   
       if (!response.ok) {
+        await  message.info(response.json().toString())
         throw new Error('Network response was not ok');
+        
       }
   
       const result = await response.json();
       console.log('Response:', result);
-  
+      await  message.info(`Transition Done Successfully`)
+      navigate(`/Product/${result.id}`); // Navigate to a route with the ID
       return result.id || null;
     } catch (error) {
       console.error('Error:', error);

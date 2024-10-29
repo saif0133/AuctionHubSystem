@@ -8,7 +8,7 @@ interface Product {
   item: {
     name: string;
     description: string;
-    images: {
+    auctionImages: {
       imageUrl: string;
     }[];
   };
@@ -17,19 +17,9 @@ interface Product {
 }
 
 
-const formatToISO = (dateStr: string): string => {
-  const [day, month, yearTime] = dateStr.split('-'); // Split DD-MM-YYYY HH:mm
-  const [year, time] = yearTime.split(' ');
-  const [hour, minute] = time.split(':');
-
-  const formattedDate = new Date(
-    Number(year), 
-    Number(month) - 1,
-    Number(day), 
-    Number(hour), 
-    Number(minute)
-  );
-  return formattedDate.toISOString();
+const formatDateToISO = (dateString: string): string => {
+  const [day, month, year, time] = dateString.split(/[-\s:]/);
+  return new Date(`${year}-${month}-${day}T${time}:00Z`).toISOString();
 };
 
 function MyAuction() {
@@ -86,8 +76,8 @@ function MyAuction() {
       <div className="products">
         {products.map((product) => {
           // Get the first image URL for the product
-          const imageUrl = product.item.images.length > 0 ? product.item.images[0].imageUrl : '';
-          const formattedExpireDate = formatToISO(product.expireDate); // Format expireDate
+          const imageUrl = product.item.auctionImages.length > 0 ? product.item.auctionImages[0].imageUrl : '';
+          const formattedExpireDate = formatDateToISO(product.expireDate); // Format expireDate
 
           return (
             <ProductCard
