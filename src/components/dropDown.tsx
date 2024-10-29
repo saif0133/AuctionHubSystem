@@ -47,7 +47,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
             <span>{`${user.name} - ${user.bid} JDs`}</span>
           </div>
         ),
-        onClick: () => message.info(`Clicked on ${user.name}'s bid`),
+        onClick: () => message.info(`${user.name}'s bid`),
         ...(user.bid === highestBidder.bid ? { disabled: false } : {}),
       }))}
     />

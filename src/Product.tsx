@@ -71,7 +71,7 @@ function Product() {
   const [userData, setUserData] = useState<userdata| null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
-  const [usersa, setUsersa] = useState<{ name: string; bid: number; pic: string }[]>([]);
+  const [usersa, setUsersa] = useState<{ name: string; bid: number; pic: string , id:number }[]>([]);
 
   const token = localStorage.getItem("authToken") || "";
 
@@ -83,6 +83,7 @@ function Product() {
             name: bid.bidder.firstName + " " + bid.bidder.lastName,
             bid: bid.amount,
             pic: `https://via.placeholder.com/40?text=${bid.bidder.firstName[0]}`, // Generates pic URL with the first letter
+            id: 5,
         };
         
         // Check if user already exists in usersa

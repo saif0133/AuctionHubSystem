@@ -16,7 +16,6 @@ interface Product {
   expireDate: string; // Keep this as string since you're parsing it
 }
 
-
 const formatDateToISO = (dateString: string): string => {
   const [day, month, year, time] = dateString.split(/[-\s:]/);
   return new Date(`${year}-${month}-${day}T${time}:00Z`).toISOString();
@@ -25,7 +24,7 @@ const formatDateToISO = (dateString: string): string => {
 function MyAuction() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,28 +37,39 @@ function MyAuction() {
             'Content-Type': 'application/json'
           }
         });
-
+  
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data: Product[] = await response.json();
+  
+        // Set products state directly with the new data
         setProducts(data);
       } catch (error) {
         if (error instanceof Error) {
-          setError(error);
+         // setError(error);
         }
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchData();
-  }, []);
+  }, []);  // Empty dependency array means this effect runs once when the component mounts
+  
 
   if (loading) {
     return (
       <div className="testmain">
         <TriangleLoader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="testmain">
+        <div className="error-message">{error}</div>
       </div>
     );
   }
