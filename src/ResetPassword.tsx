@@ -22,7 +22,7 @@ const ResetPassword = () => {
             const response = await fetch(`http://localhost:8080/reset-password?token=${token}&password=${password}`, {
                 method: 'POST', // or 'POST' depending on your server setup
                 headers: {
-                    'Content-Type': 'application/json',
+                   // 'Content-Type': 'application/json',
                 },
             });
 

@@ -35,7 +35,7 @@ function JoinAuction() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('authToken');
+       
         console.log(token);
         const response = await fetch("http://localhost:8080/auctions/joined", {
           headers: {

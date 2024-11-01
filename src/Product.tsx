@@ -67,6 +67,13 @@ interface userdata {
   sub: string;
 }
 
+interface User {
+  name: string;
+  userID: number;
+  bid: number;
+  pic: string;
+  id: number;
+}
 
 
 function Product() {
@@ -86,30 +93,36 @@ function Product() {
   const [userData, setUserData] = useState<userdata | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const [usersa, setUsersa] = useState<{ name: string; bid: number; pic: string, id: number }[]>([]);
-
+  //const [usersa, setUsersa] = useState<{ name: string |""; bid: number; pic: string, id: number }[]>([]);
   const token = localStorage.getItem("authToken") || "";
 
-  const logBids = (product: ProductData) => {
-    console.log(`Bids for ${product.item.name}:`);
+  const [usersa, setUsersa] = React.useState<User[]>([]);
 
-    product.bids.forEach(bid => {
-      const newUser = {
-        name: bid.bidder.firstName + " " + bid.bidder.lastName,
-        bid: bid.amount,
-        pic: `https://via.placeholder.com/40?text=${bid.bidder.firstName[0]}`, // Generates pic URL with the first letter
-        id: 5,
-      };
+const logBids = (product: ProductData) => {
+  console.log(`Bids for ${product.item.name}:`);
 
-      // Check if user already exists in usersa
-      const exists = usersa.some(user => user.bid === newUser.bid);
+  product.bids.forEach(bid => {
+    const newUser = {
+      name: `${bid.bidder.firstName} ${bid.bidder.lastName}`,
+      userID: bid.bidder.id,
+      bid: bid.amount,
+      pic: `https://via.placeholder.com/40?text=${bid.bidder.firstName[0]}`, // Generates pic URL with the first letter
+      id: bid.id || 0,
+    };
 
-      // If the user does not exist, push the new user
-      if (!exists) {
-        usersa.push(newUser);
-      }
-    });
-  };
+    console.log("New User: " + JSON.stringify(newUser)); // Clear log for newUser
+
+    // Check if a user with the same id already exists in usersa
+    const exists = usersa.some(user => user.id === newUser.id);
+
+    // If the user does not exist, push the new user
+    if (!exists) {
+      usersa.push(newUser);
+    }
+
+    console.log("Updated usersa array:", JSON.stringify(usersa)); // Clear log for usersa
+  });
+};
 
 
 
@@ -231,12 +244,12 @@ function Product() {
         const data: ProductData = await response.json();
         setProduct(data);
         const Userdata = extractDataFromToken(token);
-        if (Userdata?.sub === data.seller.email) {
+        if (Userdata?.sub == data.seller.email) {
           setIsOwner(true);
           setIsJoined(true);
 
         }
-        if (data?.winner.id == Userdata?.id)
+        if (data?.winner?.id == Userdata?.id)
           setIsWinner(true);
         if (data.joined) {
           setIsJoined(true);
@@ -345,7 +358,7 @@ function Product() {
                   <i className="bi bi-trash3" onClick={rmv}></i>
                 </div>
               </div>)}
-              {isJoined && !isOwner &&product.status=="activ" && (
+              {isJoined && !isOwner &&product.status=="ACTIVE" && (
                 <div className="joined">You Joined this Auction</div>
               )}
               {isWinner && (
