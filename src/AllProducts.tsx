@@ -14,14 +14,19 @@ import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
+import { useNavigate } from "react-router-dom";
 
 interface Product {
-  pId: number;
-  image: string;
-  title: string;
-  description: string;
-  price: number;
-  endDate: string;
+  id: number;
+  item: {
+    name: string;
+    description: string;
+    auctionImages: {
+      imageUrl: string;
+    }[];
+  };
+  currentPrice: number;
+  expireDate: string; // Keep this as string since you're parsing it
 }
 
 interface Category {
@@ -30,6 +35,18 @@ interface Category {
   description: string;
   attributes: string[];
 }
+
+interface SearchParams {
+  searchKey: string;
+  itemStatus: string;
+  category: string[];
+  beginDate: string;
+  expireDate: string;
+  address: string[];
+  minCurrentPrice: string;
+  maxCurrentPrice: string;
+}
+
 
 const AllProducts: React.FC = () => {
   const [fromValue, setFromValue] = useState(10);
@@ -42,7 +59,7 @@ const AllProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0); // To store total pages
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs(''));
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs(''));
@@ -50,6 +67,20 @@ const AllProducts: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
 
+  const [searchParams, setSearchParams] = useState<SearchParams>({
+    searchKey: "",
+    itemStatus: "",
+    category: [],
+    beginDate: "",
+    expireDate: "",
+    address: [],
+    minCurrentPrice: "",
+    maxCurrentPrice: ""
+});
+
+
+
+const navigate =useNavigate();
   const [allAddresses] = useState([
     'Amman',
     'Aqaba',
@@ -64,6 +95,96 @@ const AllProducts: React.FC = () => {
     "Ma'an",
     'Ajloun',
   ]);
+
+  const updateSearchParams = async () => { 
+    await navigate("/all");
+    const params = new URLSearchParams(window.location.search); // Initialize with current search parameters
+
+    // Log current parameters for debugging
+    console.log('Current URL Parameters:', Array.from(params.entries()));
+
+    // Add the range values if they are valid
+    if (fromValue != null) {
+        params.set('fromValue', fromValue.toString());
+    }
+    if (toValue != null) {
+        params.set('toValue', toValue.toString());
+    }
+
+    // Clear existing categories and add selected categories only if not empty
+    if (selectedCategories.length > 0) {
+        params.delete('categories'); // Clear existing categories
+        selectedCategories.forEach((category) => {
+            params.append('categories', category); // Use append for multiple categories
+        });
+    }
+
+    // Add selected statuses only if not empty and ensure we don't duplicate existing values
+    if (selectedstatus.length > 0 && selectedstatus.length < 2) {
+        const existingStatuses = params.getAll('status');
+        const newStatuses = selectedstatus.filter(status => !existingStatuses.includes(status)); // Filter out existing statuses
+        newStatuses.forEach((status) => {
+            params.append('status', status);
+        });
+    }
+
+    // Add current page if it has a valid value
+    if (currentPage != null) {
+        params.set('currentPage', currentPage.toString());
+    }
+
+    // Add date range only if they are valid
+    if (startDate && startDate.isValid()) { // Ensure startDate is valid
+        params.set('startDate', startDate.format('YYYY-MM-DD')); // Adjust format as needed
+    }
+    if (endDate && endDate.isValid()) { // Ensure endDate is valid
+        params.set('endDate', endDate.format('YYYY-MM-DD'));
+    }
+
+    // Add selected addresses only if there are any
+    if (selectedAddresses.length > 0) {
+        params.delete('addresses'); // Clear existing addresses
+        selectedAddresses.forEach((address) => {
+            params.append('addresses', address);
+        });
+    }
+
+    // Update the URL
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+
+    // Set searchParams state with the current values from URLSearchParams
+    setSearchParams({
+        searchKey: params.get("searchKey") || "", // Default to empty string if null
+        itemStatus: params.get("status") || "", // Default to empty string if null
+        category: params.getAll("categories"), // Use getAll for multiple categories
+        beginDate: params.get("startDate") || "", // Default to empty string if null
+        expireDate: params.get("endDate") || "", // Default to empty string if null
+        address: params.getAll("addresses"), // Use getAll for multiple addresses
+        minCurrentPrice: params.get("fromValue") || "", // Default to empty string if null
+        maxCurrentPrice: params.get("toValue") || "" // Default to empty string if null
+    });
+
+    // Log searchParams for debugging
+    console.log('Updated searchParams:', {
+        searchKey: params.get("searchKey"),
+        itemStatus: params.get("status"),
+        category: params.getAll("categories"),
+        beginDate: params.get("startDate"),
+        expireDate: params.get("endDate"),
+        address: params.getAll("addresses"),
+        minCurrentPrice: params.get("fromValue"),
+        maxCurrentPrice: params.get("toValue")
+    });
+    console.log(searchParams);
+    //fetchData(currentPage);
+};
+
+
+// UseEffect to fetch data when searchParams change
+useEffect(() => {
+  fetchData(currentPage);
+}, [searchParams]); // This will trigger fetchData whenever searchParams change
+
 
   const handleCheckboxChange2 = (name: string) => {
     setSelectedAddresses((prevSelected) => {
@@ -108,44 +229,64 @@ const AllProducts: React.FC = () => {
 
   const fetchData = async (page: number) => {
     try {
-      setLoading(true);
+      setLoading(true); // Loading state before API call
+      
+      // Body of the request
+      const requestBody =searchParams;
+      //  {
+      //   searchKey: "",             // Search term, empty by default
+      //   itemStatus: "",            // Status filter, empty by default
+      //   category: [],              // Array of categories, empty by default
+      //   beginDate: "",             // Beginning date filter, empty by default
+      //   expireDate: "",            // Expiry date filter, empty by default
+      //   address: [""],             // Address array, can include multiple locations if needed
+      //   minCurrentPrice: "",       // Minimum price filter, empty by default
+      //   maxCurrentPrice: ""        // Maximum price filter, empty by default
+      // };
+      
+  
       const response = await fetch(
-        `http://localhost:8080/auctions?offset=${(page - 1) * 10}&pageSize=10&sortBy=&sortDirection=&searchKey=&itemStatus=&category=&beginDate=&expireDate&address=&minCurrentPrice=&maxCurrentPrice=`,
+        `http://localhost:8080/auctions/all?offset=0&pageSize=10&sortBy=&sortDirection=`, // Remove query params for body data
         {
-          method: "GET",
+          method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`,
+           "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(requestBody), // Convert request body to JSON
         }
       );
-
+  
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
+  
       const data = await response.json();
-      console.log(data);
-
-      const formattedProducts = (data.content || []).map((product: any) => ({
-        pId: product.id,
-        image: product.item.images[0]?.imageUrl || "",
-        title: product.item.name,
-        description: product.item.description,
-        price: product.currentPrice,
-        endDate: formatDateToISO(product.expireDate),
+      console.log(data); // Log the full API response to debug structure
+  
+      // Access the 'content' array in the response
+      const formattedProducts = (data.content || []).map((product: Product) => ({
+        id: product.id,
+        item: {
+          name: product.item.name,
+          description: product.item.description,
+          auctionImages: product.item.auctionImages, // Array of images
+        },
+        currentPrice: product.currentPrice,
+        expireDate: formatDateToISO(product.expireDate), // Convert expireDate to ISO format
       }));
-
+      
       setProducts(formattedProducts);
-      setTotalPages(data.totalPages);
     } catch (error) {
       if (error instanceof Error) {
         setError(error);
+        console.log(error)
       }
     } finally {
       setLoading(false);
     }
   };
+  
 
   const fetchCategories = async () => {
     try {
@@ -171,9 +312,12 @@ const AllProducts: React.FC = () => {
 
 
 
+ 
   useEffect(() => {
+    updateSearchParams();
+
     fetchCategories();
-    fetchData(currentPage); // Pass the current page to fetchData
+   //fetchData(currentPage); // Pass the current page to fetchData
   }, [currentPage, token]);
 
   const formatDateToISO = (dateString: string): string => {
@@ -364,10 +508,10 @@ const AllProducts: React.FC = () => {
 
           </SimpleTreeView>
           <div className="ch">
-            <button className="next back btn btn-danger" >
+            <button className="next back btn btn-danger" onClick={()=>{window.location.href="/all"}} >
               Reset
             </button>
-            <button className="next back btn btn-success" >
+            <button className="next back btn btn-success" onClick={updateSearchParams} >
               Apply
             </button>
           </div>
@@ -383,18 +527,23 @@ const AllProducts: React.FC = () => {
 
       <div className="testmain">
         <div className="products">
-          {products.map((product) => (
+        {products.map((product) => {
+                    const imageUrl = product.item.auctionImages.length > 0 ? product.item.auctionImages[0].imageUrl : '';
+                    //const formattedExpireDate = formatDateToISO(product.expireDate); // Format expireDate
+
+          return (
             <ProductCard
-              key={product.pId}
-              img={product.image}
-              title={product.title}
-              description={product.description}
-              currentPrice={product.price}
-              endDate={new Date(product.endDate)}
-              id={product.pId}
-              message=""
+              key={product.id}
+              img={imageUrl}
+              title={product.item.name}
+              description={product.item.description}
+              currentPrice={product.currentPrice}
+              endDate={new Date(product.expireDate)}
+              id={product.id}
+              message={""}
             />
-          ))}
+          );
+        })}
         </div>
 
         <Stack spacing={2} sx={{ mt: 2 }}>

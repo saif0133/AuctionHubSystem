@@ -40,7 +40,7 @@ function ProductCard({
             message? "win" : ""
           }`}
         >
-          <Timer endDate={endDate} sentMessage={message} />
+          <Timer endDate={endDate} sentMessage={message || "Time Out"} />
         </div>
       </div>
     </div>

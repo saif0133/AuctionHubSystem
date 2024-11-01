@@ -22,17 +22,17 @@ const ResetPassword = () => {
             const response = await fetch(`http://localhost:8080/reset-password?token=${token}&password=${password}`, {
                 method: 'POST', // or 'POST' depending on your server setup
                 headers: {
-                  //  'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
             });
 
-            if (response.ok) {
+            if (response.status>=200 &&response.status<300) {
                 setStatus('Password reset successful!');
                 setTimeout(() => window.location.href = '/src/final%20project/login-signup%20page/login.html#', 2000); // Redirect after 2 seconds
                 localStorage.removeItem("PasswordCounter");
             } else {
                 setStatus('Password reset failed , request another email.');
-                setTimeout(() => window.location.href = '/src/final%20project/login-signup%20page/login.html#', 2000); // Redirect after 2 seconds
+                //setTimeout(() => window.location.href = '/src/final%20project/login-signup%20page/login.html#', 2000); // Redirect after 2 seconds
 
             }
         } catch (error) {

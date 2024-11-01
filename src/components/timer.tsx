@@ -8,7 +8,7 @@ interface TimerProps {
 const Timer: React.FC<TimerProps> = ({ endDate ,sentMessage}) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
 
-  const message = sentMessage || "Time Out";
+  const message = sentMessage;
 
   useEffect(() => {
     const calculateTimeLeft = () => {

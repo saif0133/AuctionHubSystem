@@ -345,8 +345,11 @@ function Product() {
                   <i className="bi bi-trash3" onClick={rmv}></i>
                 </div>
               </div>)}
-              {isJoined && !isOwner && (
+              {isJoined && !isOwner &&product.status=="activ" && (
                 <div className="joined">You Joined this Auction</div>
+              )}
+              {isWinner && (
+                <div className="joined">You Won this Auction</div>
               )}
             </div>
 
@@ -559,9 +562,9 @@ function Product() {
                     </div>
                   </div>
                   <div className="timer">
-                    {formattedExpireDate && (
-                      <Timer endDate={new Date(formattedExpireDate)} sentMessage="" />
-                    )}
+                    
+                      <Timer endDate={new Date(formatDateToISO(product.expireDate))} sentMessage="Auction Ended" />
+                    
                   </div>
                 </div>
 
