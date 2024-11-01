@@ -344,3 +344,26 @@ gap: 25px;
   justify-content: center;
   align-items: center;
 }
+
+.MuiBox-root{
+  border: none !important;
+  border-radius: 30px !important;
+}
+
+.MuiButtonBase-root{
+  background-color: #9a000a !important;
+  color: white !important;
+  font-weight: bolder;
+}
+
+.modal-body{
+  display: flex;
+    flex-direction: column;
+
+}
+
+.AuctionCompleted{
+  font-size: larger;
+  font-weight: bolder;
+  color: #009640;
+}

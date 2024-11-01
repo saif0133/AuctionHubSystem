@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 
 interface TimerProps {
   endDate: Date;
+  sentMessage: string;
 }
 
-const Timer: React.FC<TimerProps> = ({ endDate }) => {
+const Timer: React.FC<TimerProps> = ({ endDate ,sentMessage}) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
 
-  const message = "Auction Ended";
+  const message = sentMessage || "Time Out";
 
   useEffect(() => {
     const calculateTimeLeft = () => {

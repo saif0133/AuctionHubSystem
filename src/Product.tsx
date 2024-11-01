@@ -8,6 +8,15 @@ import Timer from "./components/timer";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { DecodedToken, extractDataFromToken } from "./components/tokenDecode";
 import { message } from "antd";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Import Bootstrap JavaScript
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import BalloonContainer from "./components/BalloonContainer";
+import { Width } from "devextreme-react/cjs/chart";
+
 
 interface ProductData {
   id: number;
@@ -45,56 +54,62 @@ interface ProductData {
   initialPrice: number;
   currentPrice: number;
   bids: any[]; // Assuming bids is an array, you can add the structure if needed
-  joined:boolean;
+  joined: boolean;
+  winner: {
+    id: number
+  }
 }
 
 interface userdata {
-  firstName:string;
-  image:string;
-  lastName:string;
-  sub:string;
+  firstName: string;
+  image: string;
+  lastName: string;
+  sub: string;
 }
 
 
 
 function Product() {
+
+
   const [amount, setAmount] = useState(0);
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<ProductData | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPopupOpen2, setIsPopupOpen2] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [formattedExpireDate, setFormattedExpireDate] = useState<string | null>(null);
   const userPayment = true;
-  const [userData, setUserData] = useState<userdata| null>(null);
+  const [userData, setUserData] = useState<userdata | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  
-  const [usersa, setUsersa] = useState<{ name: string; bid: number; pic: string , id:number }[]>([]);
+
+  const [usersa, setUsersa] = useState<{ name: string; bid: number; pic: string, id: number }[]>([]);
 
   const token = localStorage.getItem("authToken") || "";
 
   const logBids = (product: ProductData) => {
     console.log(`Bids for ${product.item.name}:`);
-    
+
     product.bids.forEach(bid => {
-        const newUser = {
-            name: bid.bidder.firstName + " " + bid.bidder.lastName,
-            bid: bid.amount,
-            pic: `https://via.placeholder.com/40?text=${bid.bidder.firstName[0]}`, // Generates pic URL with the first letter
-            id: 5,
-        };
-        
-        // Check if user already exists in usersa
-        const exists = usersa.some(user => user.bid === newUser.bid);
-        
-        // If the user does not exist, push the new user
-        if (!exists) {
-            usersa.push(newUser);
-        }
+      const newUser = {
+        name: bid.bidder.firstName + " " + bid.bidder.lastName,
+        bid: bid.amount,
+        pic: `https://via.placeholder.com/40?text=${bid.bidder.firstName[0]}`, // Generates pic URL with the first letter
+        id: 5,
+      };
+
+      // Check if user already exists in usersa
+      const exists = usersa.some(user => user.bid === newUser.bid);
+
+      // If the user does not exist, push the new user
+      if (!exists) {
+        usersa.push(newUser);
+      }
     });
-};
+  };
 
 
 
@@ -105,7 +120,7 @@ function Product() {
 
   const calculateReservedAmount = (price: number): string => {
     let amount: number;
-  
+
     if (price >= 1 && price <= 100) {
       amount = price * 0.10; // 10%
     } else if (price >= 101 && price <= 1000) {
@@ -119,7 +134,7 @@ function Product() {
     } else {
       amount = 0; // Default case, if needed
     }
-  
+
     // Return the amount formatted to 2 decimal places
     return amount.toFixed(2);
   };
@@ -133,15 +148,15 @@ function Product() {
         },
       });
 
-const info=await response.json();
+      const info = await response.json();
 
-if(info==true){
-  console.log("Free")
-}
-else{
-  console.log("NotFree")
-}
-      
+      if (info == true) {
+        console.log("Free")
+      }
+      else {
+        console.log("NotFree")
+      }
+
     } catch (error) {
       console.error("Failed to delete auction:", error);
     }
@@ -164,8 +179,39 @@ else{
   //   }
   // };
 
- 
+  const receive = async () => {
+    const url = `http://localhost:8080/auctions/${id}/receive`; 
+  
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          //'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json(); // Await the json data
+        await message.info(`${errorData.message || 'An error occurred'}`); // Display the error message
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json(); // Await the result data
+      console.log('Response:', result);
+      await message.info(`Congrats!`); // Display success message
+    } catch (error) {
+      console.error('Error:', error);
+      //await message.info('An unexpected error occurred.'); // Display generic error message
+     
+    }
+  };
+  
+  
+  
+
   useEffect(() => {
+
 
     const fetchProduct = async () => {
       try {
@@ -185,23 +231,23 @@ else{
         const data: ProductData = await response.json();
         setProduct(data);
         const Userdata = extractDataFromToken(token);
-        if(Userdata?.sub===data.seller.email)
-        {
+        if (Userdata?.sub === data.seller.email) {
           setIsOwner(true);
           setIsJoined(true);
-         
+
         }
-if(data.joined)
-{
-  setIsJoined(true);
+        if (data?.winner.id == Userdata?.id)
+          setIsWinner(true);
+        if (data.joined) {
+          setIsJoined(true);
 
-}
+        }
 
-logBids(data);
+        logBids(data);
 
-       // setIsOwner(true);
-       // setIsJoined(true);
-       // console.log(userData?.sub + "///" + data.seller.email);
+        // setIsOwner(true);
+        // setIsJoined(true);
+        // console.log(userData?.sub + "///" + data.seller.email);
 
 
         // Set the default image to the first image in the array
@@ -213,7 +259,7 @@ logBids(data);
         const auctionEndDate = new Date(formatDateToISO(data.expireDate));
         setFormattedExpireDate(formatDateToISO(data.expireDate));
         setIsAuctionEnded(currentDate > auctionEndDate);
-console.log(data.bids);
+        console.log(data.bids);
 
       } catch (error) {
         console.error("Failed to fetch product data:", error);
@@ -250,17 +296,17 @@ console.log(data.bids);
   };
   const openPopup2 = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
-   
-        setIsPopupOpen2(true);
-   
+
+    setIsPopupOpen2(true);
+
   };
 
   const closePopup = () => {
     setIsPopupOpen(false);
     const elements = document.getElementsByClassName("input__field") as HTMLCollectionOf<HTMLInputElement>;
-Array.from(elements).forEach((element) => {
-  element.value = ""; // Clear the input field
-});
+    Array.from(elements).forEach((element) => {
+      element.value = ""; // Clear the input field
+    });
 
   };
   const closePopup2 = () => {
@@ -299,14 +345,14 @@ Array.from(elements).forEach((element) => {
                   <i className="bi bi-trash3" onClick={rmv}></i>
                 </div>
               </div>)}
-              {isJoined && !isOwner &&(
+              {isJoined && !isOwner && (
                 <div className="joined">You Joined this Auction</div>
               )}
             </div>
 
             <div className="product-info">
               <div className="left">
-               
+
                 <div
                   className="first-pic"
                   style={{
@@ -370,7 +416,7 @@ Array.from(elements).forEach((element) => {
                         Join Auction
                       </button></div>
                   )}
-                   {isPopupOpen2 && (
+                  {isPopupOpen2 && (
                     <PopupMMessage
                       closePopup={closePopup2}
                       order={"JoinAuction"}
@@ -378,7 +424,7 @@ Array.from(elements).forEach((element) => {
                       description={product.id.toString()}
                     />
                   )}
-                  {isAuctionEnded && (<div className="Auction-message">
+                  {isAuctionEnded && !isWinner && (<div className="Auction-message">
 
                     <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/time%20out.png?raw=true" alt="" className="mess-img" />
 
@@ -386,6 +432,61 @@ Array.from(elements).forEach((element) => {
 
 
                   </div>)}
+
+                  {isWinner && product.status!="complete" && (
+                    <div>
+                      <BalloonContainer />
+                      <div>
+
+
+                      </div>
+
+                      <div className="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabIndex={-1}>
+                        <div className="modal-dialog modal-dialog-centered">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h1 className="modal-title fs-5" id="exampleModalToggleLabel">Contact With the seller</h1>
+                              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                              Now you must contact the seller to agree on a date and method of delivery that suits both of you using one of these methods.
+                              <br />
+                              <br />
+                              <div>Email : <b>{product.seller.email}</b></div>
+                              <div>Phone Number : <b>{product.seller.email}</b></div>
+                            </div>
+                            <div className="modal-footer">
+                              <button className="btn btn-danger" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Second Step</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={-1}>
+                        <div className="modal-dialog modal-dialog-centered">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h1 className="modal-title fs-5" id="exampleModalToggleLabel2">Confirmation upon receipt</h1>
+                              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                              You must click the button below to confirm receipt of your order.
+                              <br />
+                              <br />
+                              <button className="btn btn-success" onClick={receive}>I have Picked my order</button>
+                            </div>
+                            <div className="modal-footer">
+                              <button className="btn btn-danger" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to first step</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button className="btn btn-danger" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Show the next Step ➤</button>
+
+                    </div>
+                  )}
+                  {product.status==="complete" &&(
+                    <div className="AuctionCompleted">Auction Completed Successfully</div>
+                  )}
 
                   {isPopupOpen && (
                     <PopupMMessage
@@ -413,13 +514,13 @@ Array.from(elements).forEach((element) => {
                       <div className="curPrice"><h4 >{`Current Price is : `}</h4><div className="currentPrice"><h2> ${product.currentPrice} JDs</h2></div></div>
                       <h5>{`Initial Price is : ${product.initialPrice} JDs`}</h5>
                     </div>
-                   
+
                   </div>
                   <div className="location">
                     <h4>{product.address}</h4>
                     <div className="min-bid">Min Bid : {product.minBid} JDs</div>
                   </div>
-                  
+
                 </div>
 
                 <div className="desc">
@@ -459,7 +560,7 @@ Array.from(elements).forEach((element) => {
                   </div>
                   <div className="timer">
                     {formattedExpireDate && (
-                      <Timer endDate={new Date(formattedExpireDate)} />
+                      <Timer endDate={new Date(formattedExpireDate)} sentMessage="" />
                     )}
                   </div>
                 </div>

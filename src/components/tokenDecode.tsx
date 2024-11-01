@@ -7,6 +7,7 @@ export interface DecodedToken {
   image: string;
   roles: string[];
   isBlocked: boolean;
+  id:number;
   exp: number;
   isActive: boolean;
   iat: number;

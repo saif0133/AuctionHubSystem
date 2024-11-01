@@ -5,9 +5,9 @@ import CustomIcon from "./customIcon";
 
 // Define the type for user data
 interface User {
-  name: string;
-  bid: number;
-  pic: string;
+  name: string | "";
+  bid: number ;
+  pic: string | "";
 }
 
 interface DropdownComponentProps {
@@ -35,8 +35,8 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
             }}
           >
             <img
-              src={user.pic}
-              alt={user.name}
+              src={user?.pic || "test"}
+              alt={user?.name || "test"}
               style={{
                 width: 40,
                 height: 40,
@@ -44,11 +44,11 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
                 marginRight: 8,
               }}
             />
-            <span>{`${user.name} - ${user.bid} JDs`}</span>
+            <span>{`${user?.name} - ${user?.bid} JDs`}</span>
           </div>
         ),
-        onClick: () => message.info(`${user.name}'s bid`),
-        ...(user.bid === highestBidder.bid ? { disabled: false } : {}),
+        onClick: () => message.info(`${user?.name}'s bid`),
+        ...(user?.bid === highestBidder.bid ? { disabled: false } : {}),
       }))}
     />
   );
@@ -57,11 +57,11 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
     <Dropdown overlay={menu}>
       <Button>
         <img
-          src={highestBidder.pic}
-          alt={highestBidder.name}
+          src={highestBidder?.pic || "https://media.lordicon.com/icons/wired/outline/1657-alert.gif"}
+          alt={highestBidder?.name || ""}
           style={{ width: 30, height: 30, borderRadius: "50%" }}
         />
-        {`${highestBidder.name} - ${highestBidder.bid} JDs`} <CustomIcon />
+        {`${highestBidder?.name || "No Bids Untill Now"} - ${highestBidder?.bid || ""} JDs` || ""} <CustomIcon />
       </Button>
     </Dropdown>
   );

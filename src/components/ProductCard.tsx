@@ -37,10 +37,10 @@ function ProductCard({
         <div className="product-current-price">{currentPrice} JDs</div>
         <div
           className={`product-count-down ${
-            message === "time out" ? "" : "win"
+            message? "win" : ""
           }`}
         >
-          <Timer endDate={endDate} />
+          <Timer endDate={endDate} sentMessage={message} />
         </div>
       </div>
     </div>

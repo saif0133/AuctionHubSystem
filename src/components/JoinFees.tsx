@@ -49,7 +49,7 @@ const JoinFees: React.FC<JoinFeesProps> = ({ amount, closePopup, customFunction,
       closePopup();
   
       // Optionally navigate to another page (e.g., auction details or dashboard)
-      navigate(`/auctions/user/${description}`);
+      navigate(`/Product/${description}`);
   
     } catch (error) {
       console.error('Error:', error);

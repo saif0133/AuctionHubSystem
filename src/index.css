@@ -1749,3 +1749,12 @@ color: #740000;
 :where(.css-dev-only-do-not-override-1c0na6j).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover{
   color: #740000 !important;
 }
+
+.win {
+  color: rgb(16, 134, 0); /* Text color */
+  font-weight: bolder;
+  background-image: url("https://img.freepik.com/premium-vector/gold-glitter-classic-circle-confetti-background_88211-1910.jpg"); /* Background image */
+  background-size: cover; /* Cover the entire element */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent repeating the image */
+}

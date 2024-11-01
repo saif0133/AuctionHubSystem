@@ -22,6 +22,7 @@ import Logout from "./logout";
 import NotFound from "./notFound";
 import VarifyEmail from "./VarifyEmail";
 import ResetPassword from "./ResetPassword";
+import JoinAuction from "./JoinedAuctions";
 
 const Layout = () => {
   const location = useLocation();
@@ -43,7 +44,7 @@ const Layout = () => {
       <UserBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/My-bids" element={<NotImplemented />} />
+        <Route path="/My-bids" element={<JoinAuction />} />
         <Route path="/Product/:id" element={<Product />} />
         <Route path="/Add-Auction" element={<AddAuction />} />
         <Route path="/My-Auction" element={<MyAuction />} />

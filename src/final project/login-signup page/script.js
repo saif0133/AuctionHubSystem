@@ -239,7 +239,7 @@ async function CreateAccount(event) {
     lastName: CreateLastName,
     email: CreateEmail,
     password: CreatePass,
-    image: {
+    profileImage: {
       name: 'img',
       type: 'png',
       imageUrl: `https://via.placeholder.com/40?text=${firstLetter}`

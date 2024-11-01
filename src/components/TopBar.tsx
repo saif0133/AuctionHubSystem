@@ -70,49 +70,58 @@ function TopBar({ FirestName, LastName, UserEmail, image }: TopBarProp) {
   const updateAccount = async () => {
     const url = "http://localhost:8080/update-account";
     const token = localStorage.getItem("authToken"); // Replace with the actual token
-  
+
     const body = {
-      firstName: firstName,
-      lastName: lastName,
-      image: {
-        name: "Profile image",
-        type: "png",
-        imageUrl: imageLink ? imageLink : image,
-      },
-    };
-    console.log(body);
-  
-    try {
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          //"Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+        firstName: firstName,
+        lastName: lastName,
+        profileImage: {
+            name: "Profile image",
+            type: "png",
+            imageUrl: imageLink ? imageLink : image,
         },
-        body: JSON.stringify(body),
-      });
-  
-      // Check if response has content
-      if (response.ok) {
-        const contentType = response.headers.get("Content-Type");
-  
-        if (contentType && contentType.includes("application/json")) {
-          const data = await response.json();
-          console.log("Account updated:", data);
-         console.log(response);
+    };
+
+    console.log(JSON.stringify(body, null, 2));
+
+    try {
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(body),
+        });
+
+        // Check if response has content
+        if (response.ok) {
+            const contentType = response.headers.get("Content-Type");
+localStorage.removeItem("authToken");
+            if (contentType && contentType.includes("application/json")) {
+                const data = await response.json();
+                console.log("Account updated:", data);
+            } else {
+                console.log("Account updated, no JSON returned.");
+                const newToken = await response.text(); // Get the new token as text
+                console.log(newToken);
+               
+
+                // Correctly call window.location.reload
+                
+                  localStorage.setItem("authToken", newToken);
+                
+                setTimeout(() => {
+                    window.location.href="/";
+                }, 2000);
+            }
         } else {
-          console.log("Account updated, no JSON returned.");
-             window.location.href="/Logout"
-   window.location.href="/src/final%20project/login-signup%20page/login.html"
+            console.error("Failed to update account:", response.statusText);
         }
-      } else {
-        console.error("Failed to update account:", response.statusText);
-      }
     } catch (error) {
-      console.error("Error:", error);
+        console.error("Error:", error);
     }
-  };
-  
+};
+
   
   useEffect(() => {
     setFirstName(FirestName || '');
