@@ -84,8 +84,10 @@ function Product() {
   const [product, setProduct] = useState<ProductData | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPopupOpen2, setIsPopupOpen2] = useState(false);
+  const [isPopupOpen4, setIsPopupOpen4] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
+  const[removeFees,setRemoveFees]=useState("");
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [formattedExpireDate, setFormattedExpireDate] = useState<string | null>(null);
@@ -99,7 +101,7 @@ function Product() {
   const [usersa, setUsersa] = React.useState<User[]>([]);
 
 const logBids = (product: ProductData) => {
-  console.log(`Bids for ${product.item.name}:`);
+//  console.log(`Bids for ${product.item.name}:`);
 
   product.bids.forEach(bid => {
     const newUser = {
@@ -110,7 +112,7 @@ const logBids = (product: ProductData) => {
       id: bid.id || 0,
     };
 
-    console.log("New User: " + JSON.stringify(newUser)); // Clear log for newUser
+   // console.log("New User: " + JSON.stringify(newUser)); // Clear log for newUser
 
     // Check if a user with the same id already exists in usersa
     const exists = usersa.some(user => user.id === newUser.id);
@@ -120,7 +122,7 @@ const logBids = (product: ProductData) => {
       usersa.push(newUser);
     }
 
-    console.log("Updated usersa array:", JSON.stringify(usersa)); // Clear log for usersa
+   // console.log("Updated usersa array:", JSON.stringify(usersa)); // Clear log for usersa
   });
 };
 
@@ -164,33 +166,44 @@ const logBids = (product: ProductData) => {
       const info = await response.json();
 
       if (info == true) {
-        console.log("Free")
+        message.info("free")
+        setRemoveFees("FREE");
+        //deletAuction();
       }
       else {
-        console.log("NotFree")
+        setRemoveFees("NOTFREE");
+        message.info("Not free")
+       // deletAuction();
       }
 
+      setIsPopupOpen4(true);
     } catch (error) {
       console.error("Failed to delete auction:", error);
     }
   };
-  // const rmv = async () => {
-  //   try {
-  //     const response = await fetch(`http://localhost:8080/auctions/${id}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`,
-  //       },
-  //     });
 
 
-  //     console.log('Auction deleted successfully');
-  //     // Redirect to "My Auction" page
-  //     window.location.href = "/My-Auction";
-  //   } catch (error) {
-  //     console.error("Failed to delete auction:", error);
-  //   }
-  // };
+
+   const deletAuction = async () => {
+     try {
+       const response = await fetch(`http://localhost:8080/auctions/${id}`, {
+         method: 'DELETE',
+         headers: {
+           'Authorization': `Bearer ${token}`,
+         },
+       })
+       if(!response.ok)
+       {
+        message.info(`error : ${response.json()}`);
+        throw new Error(`HTTP error! Status: ${response}`);
+       }
+       message.info('Auction deleted successfully');
+       // Redirect to "My Auction" page
+       window.location.href = "/My-Auction";
+     } catch (error) {
+      message.info("Failed to delete auction:");
+     }
+   };
 
   const receive = async () => {
     const url = `http://localhost:8080/auctions/${id}/receive`; 
@@ -257,7 +270,7 @@ const logBids = (product: ProductData) => {
         }
 
         logBids(data);
-
+console.log(data);
         // setIsOwner(true);
         // setIsJoined(true);
         // console.log(userData?.sub + "///" + data.seller.email);
@@ -272,7 +285,7 @@ const logBids = (product: ProductData) => {
         const auctionEndDate = new Date(formatDateToISO(data.expireDate));
         setFormattedExpireDate(formatDateToISO(data.expireDate));
         setIsAuctionEnded(currentDate > auctionEndDate);
-        console.log(data.bids);
+     //   console.log(data.bids);
 
       } catch (error) {
         console.error("Failed to fetch product data:", error);
@@ -325,6 +338,9 @@ const logBids = (product: ProductData) => {
   const closePopup2 = () => {
     setIsPopupOpen2(false);
   };
+  const closePopup4 = () => {
+    setIsPopupOpen4(false);
+  };
 
   const order = () => {
     return userPayment ? "bidFees" : "noPayment";
@@ -352,15 +368,26 @@ const logBids = (product: ProductData) => {
                   <h2>{`${product.seller.firstName} ${product.seller.lastName}`}</h2>
                 </div>
               </div>
-              {isOwner && (<div className="icons">
+              {isOwner && product.status!="CANCELLED" && (<div className="icons">
                 <div className="ted">
                   <div className="description">Remove your auction</div>
                   <i className="bi bi-trash3" onClick={rmv}></i>
                 </div>
               </div>)}
+              {isPopupOpen4 && (
+                    <PopupMMessage
+                      closePopup={closePopup4}
+                      order={"RemoveFees"}
+                      amount={amount.toString()}
+                      description={removeFees}
+                      customFunction={deletAuction}
+                    />
+                  )}
               {isJoined && !isOwner &&product.status=="ACTIVE" && (
                 <div className="joined">You Joined this Auction</div>
               )}
+              {product.status=="CANCELLED"&& isOwner &&  ( <div className="joined deleted">You Deleted this Auction</div>)}
+
               {isWinner && (
                 <div className="joined">You Won this Auction</div>
               )}
@@ -575,8 +602,8 @@ const logBids = (product: ProductData) => {
                     </div>
                   </div>
                   <div className="timer">
-                    
-                      <Timer endDate={new Date(formatDateToISO(product.expireDate))} sentMessage="Auction Ended" />
+                    {(product.status!="CANCELLED")&&( <Timer endDate={new Date(formatDateToISO(product.expireDate))} sentMessage="Auction Ended" />)}
+                     {(product.status=="CANCELLED")&& (<><br></br> "You have deleted this auction"</>)}
                     
                   </div>
                 </div>

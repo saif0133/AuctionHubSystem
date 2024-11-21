@@ -10,6 +10,7 @@ interface CardProps {
   endDate: Date;
   id: number;
   message: string;
+  status:string
 }
 
 function ProductCard({
@@ -20,6 +21,7 @@ function ProductCard({
   endDate,
   id,
   message,
+  status,
 }: CardProps) {
   const navigate = useNavigate();
 
@@ -40,7 +42,8 @@ function ProductCard({
             message? "win" : ""
           }`}
         >
-          <Timer endDate={endDate} sentMessage={message || "Time Out"} />
+         {status!="CANCELLED" &&  <Timer endDate={endDate} sentMessage={message || "Time Out"} />}
+         {status=="CANCELLED" &&  ("Deleted Auction") }
         </div>
       </div>
     </div>

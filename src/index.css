@@ -1351,7 +1351,7 @@ input[type="range"]::-webkit-slider-thumb:active {
 
 input[type="number"] {
   color: #8a8383;
-  width: 40%;
+  /*width: 40%;*/
   height: 30px;
   font-size: small;
   border: 1px solid black;

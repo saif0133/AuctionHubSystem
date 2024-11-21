@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
 import UploadComponent from "./uploadImage";
+import { useNavigate } from "react-router-dom";
 
 interface TopBarProp {
   FirestName: string | undefined;
@@ -22,7 +23,7 @@ function TopBar({ FirestName, LastName, UserEmail, image }: TopBarProp) {
   const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(event.target.value);
   };
-
+const navigate = useNavigate();
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent default action (like form submission)
@@ -35,6 +36,7 @@ function TopBar({ FirestName, LastName, UserEmail, image }: TopBarProp) {
       alert("Please enter a search query");
       return;
     }
+    navigate(`/all?searchKey=${searchInput}`);
     console.log("Search input:", searchInput);
     setSearchInput("");
   };

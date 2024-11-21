@@ -42,7 +42,11 @@ const JoinFees: React.FC<JoinFeesProps> = ({ amount, closePopup, customFunction,
       console.log('Response:', result);
   
       if (!response.ok) {
+        message.error(result.message.toString());
+        closePopup();
+
         throw new Error(result || 'Failed to join the auction. Please try again.');
+
       }
   
       message.success("You've successfully joined the auction!");
@@ -53,7 +57,7 @@ const JoinFees: React.FC<JoinFeesProps> = ({ amount, closePopup, customFunction,
   
     } catch (error) {
       console.error('Error:', error);
-      message.error((error as Error).message);
+     // message.error((error as Error).message);
     }
   };
   

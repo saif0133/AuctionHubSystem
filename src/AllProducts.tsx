@@ -11,13 +11,16 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Box from '@mui/material/Box';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
-import { TreeItem } from '@mui/x-tree-view/TreeItem';
+//import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import { useNavigate } from "react-router-dom";
+import { TreeItem } from "@mui/x-tree-view";
+
 
 interface Product {
   id: number;
+  status: string;
   item: {
     name: string;
     description: string;
@@ -50,9 +53,10 @@ interface SearchParams {
 
 const AllProducts: React.FC = () => {
   const [fromValue, setFromValue] = useState(10);
-  const [toValue, setToValue] = useState(1000);
+  const [toValue, setToValue] = useState(10000);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedstatus, setSelectedstatus] = useState<string[]>([]);
+  const [deafultExpand, setDeafultExpand] = useState<string[]>([]);
   const today = new Date();
   const day = today.getDate().toString().padStart(2, "0");
   const month = (today.getMonth() + 1).toString().padStart(2, "0");
@@ -76,11 +80,11 @@ const AllProducts: React.FC = () => {
     address: [],
     minCurrentPrice: "",
     maxCurrentPrice: ""
-});
+  });
 
 
 
-const navigate =useNavigate();
+  const navigate = useNavigate();
   const [allAddresses] = useState([
     'Amman',
     'Aqaba',
@@ -96,57 +100,61 @@ const navigate =useNavigate();
     'Ajloun',
   ]);
 
-  const updateSearchParams = async () => { 
+  const updateSearchParams = async () => {
+    
     await navigate("/all");
+    console.log("def" + deafultExpand);
     const params = new URLSearchParams(window.location.search); // Initialize with current search parameters
+if(params.get("searchKey")=="" || !params.get("searchKey"))
+      await navigate("/all");
 
     // Log current parameters for debugging
     console.log('Current URL Parameters:', Array.from(params.entries()));
 
     // Add the range values if they are valid
     if (fromValue != null) {
-        params.set('fromValue', fromValue.toString());
+      params.set('fromValue', fromValue.toString());
     }
     if (toValue != null) {
-        params.set('toValue', toValue.toString());
+      params.set('toValue', toValue.toString());
     }
 
     // Clear existing categories and add selected categories only if not empty
     if (selectedCategories.length > 0) {
-        params.delete('categories'); // Clear existing categories
-        selectedCategories.forEach((category) => {
-            params.append('categories', category); // Use append for multiple categories
-        });
+      params.delete('categories'); // Clear existing categories
+      selectedCategories.forEach((category) => {
+        params.append('categories', category); // Use append for multiple categories
+      });
     }
 
     // Add selected statuses only if not empty and ensure we don't duplicate existing values
     if (selectedstatus.length > 0 && selectedstatus.length < 2) {
-        const existingStatuses = params.getAll('status');
-        const newStatuses = selectedstatus.filter(status => !existingStatuses.includes(status)); // Filter out existing statuses
-        newStatuses.forEach((status) => {
-            params.append('status', status);
-        });
+      const existingStatuses = params.getAll('status');
+      const newStatuses = selectedstatus.filter(status => !existingStatuses.includes(status)); // Filter out existing statuses
+      newStatuses.forEach((status) => {
+        params.append('status', status);
+      });
     }
 
     // Add current page if it has a valid value
     if (currentPage != null) {
-        params.set('currentPage', currentPage.toString());
+      params.set('currentPage', currentPage.toString());
     }
 
     // Add date range only if they are valid
     if (startDate && startDate.isValid()) { // Ensure startDate is valid
-        params.set('startDate', startDate.format('YYYY-MM-DD')); // Adjust format as needed
+      params.set('startDate', startDate.format('YYYY-MM-DD')); // Adjust format as needed
     }
     if (endDate && endDate.isValid()) { // Ensure endDate is valid
-        params.set('endDate', endDate.format('YYYY-MM-DD'));
+      params.set('endDate', endDate.format('YYYY-MM-DD'));
     }
 
     // Add selected addresses only if there are any
     if (selectedAddresses.length > 0) {
-        params.delete('addresses'); // Clear existing addresses
-        selectedAddresses.forEach((address) => {
-            params.append('addresses', address);
-        });
+      params.delete('addresses'); // Clear existing addresses
+      selectedAddresses.forEach((address) => {
+        params.append('addresses', address);
+      });
     }
 
     // Update the URL
@@ -154,36 +162,44 @@ const navigate =useNavigate();
 
     // Set searchParams state with the current values from URLSearchParams
     setSearchParams({
-        searchKey: params.get("searchKey") || "", // Default to empty string if null
-        itemStatus: params.get("status") || "", // Default to empty string if null
-        category: params.getAll("categories"), // Use getAll for multiple categories
-        beginDate: params.get("startDate") || "", // Default to empty string if null
-        expireDate: params.get("endDate") || "", // Default to empty string if null
-        address: params.getAll("addresses"), // Use getAll for multiple addresses
-        minCurrentPrice: params.get("fromValue") || "", // Default to empty string if null
-        maxCurrentPrice: params.get("toValue") || "" // Default to empty string if null
+      searchKey: params.get("searchKey") || "", // Default to empty string if null
+      itemStatus: params.get("status") || "", // Default to empty string if null
+      category: params.getAll("categories"), // Use getAll for multiple categories
+      beginDate: params.get("startDate") || "", // Default to empty string if null
+      expireDate: params.get("endDate") || "", // Default to empty string if null
+      address: params.getAll("addresses"), // Use getAll for multiple addresses
+      minCurrentPrice: params.get("fromValue") || "", // Default to empty string if null
+      maxCurrentPrice: params.get("toValue") || "" // Default to empty string if null
     });
 
     // Log searchParams for debugging
     console.log('Updated searchParams:', {
-        searchKey: params.get("searchKey"),
-        itemStatus: params.get("status"),
-        category: params.getAll("categories"),
-        beginDate: params.get("startDate"),
-        expireDate: params.get("endDate"),
-        address: params.getAll("addresses"),
-        minCurrentPrice: params.get("fromValue"),
-        maxCurrentPrice: params.get("toValue")
+      searchKey: params.get("searchKey"),
+      itemStatus: params.get("status"),
+      category: params.getAll("categories"),
+      beginDate: params.get("startDate"),
+      expireDate: params.get("endDate"),
+      address: params.getAll("addresses"),
+      minCurrentPrice: params.get("fromValue"),
+      maxCurrentPrice: params.get("toValue")
     });
     console.log(searchParams);
-    //fetchData(currentPage);
-};
-
-
-// UseEffect to fetch data when searchParams change
-useEffect(() => {
-  fetchData(currentPage);
-}, [searchParams]); // This will trigger fetchData whenever searchParams change
+    // fetchData(currentPage);
+  };
+  // Handle TreeItem expansion/collapse
+  const handleItemExpansionToggle = (id: string) => (event: React.SyntheticEvent, itemId: string, isExpanded: boolean) => {
+    if (isExpanded) {
+      // Add the item ID to the expanded items array when expanded
+      setDeafultExpand(prevState => [...prevState, id]);
+    } else {
+      // Remove the item ID from the expanded items array when collapsed
+      setDeafultExpand(prevState => prevState.filter(item => item !== id));
+    }
+  };
+  // UseEffect to fetch data when searchParams change
+  useEffect(() => {
+    fetchData(currentPage);
+  }, [searchParams]); // This will trigger fetchData whenever searchParams change
 
 
   const handleCheckboxChange2 = (name: string) => {
@@ -230,9 +246,9 @@ useEffect(() => {
   const fetchData = async (page: number) => {
     try {
       setLoading(true); // Loading state before API call
-      
+
       // Body of the request
-      const requestBody =searchParams;
+      const requestBody = searchParams;
       //  {
       //   searchKey: "",             // Search term, empty by default
       //   itemStatus: "",            // Status filter, empty by default
@@ -243,27 +259,27 @@ useEffect(() => {
       //   minCurrentPrice: "",       // Minimum price filter, empty by default
       //   maxCurrentPrice: ""        // Maximum price filter, empty by default
       // };
-      
-  
+
+
       const response = await fetch(
         `http://localhost:8080/auctions/all?offset=0&pageSize=10&sortBy=&sortDirection=`, // Remove query params for body data
         {
           method: "POST",
           headers: {
-           "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(requestBody), // Convert request body to JSON
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
+
       const data = await response.json();
       console.log(data); // Log the full API response to debug structure
-  
+
       // Access the 'content' array in the response
       const formattedProducts = (data.content || []).map((product: Product) => ({
         id: product.id,
@@ -275,7 +291,7 @@ useEffect(() => {
         currentPrice: product.currentPrice,
         expireDate: formatDateToISO(product.expireDate), // Convert expireDate to ISO format
       }));
-      
+
       setProducts(formattedProducts);
     } catch (error) {
       if (error instanceof Error) {
@@ -286,7 +302,7 @@ useEffect(() => {
       setLoading(false);
     }
   };
-  
+
 
   const fetchCategories = async () => {
     try {
@@ -312,12 +328,12 @@ useEffect(() => {
 
 
 
- 
+
   useEffect(() => {
     updateSearchParams();
 
     fetchCategories();
-   //fetchData(currentPage); // Pass the current page to fetchData
+    //fetchData(currentPage); // Pass the current page to fetchData
   }, [currentPage, token]);
 
   const formatDateToISO = (dateString: string): string => {
@@ -336,7 +352,7 @@ useEffect(() => {
   };
 
   const updateSliderBackground = () => {
-    const rangeDistance = 1000 - 10;
+    const rangeDistance = 10000 - 10;
     const fromPosition = ((fromValue - 10) / rangeDistance) * 100;
     const toPosition = ((toValue - 10) / rangeDistance) * 100;
 
@@ -375,8 +391,8 @@ useEffect(() => {
         <div className="filter-container">
 
 
-          <SimpleTreeView>
-            <TreeItem itemId="grid" label="Price">
+          <SimpleTreeView defaultExpandedItems={deafultExpand} onItemExpansionToggle={handleItemExpansionToggle("tree1")}  >
+            <TreeItem itemId="tree1" label="Price" >
 
               <div className="r_container list-group-item">
                 <div className="range-title">Price Range</div>
@@ -386,18 +402,23 @@ useEffect(() => {
                     type="range"
                     value={fromValue}
                     min="10"
-                    max="1000"
+                    max="10000"
                     step={10}
-                    onChange={(e) => setFromValue(Number(e.target.value))}
-                  />
+                    onChange={(e) => {
+                      setFromValue(Number(e.target.value)); // Update the slider value
+                      setDeafultExpand(prevState => [...prevState, "tree1"]); // Add "grid" to the array
+                    }} />
                   <input
                     id="toSlider"
                     type="range"
                     value={toValue}
                     min="10"
-                    max="1000"
+                    max="10000"
                     step={10}
-                    onChange={(e) => setToValue(Number(e.target.value))}
+                    onChange={(e) => {
+                      setToValue(Number(e.target.value));
+                      setDeafultExpand(prevState => [...prevState, "tree1"]);
+                    }}
                   />
                 </div>
                 <div className="form_control">
@@ -419,7 +440,7 @@ useEffect(() => {
                       type="number"
                       value={toValue}
                       min={fromValue + 10}
-                      max="1000"
+                      max="10000"
                       onChange={handleToInputChange}
                     />
                   </div>
@@ -430,14 +451,17 @@ useEffect(() => {
 
           </SimpleTreeView>
 
-          <SimpleTreeView>
-            <TreeItem itemId="grid" label="Date">
+          <SimpleTreeView defaultExpandedItems={deafultExpand} onItemExpansionToggle={handleItemExpansionToggle("tree2")}  >
+            <TreeItem itemId="tree2" label="Date">
               <div className="back">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateField
                     label="Start Date"
                     value={startDate}
-                    onChange={(newValue) => setStartDate(newValue)}
+                    onChange={(newValue) => {
+                      setStartDate(newValue);
+                      setDeafultExpand(prevState => [...prevState, "tree2"]);
+                    }}
                   />
                 </LocalizationProvider>
                 <br />
@@ -446,7 +470,11 @@ useEffect(() => {
                   <DateField
                     label="ُEnd Date"
                     value={endDate}
-                    onChange={(newValue) => setEndDate(newValue)}
+                    onChange={(newValue) => {
+                      setEndDate(newValue);
+                      setDeafultExpand(prevState => [...prevState, "tree2"]); // Add "grid" to the array
+
+                    }}
                   />
                 </LocalizationProvider>
               </div>
@@ -454,13 +482,15 @@ useEffect(() => {
 
           </SimpleTreeView>
 
-          <SimpleTreeView>
-            <TreeItem itemId="grid" label="Category">
+          <SimpleTreeView defaultExpandedItems={deafultExpand} onItemExpansionToggle={handleItemExpansionToggle("tree3")}  >
+            <TreeItem itemId="tree3" label="Category">
               <div className="check">
                 <div className="check-cat">
 
                   {categories.map((category) => (
-                    <label className="custom-checkbox"> <input checked={selectedCategories.includes(category.name)} type="checkbox" id={category.name} name={category.name} onChange={() => { handleCheckboxChange(category.name); }} /><span className="checkmark"></span> {category.name}</label>
+                    <label className="custom-checkbox"> <input checked={selectedCategories.includes(category.name)} type="checkbox" id={category.name} name={category.name} onChange={() => {
+                      handleCheckboxChange(category.name); setDeafultExpand(prevState => [...prevState, "tree3"]); // Add "grid" to the array
+                    }} /><span className="checkmark"></span> {category.name}</label>
                   ))}
                 </div>
               </div>
@@ -469,14 +499,18 @@ useEffect(() => {
 
           </SimpleTreeView>
 
-          <SimpleTreeView>
-            <TreeItem itemId="grid" label="Status">
+          <SimpleTreeView defaultExpandedItems={deafultExpand} onItemExpansionToggle={handleItemExpansionToggle("tree4")}  >
+            <TreeItem itemId="tree4" label="Status">
               <div className="check">
-              <div className="check-cat">
-                <label className="custom-checkbox" > <input  checked={selectedstatus.includes("New")} type="checkbox" id="New" onChange={() => { handleCheckboxChange3("New"); }} name="New" value="New" /><span className="checkmark"></span> New</label>
+                <div className="check-cat">
+                  <label className="custom-checkbox" > <input checked={selectedstatus.includes("New")} type="checkbox" id="New" onChange={() => {
+                    handleCheckboxChange3("New"); setDeafultExpand(prevState => [...prevState, "tree4"]); // Add "grid" to the array
+                  }} name="New" value="New" /><span className="checkmark"></span> New</label>
 
-                <label className="custom-checkbox"> <input  checked={selectedstatus.includes("Used")} type="checkbox" id="Used" onChange={() => { handleCheckboxChange3("Used"); }} name="Used" value="Used" /><span className="checkmark"></span> Used</label>
-              </div>
+                  <label className="custom-checkbox"> <input checked={selectedstatus.includes("Used")} type="checkbox" id="Used" onChange={() => {
+                    handleCheckboxChange3("Used"); setDeafultExpand(prevState => [...prevState, "tree4"]); // Add "grid" to the array
+                  }} name="Used" value="Used" /><span className="checkmark"></span> Used</label>
+                </div>
               </div>
 
             </TreeItem>
@@ -484,8 +518,8 @@ useEffect(() => {
           </SimpleTreeView>
 
 
-          <SimpleTreeView>
-            <TreeItem itemId="grid" label="Address">
+          <SimpleTreeView defaultExpandedItems={deafultExpand} onItemExpansionToggle={handleItemExpansionToggle("tree5")}  >
+            <TreeItem itemId="tree5" label="Address">
               <div className="check">
                 <div className="check-cat">
                   {allAddresses.map((address, index) => (
@@ -496,9 +530,11 @@ useEffect(() => {
                         id={address}
                         name={address}
                         checked={selectedAddresses.includes(address)}
-                        onChange={() => { handleCheckboxChange2(address); console.log(selectedAddresses) }}
+                        onChange={() => {
+                          handleCheckboxChange2(address); console.log(selectedAddresses); setDeafultExpand(prevState => [...prevState, "tree4"]); // Add "grid" to the array
+                        }}
                       />   <span className="checkmark"></span>
- {address} </label>
+                        {address} </label>
                     </div>
                   ))}
                 </div>
@@ -508,7 +544,7 @@ useEffect(() => {
 
           </SimpleTreeView>
           <div className="ch">
-            <button className="next back btn btn-danger" onClick={()=>{window.location.href="/all"}} >
+            <button className="next back btn btn-danger" onClick={() => { window.location.href = "/all" }} >
               Reset
             </button>
             <button className="next back btn btn-success" onClick={updateSearchParams} >
@@ -527,23 +563,24 @@ useEffect(() => {
 
       <div className="testmain">
         <div className="products">
-        {products.map((product) => {
-                    const imageUrl = product.item.auctionImages.length > 0 ? product.item.auctionImages[0].imageUrl : '';
-                    //const formattedExpireDate = formatDateToISO(product.expireDate); // Format expireDate
+          {products.map((product) => {
+            const imageUrl = product.item.auctionImages.length > 0 ? product.item.auctionImages[0].imageUrl : '';
+            //const formattedExpireDate = formatDateToISO(product.expireDate); // Format expireDate
 
-          return (
-            <ProductCard
-              key={product.id}
-              img={imageUrl}
-              title={product.item.name}
-              description={product.item.description}
-              currentPrice={product.currentPrice}
-              endDate={new Date(product.expireDate)}
-              id={product.id}
-              message={""}
-            />
-          );
-        })}
+            return (
+              <ProductCard
+                key={product.id}
+                img={imageUrl}
+                title={product.item.name}
+                description={product.item.description}
+                currentPrice={product.currentPrice}
+                endDate={new Date(product.expireDate)}
+                id={product.id}
+                message={""}
+                status={product.status}
+              />
+            );
+          })}
         </div>
 
         <Stack spacing={2} sx={{ mt: 2 }}>

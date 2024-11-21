@@ -368,3 +368,7 @@ gap: 25px;
   font-weight: bolder;
   color: #009640;
 }
+
+.deleted{
+  background-color: #b40611 !important;
+}

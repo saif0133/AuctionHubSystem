@@ -1,6 +1,7 @@
  import React, { useState, ChangeEvent } from "react";
  import "./AddCard.css"
 import { useNavigate } from "react-router-dom";
+import PopupMMessage from "./components/PopupMessage";
  const cardLogos: { [key: string]: string } = {
    visa: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/640px-Visa_Logo.png",
    mastercard: "https://pngimg.com/uploads/mastercard/mastercard_PNG15.png",
@@ -64,7 +65,7 @@ let paymentID;
  const [cardType, setCardType] = useState<string>("unknown")
  const userToken = localStorage.getItem('authToken') || '';
  const navigate = useNavigate();
-
+const [isPopupOpen, setIsPopupOpen] =useState(false);
 
  const addCard = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   event.preventDefault();
@@ -104,6 +105,7 @@ let paymentID;
 
  const postData = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   event.preventDefault();
+  setIsPopupOpen(true);
 
   const url = 'https://api.stripe.com/v1/tokens'; // Replace with your API endpoint
 
@@ -128,6 +130,7 @@ let paymentID;
     });
 
     if (!response.ok) {
+      setIsPopupOpen(false);
       throw new Error('Network response was not ok');
     }
 
@@ -140,6 +143,7 @@ let paymentID;
     
   } catch (error) {
     console.error('Error:', error);
+    setIsPopupOpen(false);
   }
 };
 
@@ -215,6 +219,14 @@ let paymentID;
            Submit
          </button>
        </div>
+       {isPopupOpen && (
+       <PopupMMessage
+                      closePopup={console.log}
+                      order={"Loading"}
+                      amount={"0"}
+                      description={""}
+                      customFunction={console.log}
+                    />)}
      </div>
    );
  }

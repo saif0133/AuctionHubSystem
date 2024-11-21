@@ -43,6 +43,8 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
     return "PublishFees";
   };
 
+  const  [isPopupOpen5,setIsPopupOpen5] = useState(false);
+
   const calculateReservedAmount = (price: number): string => {
     let amount: number;
   
@@ -72,6 +74,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
  
 
   const postData = async (): Promise<string | null> => {
+    setIsPopupOpen5(true);
     const url = 'http://localhost:8080/auctions'; 
   
     const data = {
@@ -104,6 +107,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
       });
   
       if (!response.ok) {
+        setIsPopupOpen5(false);
         await  message.info(response.json().toString())
         throw new Error('Network response was not ok');
         
@@ -115,6 +119,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
       navigate(`/Product/${result.id}`); // Navigate to a route with the ID
       return result.id || null;
     } catch (error) {
+      setIsPopupOpen5(false);
       console.error('Error:', error);
       return null;
     }
@@ -700,6 +705,14 @@ const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, Mouse
           )}
         </div>
       </form>
+      {isPopupOpen5 && (
+       <PopupMMessage
+                      closePopup={console.log}
+                      order={"Loading"}
+                      amount={"0"}
+                      description={""}
+                      customFunction={console.log}
+                    />)}
     </div>
   );
 }
