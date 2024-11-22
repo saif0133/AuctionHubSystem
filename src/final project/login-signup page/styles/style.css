@@ -207,7 +207,7 @@ body::-webkit-scrollbar {
 
 
 
-@media (max-width: 750px) {
+@media (max-device-width: 750px) {
   body {
     background-color: #2f2f2f;
   }
