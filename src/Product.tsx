@@ -256,6 +256,7 @@ const logBids = (product: ProductData) => {
 
         const data: ProductData = await response.json();
         setProduct(data);
+        if(token){
         const Userdata = extractDataFromToken(token);
         if (Userdata?.sub == data.seller.email) {
           setIsOwner(true);
@@ -268,7 +269,7 @@ const logBids = (product: ProductData) => {
           setIsJoined(true);
 
         }
-
+      }
         logBids(data);
 console.log(data);
         // setIsOwner(true);
@@ -350,6 +351,19 @@ console.log(data);
     setSelectedImage(imageUrl);
   };
 
+  const [bgPosition, setBgPosition] = useState("center");
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const nativeEvent = e.nativeEvent as MouseEvent;
+    const target = e.target as HTMLDivElement; // Type assertion to HTMLDivElement
+    const { offsetX, offsetY } = nativeEvent;
+
+    const x = (offsetX / target.clientWidth) * 100;
+    const y = (offsetY / target.clientHeight) * 100;
+
+    setBgPosition(`${x}% ${y}%`);
+  };
+
 
   return (
     <div className="testmain">
@@ -396,12 +410,14 @@ console.log(data);
             <div className="product-info">
               <div className="left">
 
-                <div
-                  className="first-pic"
-                  style={{
-                    backgroundImage: `url(${selectedImage || product.item.auctionImages[0].imageUrl})`,
-                  }}
-                ></div>
+              <div
+      className="first-pic"
+      style={{
+        backgroundImage: `url(${selectedImage || product.item.auctionImages[0].imageUrl})`,
+        backgroundPosition: bgPosition,
+      }}
+      onMouseMove={handleMouseMove}
+    ></div>
 
                 {/* Additional Images - Clicking on them updates the main image */}
                 <div className="additional-pics">

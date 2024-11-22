@@ -21,9 +21,25 @@
  <!-- Loading popup -->
  <div id="loadingPopup" class="loading-popup" style="display: none;">
     <div class="loading-content">
-      <img src="https://i.pinimg.com/originals/ec/d6/bc/ecd6bc09da634e4e2efa16b571618a22.gif" class="loading" alt="">
+      <img src="https://i.pinimg.com/originals/46/04/1e/46041edc7834dfeabad2de3e5b5e99a6.gif" class="loading" alt="">
     </div>
   </div>
+
+  <div class="popup2">
+    <div class="popup-content2">
+      <div class="popup-header2">
+        <span class="popup-icon">&#10004;</span>
+      </div>
+      <div class="popup-body2">
+        <h2 id="popup-titlex">Confirmation Sent!</h2>
+        <p id="popup-bodyx">We sent a confirmation link to your email. Please check your inbox to complete the process.</p>
+      </div>
+      <div class="popup-footer2">
+        <button class="popup-btn2" onclick="window.location.reload()">OK</button>
+    </div>
+    </div>
+  </div>
+  
     <div class="container">
 
         <div class="signtuer">
@@ -169,12 +185,14 @@ Where Deals Meet Destiny
                     <div class="inp">
                         <div class="saif">
                           <label class="input">
-                            <input class="input__field" id="emailL" type="text" placeholder=" " />
+                            <input class="input__field inpError" id="emailL" type="text" placeholder=" "          oninput="document.getElementById('Error').style.display='none';" 
+                            />
                             <span class="input__label">Email</span>
                             <div class="info-box" id="emailLError">Email must contain '@' and '.'.</div>
                           </label>
                         </div>
                       </div>
+                      <div class="Error" id="Error"></div>
                     <br>
 
                     <div class="inp">

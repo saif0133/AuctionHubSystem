@@ -101,11 +101,12 @@ const AllProducts: React.FC = () => {
   ]);
 
   const updateSearchParams = async () => {
+    console.log(searchParams);
     
     await navigate("/all");
     console.log("def" + deafultExpand);
     const params = new URLSearchParams(window.location.search); // Initialize with current search parameters
-if(params.get("searchKey")=="" || !params.get("searchKey"))
+if(params.get("searchKey")=="")
       await navigate("/all");
 
     // Log current parameters for debugging
@@ -162,7 +163,7 @@ if(params.get("searchKey")=="" || !params.get("searchKey"))
 
     // Set searchParams state with the current values from URLSearchParams
     setSearchParams({
-      searchKey: params.get("searchKey") || "", // Default to empty string if null
+      searchKey: searchParams.searchKey || "", // Default to empty string if null
       itemStatus: params.get("status") || "", // Default to empty string if null
       category: params.getAll("categories"), // Use getAll for multiple categories
       beginDate: params.get("startDate") || "", // Default to empty string if null
@@ -330,7 +331,14 @@ if(params.get("searchKey")=="" || !params.get("searchKey"))
 
 
   useEffect(() => {
-    updateSearchParams();
+    //updateSearchParams();
+
+      const params = new URLSearchParams(window.location.search);
+    if (params.get("searchKey")) {
+      setSearchParams(prev => ({
+        ...prev, // Spread the existing searchParams
+        searchKey: params.get("searchKey") || "" // Update only the "searchKey"
+      }));}
 
     fetchCategories();
     //fetchData(currentPage); // Pass the current page to fetchData
@@ -562,6 +570,7 @@ if(params.get("searchKey")=="" || !params.get("searchKey"))
       </div>
 
       <div className="testmain">
+        {searchParams.searchKey && (<div className="searchResult">Showing results for <b>{searchParams.searchKey}</b> - Page {currentPage+1} <hr /></div>)}
         <div className="products">
           {products.map((product) => {
             const imageUrl = product.item.auctionImages.length > 0 ? product.item.auctionImages[0].imageUrl : '';

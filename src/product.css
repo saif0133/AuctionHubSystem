@@ -1,7 +1,7 @@
 .first-pic {
   height: 500px;
   width: 100%;
-  background-color: rgb(202, 202, 202);
+  background-color: transparent;
   margin-bottom: 2%;
   border-radius: 15px;
 }
@@ -115,10 +115,20 @@
 .owner-pic,
 .first-pic,
 .pro-pic {
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
+
+
+
+.first-pic:hover {
+  background-size: 200%; /* تكبير الصورة */
+  cursor: zoom-in;
+}
+
+
+
 
 .product-name {
   height: 12%;

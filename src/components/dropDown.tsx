@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menu, Dropdown, Button, message } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import CustomIcon from "./customIcon";
+import PopupMMessage from "./PopupMessage";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 // Define the type for user data
 interface User {
@@ -23,6 +25,14 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
   // Find the user with the highest bid if there is one
   const highestBidder = sortedUsers.length > 0 ? sortedUsers[0] : null;
 
+  const [isPopupOpen,setIsPopupOpen]=useState(false);
+  const [Id,setID]=useState(0);
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+
   const deleteBid = async (bidID: number) => {
     const token = localStorage.getItem("authToken");
     try {
@@ -37,12 +47,20 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
 
       if (!response.ok) {
         message.info(response.status);
+        closePopup();
+
         throw new Error(`HTTP error! Status: ${response.status}`);
+        
 
       }
 
+      closePopup();
+
+
 
     } catch (error) {
+      closePopup();
+
       console.error('Failed to fetch categories:', error);
 
     }
@@ -77,13 +95,14 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
                   }}
                 />
                 <span>{`${user.name} - ${user.bid} JDs`}</span>
+                
               </div>
             ),
             onClick: () => {
               message.info(`${user.name}'s bid with id ${user.id} and user id is ${user.userID}`)
-
-
-              deleteBid(user.id);
+              setID(user.id);
+setIsPopupOpen(true);
+             // deleteBid(user.id);
             },
             ...(user.bid === highestBidder?.bid ? { disabled: false } : {}),
           }))
@@ -93,23 +112,35 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
   );
 
   return (
-    <Dropdown overlay={menu}>
-      <Button>
-        <img
-          src={
-            highestBidder
-              ? highestBidder.pic
-              : "https://media.lordicon.com/icons/wired/outline/1657-alert.gif"
-          }
-          alt={highestBidder?.name || "No Bids"}
-          style={{ width: 30, height: 30, borderRadius: "50%" }}
-        />
-        {highestBidder
-          ? `${highestBidder.name} - ${highestBidder.bid} JDs`
-          : "No Bids Until Now"}{" "}
-        <CustomIcon />
-      </Button>
-    </Dropdown>
+    <>
+      <Dropdown overlay={menu}>
+        <Button>
+          <img
+            src={
+              highestBidder
+                ? highestBidder.pic
+                : "https://media.lordicon.com/icons/wired/outline/1657-alert.gif"
+            }
+            alt={highestBidder?.name || "No Bids"}
+            style={{ width: 30, height: 30, borderRadius: "50%" }}
+          />
+          {highestBidder
+            ? `${highestBidder.name} - ${highestBidder.bid} JDs`
+            : "No Bids Until Now"}{" "}
+          <CustomIcon />
+        </Button>
+      </Dropdown>
+
+      {isPopupOpen && (
+      <PopupMMessage
+        closePopup={closePopup}
+        order={"RemoveFees"}
+        amount={""}
+        description={"FREE"}
+        customFunction={() => deleteBid(Id)} // Wrap in a function
+      />)}
+
+    </>
   );
 };
 

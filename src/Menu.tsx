@@ -26,24 +26,46 @@ function Menu() {
   const [menuClass, setMenuClass] = useState(''); // Manage menu class
   const token = localStorage.getItem("authToken"); // Check if the token exists
 
-  let items: ListItem[] = [
-    { text: "Home", icon: faHome, link: "/" },
-    { text: "Add Auction", icon: faPlus, link: "/Add-Auction" },
-    { text: "My Auction", icon: faGavel, link: "/My-Auction" },
-    { text: "My bids", icon: faMoneyBillWave, link: "/My-bids" },
-    { text: "Payment", icon: faCreditCard, link: "/Payment" },
-    { text: "Help", icon: faQuestionCircle, link: "/Help" },
-    { text: "About Us", icon: faInfoCircle, link: "/About-Us" },
-    { text: "Contact Us", icon: faPhone, link: "/Contact-Us" },
-  ];
+  // let items: ListItem[] = [
+  //   { text: "Home", icon: faHome, link: "/" },
+  //   { text: "Add Auction", icon: faPlus, link: "/Add-Auction" },
+  //   { text: "My Auction", icon: faGavel, link: "/My-Auction" },
+  //   { text: "My bids", icon: faMoneyBillWave, link: "/My-bids" },
+  //   { text: "Payment", icon: faCreditCard, link: "/Payment" },
+  //   { text: "Help", icon: faQuestionCircle, link: "/Help" },
+  //   { text: "About Us", icon: faInfoCircle, link: "/About-Us" },
+  //   { text: "Contact Us", icon: faPhone, link: "/Contact-Us" },
+  // ];
+  let items: ListItem[] = localStorage.getItem("authToken")
+  ? [
+      { text: "Home", icon: faHome, link: "/" },
+      { text: "Add Auction", icon: faPlus, link: "/Add-Auction" },
+      { text: "My Auction", icon: faGavel, link: "/My-Auction" },
+      { text: "My bids", icon: faMoneyBillWave, link: "/My-bids" },
+      { text: "Payment", icon: faCreditCard, link: "/Payment" },
+      { text: "Help", icon: faQuestionCircle, link: "/Help" },
+      { text: "About Us", icon: faInfoCircle, link: "/About-Us" },
+      { text: "Contact Us", icon: faPhone, link: "/Contact-Us" },
+    ]
+  : [
+      { text: "Home", icon: faHome, link: "/" },
+      { text: "Help", icon: faQuestionCircle, link: "/Help" },
+      { text: "About Us", icon: faInfoCircle, link: "/About-Us" },
+      { text: "Contact Us", icon: faPhone, link: "/Contact-Us" },
+    ];
+
 
   if (token) {
     items.push({ text: "Logout", icon: faSignOutAlt, link: "/Logout" });
   }
-  const [isMenuCollapsed, setIsMenuCollapsed] = useState(true);
-
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState(() => {
+    const storedValue = localStorage.getItem("menu");
+    return storedValue ? JSON.parse(storedValue) : true; // Default to true if no value is found
+  });
+  
   const toggleMenuCollapse = () => {
     setIsMenuCollapsed(!isMenuCollapsed);
+    localStorage.setItem("menu",(!isMenuCollapsed).toString());
   };
 
   const toggleMenu = () => {

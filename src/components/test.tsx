@@ -12,8 +12,8 @@ function LoadingPopup(){
 
 
   return (
-    <div className="asd">
-      <div className="caption-imagel">
+    <div className="popupMessage">
+      <div className="caption-image">
        
 <TriangleLoader />
     </div>

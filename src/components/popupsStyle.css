@@ -20,6 +20,8 @@
   border-radius: 10px;
 }
 
+.popup:has(.asd) {
+background-color: transparent !important;}
 
 .close {
   color: #eaeaea;

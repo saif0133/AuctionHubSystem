@@ -126,7 +126,11 @@ function submitEmail() {
    localStorage.setItem("PasswordCounter","A");
     
   } else {
-    alert('Please enter a valid email address.');
+    errorcontainer.style.display = "none";
+   
+   errortext.innerText="Please enter valid Email";
+    
+  //  alert('Please enter a valid email address.');
   }
 }
 
@@ -135,7 +139,7 @@ function submitEmail() {
 
 const postData = async (email2) => {
   event.preventDefault();
-
+  loadingPopup.style.display = 'flex';
   const url = `http://localhost:8080/forgot-password-request?email=${email2}`; // Replace with your API endpoint
 console.log(url);
 
@@ -148,12 +152,19 @@ console.log(url);
     });
 
     if (!response.ok) {
+      loadingPopup.style.display = 'none';
+
       throw new Error('Network response was not ok');
     }
 
     const result = await response.text();
     console.log('Response:', result);
-    alert("Reset Password email was sent successfully!");
+    loadingPopup.style.display = 'none';
+
+    //alert("Reset Password email was sent successfully!");
+    document.getElementById("popup-bodyx").textContent="Please check your email inbox or spam folder for the reset password link."
+    document.getElementById("popup-titlex").textContent="Reset Pssword Sent"
+    showPopup();
     
   } catch (error) {
     alert("User not found, Please make sure of your email");
@@ -269,21 +280,35 @@ async function CreateAccount(event) {
 
     if (!response.ok) {
       loadingPopup.style.display = 'none';
+      document.getElementById("Error").style.display="flex"
+      document.getElementById("Error").innerHTML=`${responseData.message}`
+      document.querySelectorAll(".inpError").forEach((element) => {
+        element.style.borderBlockColor = "red";
+      });
+      
       throw new Error(responseData.error || responseData.message);
     }
   
-    alert('Please check your email');
-    window.location.reload();
+    showPopup();
+   // alert('Please check your email');
+   // window.location.reload();
   } catch (error) {
     console.error('Error:', error);
-    alert(`Error: ${error.message}`);
+    document.getElementById("Error").style.display="flex"
+    document.getElementById("Error").innerHTML=`${responseData.message}`
+    document.querySelectorAll(".inpError").forEach((element) => {
+      element.style.borderBlockColor = "red";
+    });
+        //alert(`Error: ${error.message}`);
   } finally {
     if (loadingPopup) {
       loadingPopup.style.display = 'none';
     }
   }
 }
-
+function showPopup() {
+  document.querySelector('.popup2').style.display = 'flex';
+}
 
 
 
@@ -307,7 +332,7 @@ async function verifyLogin() {
 
   errorcontainer.style.display = "none";
   if (!email || !password) {
-    alert("Please fill in both fields.");
+    errortext.innerText="Please enter valid Email";
     return;
   }
 

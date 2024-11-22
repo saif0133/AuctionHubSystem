@@ -36,7 +36,8 @@ const navigate = useNavigate();
       alert("Please enter a search query");
       return;
     }
-    navigate(`/all?searchKey=${searchInput}`);
+    //navigate(`/all?searchKey=${searchInput}`);
+    window.location.href=`/all?searchKey=${searchInput}`;
     console.log("Search input:", searchInput);
     setSearchInput("");
   };
