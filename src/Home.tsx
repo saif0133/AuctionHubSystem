@@ -151,6 +151,7 @@ const Home: React.FC = () => {
               endDate={new Date(product.expireDate)}
               id={product.id}
               message={""}
+              status=""
             />
           );
         })}

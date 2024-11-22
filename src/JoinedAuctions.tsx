@@ -111,6 +111,7 @@ function JoinAuction() {
         endDate={new Date(formattedExpireDate)} // Pass the formatted date
         id={product.id}
         message={message}
+        status=""
       />
     );
   })}
