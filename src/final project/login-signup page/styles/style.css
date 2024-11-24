@@ -233,6 +233,12 @@ body::-webkit-scrollbar {
     
   }
 
+  .loading{
+    width: 390px !important;
+    height: 260px !important;
+  }
+  
+
   .container.reverse {
     transform: none;
   }
@@ -367,12 +373,15 @@ font-weight: bolder;
 }
 
 .footer{
-  display: none !important;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  display: flex !important;
   height: 30px;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: rgb(164, 5, 5);
+  background-color: rgb(28, 28, 28);
 }
 
 .create{
@@ -431,13 +440,48 @@ font-weight: bolder;
     font-size: medium;
   }
 
-
+.popup{
+  z-index: 10 !important;
+}
 button{
   background-color: #ffffff;
   border-radius: 6px;
   width: 100% !important;
 }
 
+.buttonF{
+  background-color: #212121;
+  width: 90% !important;
+
+}
+.err {
+  align-items: center;
+  justify-content: center; 
+  width: auto !important;
+  max-width: 100%;
+  background-color: #ff0000;
+  padding: 6px 10px;
+  border-radius: 10px;
+  gap: 10px;
+  display: none;
+  margin-bottom: 4%;
+  transition: 1s ease;
+}
+
+.popup-content2 {
+  background-color: white;
+  border-radius: 10px;
+  width: 80% !important;
+  font-size: 30px !important;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.popup-content2 h2 , p  {
+
+  font-size: 30px !important;
+
+}
 
   .saif {
     width: 100%;
@@ -761,7 +805,6 @@ button{
 }
 
 .loading-content {
- background: white;
   
   border-radius: 15px;
   overflow: hidden;
