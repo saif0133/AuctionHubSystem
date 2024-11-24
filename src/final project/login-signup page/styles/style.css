@@ -459,15 +459,22 @@ button{
   justify-content: center; 
   width: auto !important;
   max-width: 100%;
-  background-color: #ff0000;
-  padding: 6px 10px;
+  background-color: #ff9292 !important;
+  padding: 13px 10px !important;
   border-radius: 10px;
+font-size: 30px !important;
   gap: 10px;
   display: none;
   margin-bottom: 4%;
   transition: 1s ease;
 }
+.error-signin{
+  font-size: 30px !important;
 
+}
+.err-img{
+  height: 60px !important;
+}
 .popup-content2 {
   background-color: white;
   border-radius: 10px;
