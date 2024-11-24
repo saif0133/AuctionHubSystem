@@ -5,6 +5,14 @@ import LoginWarning from "./components/loginWarning";
 import { fetchPaymentId, getPaymentDetails } from "./components/paymentId";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
+import * as React from 'react';
+import Box from '@mui/joy/Box';
+import Alert from '@mui/joy/Alert';
+import IconButton from '@mui/joy/IconButton';
+import Button from '@mui/joy/Button';
+import WarningIcon from '@mui/icons-material/Warning';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 let count = 1;
 let userNotIn=true;
@@ -39,6 +47,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const navigate = useNavigate(); // Initialize useNavigate
   const userToken = localStorage.getItem('authToken') || null;
   const [userPayment, srtUserPayment] = useState(false);
+  const [showAlert, serShowAlert] = useState(false);
   const order = () => {
     return "PublishFees";
   };
@@ -137,6 +146,9 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
       if (details.paymentId) {
        
         srtUserPayment(true);
+      }
+      else{
+        serShowAlert(true);
       }
 
       setIsLoading(false); // Set loading to false after data is fetched
@@ -448,6 +460,25 @@ const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, Mouse
   return (
     
     <div className="testmain">
+     {!userPayment &&showAlert &&(
+        <Alert
+          startDecorator={<WarningIcon />}
+          variant="solid"
+          color="danger"
+          endDecorator={
+            <React.Fragment>
+               <Button variant="outlined" color="neutral" sx={{ mr: 1 }} onClick={()=>navigate("../AddCard")}>
+                Add Payment Method
+              </Button> 
+              <IconButton variant="solid" size="sm" color="danger" onClick={()=>serShowAlert(false)}>
+                <CloseIcon />
+              </IconButton> 
+            </React.Fragment>
+          }
+        >
+          Payment is missing! Please add to be able to create auction without adding payment method.
+        </Alert>
+      )}
       <div className="formTitle" id="formTitle">
         {" "}
         {Title}

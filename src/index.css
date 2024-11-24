@@ -1952,3 +1952,16 @@ input[type="range"] {
   border-bottom-left-radius: 10px;
 }
 
+.css-11c8slp-JoyAlert-root{
+  margin-top: 4%;
+  position: fixed !important;
+  z-index: 2;
+}
+.css-1p9cwj3-JoyAlert-endDecorator Button{
+  color: white !important;
+
+}
+.css-1p9cwj3-JoyAlert-endDecorator Button:hover{
+  color: rgb(64, 64, 64) !important;
+
+}
