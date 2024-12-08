@@ -64,6 +64,7 @@ const AllProducts: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [searchCategory, setSearchCategory] = useState("");
   const [totalPages, setTotalPages] = useState(0); // To store total pages
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs(''));
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs(''));
@@ -74,7 +75,7 @@ const AllProducts: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     searchKey: "",
     itemStatus: "",
-    category: [],
+    category: [searchCategory?searchCategory:""],
     beginDate: "",
     expireDate: "",
     address: [],
@@ -100,16 +101,25 @@ const AllProducts: React.FC = () => {
     'Ajloun',
   ]);
 
-  const updateSearchParams = async () => {
+  const updateSearchParams = async (reload: boolean) => {
     console.log(searchParams);
-    
-    await navigate("/all");
-    console.log("def" + deafultExpand);
-    const params = new URLSearchParams(window.location.search); // Initialize with current search parameters
-if(params.get("searchKey")=="")
+    if (reload)
+    {
       await navigate("/all");
 
-    // Log current parameters for debugging
+    }
+   // console.log("def" + deafultExpand);
+    const params = new URLSearchParams(window.location.search); // Initialize with current search parameters
+    if (params.get("searchKey") == "")
+      await navigate("/all");
+
+    if(params.getAll("categories").length>0)
+    {
+      setSearchParams(prev => ({
+        ...prev,
+        category: params.getAll("categories")
+      }));
+          }
     console.log('Current URL Parameters:', Array.from(params.entries()));
 
     // Add the range values if they are valid
@@ -127,7 +137,7 @@ if(params.get("searchKey")=="")
         params.append('categories', category); // Use append for multiple categories
       });
     }
-
+    
     // Add selected statuses only if not empty and ensure we don't duplicate existing values
     if (selectedstatus.length > 0 && selectedstatus.length < 2) {
       const existingStatuses = params.getAll('status');
@@ -172,7 +182,7 @@ if(params.get("searchKey")=="")
       minCurrentPrice: params.get("fromValue") || "", // Default to empty string if null
       maxCurrentPrice: params.get("toValue") || "" // Default to empty string if null
     });
-
+    
     // Log searchParams for debugging
     console.log('Updated searchParams:', {
       searchKey: params.get("searchKey"),
@@ -202,6 +212,27 @@ if(params.get("searchKey")=="")
     fetchData(currentPage);
   }, [searchParams]); // This will trigger fetchData whenever searchParams change
 
+
+  useEffect(() => {
+    // الحصول على التفاصيل من الموقع الحالي
+    const { href, pathname, search, hash } = window.location;
+
+    // استخدام URLSearchParams لتحليل معلمات البحث
+    const params = new URLSearchParams(search);
+
+    // استخراج جميع القيم الخاصة بـ "categories"
+    const categories = params.getAll("categories");
+
+    // تكرار كل فئة على حدة
+    categories.forEach((category) => {
+      handleCheckboxChange(category); // استدعاء الفنكشن لكل فئة
+      setSearchCategory(category);
+    });
+
+    console.log(categories);
+    updateSearchParams(false);
+
+  }, []);
 
   const handleCheckboxChange2 = (name: string) => {
     setSelectedAddresses((prevSelected) => {
@@ -333,12 +364,13 @@ if(params.get("searchKey")=="")
   useEffect(() => {
     //updateSearchParams();
 
-      const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
     if (params.get("searchKey")) {
       setSearchParams(prev => ({
         ...prev, // Spread the existing searchParams
         searchKey: params.get("searchKey") || "" // Update only the "searchKey"
-      }));}
+      }));
+    }
 
     fetchCategories();
     //fetchData(currentPage); // Pass the current page to fetchData
@@ -388,7 +420,6 @@ if(params.get("searchKey")=="")
 
   const items = [{ text: "Home", icon: faHome, link: "/" }];
   const logo = "https://saifsamplewebsite.netlify.app/imgs/hublogo-2.png";
-
   return (
     <>
       <div className="menu">
@@ -555,9 +586,16 @@ if(params.get("searchKey")=="")
             <button className="next back btn btn-danger" onClick={() => { window.location.href = "/all" }} >
               Reset
             </button>
-            <button className="next back btn btn-success" onClick={updateSearchParams} >
-              Apply
-            </button>
+            <button 
+  className="next back btn btn-success" 
+  onClick={(e) => {
+    e.preventDefault(); // منع التصرف الافتراضي (مثل الريفريش)
+    updateSearchParams(true); // تحديث الـ search params
+  }} 
+>
+  Apply
+</button>
+
           </div>
         </div>
         <div className="footer">
@@ -570,7 +608,7 @@ if(params.get("searchKey")=="")
       </div>
 
       <div className="testmain">
-        {searchParams.searchKey && (<div className="searchResult">Showing results for <b>{searchParams.searchKey}</b> - Page {currentPage+1} <hr /></div>)}
+        {searchParams.searchKey && (<div className="searchResult">Showing results for <b>{searchParams.searchKey}</b> - Page {currentPage + 1} <hr /></div>)}
         <div className="products">
           {products.map((product) => {
             const imageUrl = product.item.auctionImages.length > 0 ? product.item.auctionImages[0].imageUrl : '';

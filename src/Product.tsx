@@ -49,6 +49,7 @@ interface ProductData {
     firstName: string;
     lastName: string;
     email: string; // Email is already included
+    phone: string;
   };
   minBid: number;
   initialPrice: number;
@@ -512,7 +513,7 @@ console.log(data);
                               <br />
                               <br />
                               <div>Email : <b>{product.seller.email}</b></div>
-                              <div>Phone Number : <b>{product.seller.email}</b></div>
+                              <div>Phone Number : <b>{product.seller.phone}</b></div>
                             </div>
                             <div className="modal-footer">
                               <button className="btn btn-danger" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Second Step</button>
@@ -625,7 +626,7 @@ console.log(data);
                 </div>
 
                 <div className="drop">
-                  <DropdownComponent users={usersa} />
+                  <DropdownComponent users={usersa} status={product.status} />
                 </div>
               </div>
             </div>

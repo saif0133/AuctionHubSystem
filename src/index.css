@@ -285,7 +285,7 @@ body::-webkit-scrollbar {
   appearance: none;
   border: none;
   outline: none;
-  background-color: #DADADA;
+  background-color: #ffffff;
   /*border-bottom: .2em solid #04930b !important;*/
   background: rgba(#04930b, .2) !important;
   border-radius: 10px;
@@ -570,12 +570,15 @@ li {
 
 .imageContainer {
   width: 70vw;
+  height: 34%;
+  overflow: hidden;
   overflow: hidden;
   display: flex;
   justify-content: center;
   margin-top: 30px;
   margin-bottom: 30px;
   opacity: 0.8;
+  border-radius: 30px;
 }
 
 .imageCont {
@@ -2022,4 +2025,34 @@ input[type="range"] {
   background: linear-gradient(142deg, #E00613, #531420); /* تدرج قطري من الزاوية العليا اليسرى إلى الزاوية السفلى اليسرى */
   top: 0;
   z-index: -1;
+}
+
+.slick-slider{
+width: 100% !important;
+}
+
+
+
+.slick-prev{
+  left: 10px !important;
+  z-index: 3;
+
+}
+.slick-next{
+  right: 10px !important;
+  z-index: 3;
+
+}
+
+
+.rv{
+  position: absolute;
+  right: 10px !important;
+  bottom: 5.5px;
+}
+
+.bi-trash{
+  fill: red !important;
+  color:red;
+  font-size: x-large;
 }

@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, Dropdown, Button, message } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import CustomIcon from "./customIcon";
 import PopupMMessage from "./PopupMessage";
 import { faL } from "@fortawesome/free-solid-svg-icons";
+import { DecodedToken, extractDataFromToken } from "./tokenDecode";
+import RemoveIcon from '@mui/icons-material/Remove';
+
 
 // Define the type for user data
 interface User {
@@ -14,11 +17,17 @@ interface User {
   id: number;
 }
 
-interface DropdownComponentProps {
-  users: User[];
+interface UserInfo {
+ id:number
 }
 
-const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
+
+interface DropdownComponentProps {
+  users: User[];
+  status:string;
+}
+
+const DropdownComponent: React.FC<DropdownComponentProps> = ({ users,status }) => {
   // Sort users by bid amount in descending order
   const sortedUsers = [...users].sort((a, b) => b.bid - a.bid);
 
@@ -26,11 +35,21 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
   const highestBidder = sortedUsers.length > 0 ? sortedUsers[0] : null;
 
   const [isPopupOpen,setIsPopupOpen]=useState(false);
+  const [isOwner,setIsOwner]=useState(false);
   const [Id,setID]=useState(0);
 
   const closePopup = () => {
     setIsPopupOpen(false);
   };
+
+  const [userData, setUserData] = useState<DecodedToken | null>(null);
+
+  
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const data = extractDataFromToken(token);
+    setUserData(data);
+  }, []);
 
 
   const deleteBid = async (bidID: number) => {
@@ -95,13 +114,21 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users }) => {
                   }}
                 />
                 <span>{`${user.name} - ${user.bid} JDs`}</span>
-                
+                {userData?.id==user.userID  &&<span className="rv"> <i className="bi bi-trash"></i></span>}
               </div>
             ),
             onClick: () => {
-              message.info(`${user.name}'s bid with id ${user.id} and user id is ${user.userID}`)
+              console.log(status+""+user.userID+"/"+userData?.id);
+             // message.info(`${user.name}'s bid with id ${user.id} and user id is ${user.userID}`)
               setID(user.id);
-setIsPopupOpen(true);
+              if(status=="ACTIVE" && userData?.id==user.id)
+              {
+                setIsPopupOpen(true);
+              }
+              else if(status!="ACTIVE" && userData?.id==user.userID)
+              {
+                message.info("You can not remove your bid when auction is ended");
+              }
              // deleteBid(user.id);
             },
             ...(user.bid === highestBidder?.bid ? { disabled: false } : {}),

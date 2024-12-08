@@ -7,6 +7,10 @@ import CategoryCard from "./components/CategoryCard";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import LoginWarning from "./components/loginWarning";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import Slider from "react-slick";
 
 // Update Product interface to match the fetched data
 interface Product {
@@ -33,6 +37,22 @@ const Home: React.FC = () => {
     return new Date(`${year}-${month}-${day}T${time}:00Z`).toISOString();
   };
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
+  
+  const images = [
+    'https://github.com/saif0133/deploy-sec/blob/main/imgs/auction.png?raw=true',
+    'https://github.com/saif0133/website-deployment/blob/main/imgs/au3.png?raw=true',
+    'https://github.com/saif0133/website-deployment/blob/main/imgs/au2.png?raw=true',
+    'https://github.com/saif0133/website-deployment/blob/main/imgs/au1.png?raw=true',
+  ];
   
 
   
@@ -125,7 +145,15 @@ const Home: React.FC = () => {
   return (
     <div className="testmain">
       <div className="imageContainer">
-        <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/auction.png?raw=true" alt="" className="imageCont" />
+        {/* <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/auction.png?raw=true" alt="" className="imageCont" /> */}
+        <Slider {...settings}>
+      {images.map((src, index) => (
+        <div key={index}>
+          <img src={src} alt={`Slide ${index + 1}`} style={{ width: "100%" }} />
+        </div>
+      ))}
+    </Slider>
+
       </div>
       <div className="category-list">
 

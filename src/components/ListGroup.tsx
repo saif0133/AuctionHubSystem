@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 interface ListItem {
   text: string;
@@ -25,9 +25,9 @@ const ListGroup: React.FC<ListGroupProps> = ({ items, logo, isMenuCollapsed }) =
   return (
     <>
       <div className="logo-container">
-        <a href="/" className="goHome">
+        <Link to="/" className="goHome">
           <img className="logo" src={logo} alt="User" />
-        </a>
+        </Link>
         <div className="logo-spacer"></div>
       </div>
       <div className="logo-container2">

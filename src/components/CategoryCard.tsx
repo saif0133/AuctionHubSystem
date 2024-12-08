@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Category {
   id: number;
@@ -10,7 +11,7 @@ interface Category {
 const CategoryList: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate=useNavigate();
   useEffect(() => {
     // Fetch categories from the server
     const fetchCategories = async () => {
@@ -57,7 +58,7 @@ const CategoryList: React.FC = () => {
 
 const CategoryCard: React.FC<{ title: string, description: string }> = ({ title, description }) => {
   return (
-    <div className="category-card ">
+    <div className="category-card " onClick={()=>window.location.href=`/all?fromValue=10&toValue=10000&categories=${title}&currentPage=0`}>
       <h3>{title}</h3>
       <p>{description}</p>
     </div>
