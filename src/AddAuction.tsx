@@ -48,6 +48,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const userToken = localStorage.getItem('authToken') || null;
   const [userPayment, srtUserPayment] = useState(false);
   const [showAlert, serShowAlert] = useState(false);
+  const maxInputArea=400;
   const order = () => {
     return "PublishFees";
   };
@@ -498,8 +499,9 @@ const validateAndProcessData = (event: React.MouseEvent<HTMLButtonElement, Mouse
             <div className="inp">
               <div className="saif">
                 <label className="input">
-                  <textarea className="input__field" placeholder=" "  onChange={(e) => setProductDescription((e.target as HTMLTextAreaElement).value)} />
+                  <textarea className="input__field" placeholder=" "  maxLength={maxInputArea}  onChange={(e) => setProductDescription((e.target as HTMLTextAreaElement).value)} />
                   <span className="input__label">Product Description</span>
+                  <span className="inputCounter"><span className={productDescription.length<maxInputArea?"inputCountergreen":"inputCounterred"}>{productDescription.length}</span> /{maxInputArea}</span>
                 </label>
               </div>
             </div>

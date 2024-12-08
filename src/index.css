@@ -210,6 +210,8 @@ body::-webkit-scrollbar {
 }
 
 .user-info-box {
+  height: 275px;
+  width: 300px;
   display: none;
   position: absolute;
   top: 100%;
@@ -220,6 +222,7 @@ body::-webkit-scrollbar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 10;
   border-radius: 10px !important;
+  overflow: hidden;
 
 }
 
@@ -235,9 +238,10 @@ body::-webkit-scrollbar {
 }
 
 .user-info-box img {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
+  margin-bottom: 5%;
 }
 
 .user-info-box input {
@@ -247,7 +251,7 @@ body::-webkit-scrollbar {
   appearance: none;
   border: none;
   outline: none;
-  border-bottom: .2em solid #930404;
+  /* border-bottom: .2em solid #930404; */
   background: rgba(#930404, .2);
   border-radius: .2em .2em 0 0;
   padding: .4em;
@@ -255,15 +259,39 @@ body::-webkit-scrollbar {
 
 }
 
+.forbidden{
+  cursor: not-allowed;
+}
+
+.inpa{
+  display: flex;
+  width: 90%;
+  margin-bottom: 20px;
+}
+
+.inpa input:nth-child(2) {
+  border-left: 2px solid rgb(79, 79, 80); /* إضافة حدود زرقاء للـ input الثاني */
+}
+
+.inpa input{
+  color: black !important;
+
+  margin: -3px !important;
+}
 .inputk {
+  text-align: center;
+  width: 100%;
+  font-size: large;
   appearance: none;
   border: none;
   outline: none;
-  border-bottom: .2em solid #04930b !important;
+  background-color: #DADADA;
+  /*border-bottom: .2em solid #04930b !important;*/
   background: rgba(#04930b, .2) !important;
-  border-radius: .2em .2em 0 0;
+  border-radius: 10px;
   padding: .4em;
-  color: #04930b !important;
+  color: #A1A1A1 !important;
+  filter: drop-shadow(10px 7px 4px rgba(0, 0, 0, 0.8));
 }
 
 .user-info-box button {
@@ -277,7 +305,8 @@ body::-webkit-scrollbar {
 }
 
 .user-info-box .buttons button {
-  margin-right: 5px;
+  /* margin-right: 5px; */
+  width: 110px;
 }
 
 
@@ -1964,4 +1993,33 @@ input[type="range"] {
 .css-1p9cwj3-JoyAlert-endDecorator Button:hover{
   color: rgb(64, 64, 64) !important;
 
+}
+
+.inputCounter{
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+}
+.inputCountergreen{
+  color: #009640 !important;
+}
+.inputCounterred{
+  color: #7a0000 !important;
+}
+
+.userInfoBar{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.color{
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(142deg, #E00613, #531420); /* تدرج قطري من الزاوية العليا اليسرى إلى الزاوية السفلى اليسرى */
+  top: 0;
+  z-index: -1;
 }
