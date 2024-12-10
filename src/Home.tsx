@@ -128,6 +128,28 @@ const Home: React.FC = () => {
 
   if (error) {
     return <div className="testmain">
+       <div className="imageContainer">
+        {/* <img src="https://github.com/saif0133/deploy-sec/blob/main/imgs/auction.png?raw=true" alt="" className="imageCont" /> */}
+        {/* <Slider {...settings}>
+      {images.map((src, index) => (
+        <div key={index}>
+          <img src={src} alt={`Slide ${index + 1}`} style={{ width: "100%" }} />
+        </div>
+      ))}
+    </Slider> */}
+  <Swiper 
+  loop={true}
+  modules={[Autoplay]}
+  autoplay={{delay:2500}}>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/website-deployment/blob/main/imgs/au3.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/deploy-sec/blob/main/imgs/auction.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/website-deployment/blob/main/imgs/au2.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/website-deployment/blob/main/imgs/au1.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      
+    
+      </Swiper>
+
+      </div>
       <div className="errorpage">
         <div><img
           src="https://github.com/saif0133/deploy-sec/blob/main/imgs/warning.png?raw=true"
