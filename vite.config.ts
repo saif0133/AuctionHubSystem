@@ -8,7 +8,9 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       output: {
-        manualChunks: {}
+        manualChunks: {
+          react: ['react', 'react-dom']
+        }
       },
       external: ['react-dom', 'react-dom/client']
 
