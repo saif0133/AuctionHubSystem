@@ -12,7 +12,7 @@ export default defineConfig({
           react: ['react', 'react-dom']
         }
       },
-      external: ['react-dom', 'react-dom/client']
+    //  external: ['react-dom', 'react-dom/client']
 
     }
   }
