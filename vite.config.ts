@@ -9,7 +9,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {}
-      }
+      },
+      external: ['react-dom', 'react-dom/client']
+
     }
   }
 });
