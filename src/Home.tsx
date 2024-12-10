@@ -4,12 +4,10 @@ import ProductCard from "./components/ProductCard";
 import TriangleLoader from "./components/loading";
 import { extractDataFromToken } from "./components/tokenDecode";
 import CategoryCard from "./components/CategoryCard";
-import Pagination from '@mui/material/Pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import 'swiper/css/pagination';  // If you're using pagination
-import 'swiper/css/autoplay';  // Autoplay specific styles (optional, but recommended)
-
+import 'swiper/css/autoplay';
+import { Autoplay } from 'swiper/modules';
 
 import Slider from "react-slick";
 
@@ -153,18 +151,17 @@ const Home: React.FC = () => {
         </div>
       ))}
     </Slider> */}
-
-<Swiper
-      spaceBetween={50}  // Space between slides
-      slidesPerView={1}  // Number of slides visible at once
-      autoplay={{
-        delay: 2500,  // Delay between transitions (in ms)
-      }}
-    >
-      <SwiperSlide>Slide 1</SwiperSlide>
-      <SwiperSlide>Slide 2</SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-    </Swiper>
+  <Swiper 
+  loop={true}
+  modules={[Autoplay]}
+  autoplay={{delay:2500}}>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/website-deployment/blob/main/imgs/au3.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/deploy-sec/blob/main/imgs/auction.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/website-deployment/blob/main/imgs/au2.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      <SwiperSlide><img style={{height:"105%"}} src="https://github.com/saif0133/website-deployment/blob/main/imgs/au1.png?raw=true" alt="" className="imageCont" /></SwiperSlide>
+      
+    
+      </Swiper>
 
       </div>
       <div className="category-list">

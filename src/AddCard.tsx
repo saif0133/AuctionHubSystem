@@ -2,6 +2,7 @@
  import "./AddCard.css"
 import { useNavigate } from "react-router-dom";
 import PopupMMessage from "./components/PopupMessage";
+import { message } from "antd";
  const cardLogos: { [key: string]: string } = {
    visa: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/640px-Visa_Logo.png",
    mastercard: "https://pngimg.com/uploads/mastercard/mastercard_PNG15.png",
@@ -88,7 +89,9 @@ const [isPopupOpen, setIsPopupOpen] =useState(false);
     });
 
     if (!response.ok) {
+      message.info("Something went wrong please try agin later");
       throw new Error('Network response was not ok');
+      
     }
 
     const result = await response.text();
@@ -98,6 +101,8 @@ const [isPopupOpen, setIsPopupOpen] =useState(false);
 
   } catch (error) {
     console.error('Error:', error);
+    message.info("Something went wrong please try agin later");
+
   }
 };
 

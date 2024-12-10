@@ -8,12 +8,16 @@
     display: flex;
     flex-wrap: wrap;
     transition: opacity 500ms;
-    position: fixed; /* Allow absolute positioning of balloons */
+    position: fixed; 
     background-color: #EFEFEF;
+    z-index: 0;
+    pointer-events: none !important;
 
   }
   
   .balloon {
+    pointer-events: none !important;
+
     height: 125px;
     width: 105px;
     border-radius: 75% 75% 70% 70%;

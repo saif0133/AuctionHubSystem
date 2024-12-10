@@ -49,8 +49,8 @@ interface ProductData {
     firstName: string;
     lastName: string;
     email: string; // Email is already included
-    phone: string;
-  };
+    phoneNumber:string
+    };
   minBid: number;
   initialPrice: number;
   currentPrice: number;
@@ -88,6 +88,7 @@ function Product() {
   const [isPopupOpen4, setIsPopupOpen4] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
+  const [isRecived, setIsRecived] = useState(false);
   const[removeFees,setRemoveFees]=useState("");
   const [isAuctionEnded, setIsAuctionEnded] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
@@ -167,12 +168,12 @@ const logBids = (product: ProductData) => {
       const info = await response.json();
 
       if (info == true) {
-        message.info("free")
+       // message.info("free")
         setRemoveFees("FREE");
         //deletAuction();
       }
       else {
-        setRemoveFees("NOTFREE");
+      //  setRemoveFees("NOTFREE");
         message.info("Not free")
        // deletAuction();
       }
@@ -227,6 +228,7 @@ const logBids = (product: ProductData) => {
       const result = await response.json(); // Await the result data
       console.log('Response:', result);
       await message.info(`Congrats!`); // Display success message
+      setIsRecived(true);
     } catch (error) {
       console.error('Error:', error);
       //await message.info('An unexpected error occurred.'); // Display generic error message
@@ -269,6 +271,10 @@ const logBids = (product: ProductData) => {
         if (data.joined) {
           setIsJoined(true);
 
+        }
+        if(data.status=="RESERVED")
+        {
+          setIsRecived(true)
         }
       }
         logBids(data);
@@ -383,7 +389,7 @@ console.log(data);
                   <h2>{`${product.seller.firstName} ${product.seller.lastName}`}</h2>
                 </div>
               </div>
-              {isOwner && product.status!="CANCELLED" && (<div className="icons">
+              {isOwner && product.status=="ACTIVE" && (<div className="icons">
                 <div className="ted">
                   <div className="description">Remove your auction</div>
                   <i className="bi bi-trash3" onClick={rmv}></i>
@@ -513,7 +519,7 @@ console.log(data);
                               <br />
                               <br />
                               <div>Email : <b>{product.seller.email}</b></div>
-                              <div>Phone Number : <b>{product.seller.phone}</b></div>
+                              <div>Phone Number : <b>{product.seller.phoneNumber}</b></div>
                             </div>
                             <div className="modal-footer">
                               <button className="btn btn-danger" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Second Step</button>
@@ -532,7 +538,13 @@ console.log(data);
                               You must click the button below to confirm receipt of your order.
                               <br />
                               <br />
-                              <button className="btn btn-success" onClick={receive}>I have Picked my order</button>
+                              <button
+  className="btn btn-success"
+  disabled={isRecived} // Correct way to disable the button
+  onClick={receive}
+>
+  {isRecived ? <span>Done Successfully</span> : <span>I have Picked my order</span>}
+</button>
                             </div>
                             <div className="modal-footer">
                               <button className="btn btn-danger" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to first step</button>

@@ -121,13 +121,16 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ users,status }) =
               console.log(status+""+user.userID+"/"+userData?.id);
              // message.info(`${user.name}'s bid with id ${user.id} and user id is ${user.userID}`)
               setID(user.id);
-              if(status=="ACTIVE" && userData?.id==user.id)
+              if(status=="ACTIVE" && userData?.id==user.userID)
               {
                 setIsPopupOpen(true);
               }
               else if(status!="ACTIVE" && userData?.id==user.userID)
               {
                 message.info("You can not remove your bid when auction is ended");
+              }
+              else{
+                message.info("a7a");
               }
              // deleteBid(user.id);
             },
