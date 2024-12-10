@@ -48,7 +48,7 @@ const [itemStatusa, setItemStatusa] = useState("NEW");
   const userToken = localStorage.getItem('authToken') || null;
   const [userPayment, srtUserPayment] = useState(false);
   const [showAlert, serShowAlert] = useState(false);
-  const maxInputArea=400;
+  const maxInputArea=200;
   const order = () => {
     return "PublishFees";
   };

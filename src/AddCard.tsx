@@ -1,8 +1,9 @@
- import React, { useState, ChangeEvent } from "react";
+ import React, { useState, ChangeEvent, useEffect } from "react";
  import "./AddCard.css"
 import { useNavigate } from "react-router-dom";
 import PopupMMessage from "./components/PopupMessage";
 import { message } from "antd";
+import { fetchPaymentId, getPaymentDetails } from "./components/paymentId";
  const cardLogos: { [key: string]: string } = {
    visa: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/640px-Visa_Logo.png",
    mastercard: "https://pngimg.com/uploads/mastercard/mastercard_PNG15.png",
@@ -135,6 +136,8 @@ const [isPopupOpen, setIsPopupOpen] =useState(false);
     });
 
     if (!response.ok) {
+      message.info("Something went wrong please try again later");
+
       setIsPopupOpen(false);
       throw new Error('Network response was not ok');
     }
@@ -147,10 +150,27 @@ const [isPopupOpen, setIsPopupOpen] =useState(false);
     await addCard(event);
     
   } catch (error) {
+    message.info("Something went wrong please try again later");
+
     console.error('Error:', error);
     setIsPopupOpen(false);
   }
 };
+
+useEffect(() => {
+  const fetchDetails = async () => {
+    await fetchPaymentId();
+    const details = getPaymentDetails(); 
+    if (details.paymentId) {
+      message.info("You already added payment method");
+      navigate("/Payment");
+    }
+  };
+
+  fetchDetails().catch((error) => {
+    console.error("Error fetching payment details:", error);
+  });
+}, []);
 
 
    return (
