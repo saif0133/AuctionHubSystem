@@ -3,7 +3,7 @@
 // //import removeToken from "./final project/login-signup page/script.js";
 
 // const handleLogout = () => {
-//   localStorage.clear(); // Remove the token from localStorage
+//   localStorage.clear(); // Remove the token from localStorag
 //   window.location.reload();
 // };
 
